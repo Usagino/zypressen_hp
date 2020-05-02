@@ -1,0 +1,55 @@
+$breakpoints: (
+  'sm': 'screen and (max-width: 450px)',
+  'md': 'screen and (max-width: 768px)',
+  'lg': 'screen and (min-width: 1000px)',
+  'xl': 'screen and (min-width: 1200px)'
+) !default;
+
+@mixin mq($breakpoint: md) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
+@mixin flex-middle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin full-screen{
+  height: 100vh;
+  width: 100vw;
+}
+@mixin full-size{
+  height: 100%;
+  width: 100%;
+}
+
+@mixin gap-right($i){
+  & > * {
+    margin: 0px;
+    margin-right: $i !important;
+    &:last-child {
+      margin: 0px;
+      margin-right: 0px !important;
+    }
+  }
+}
+@mixin gap-bottom($i){
+  & > * {
+    margin: 0px;
+    margin-bottom: $i !important;
+    &:last-child {
+      margin: 0px;
+      margin-bottom: 0px !important;
+    }
+  }
+}
+
+@mixin default-pc-width{
+  max-width: $default-size;
+  padding-left: 40px;
+  padding-right: 40px;
+  margin: auto;
+}
