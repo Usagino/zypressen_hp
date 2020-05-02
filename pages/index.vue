@@ -1,16 +1,11 @@
 <template lang="pug">
 .container
   p.pagepage page
+  logo
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-
-export default {
-  components: {
-    Logo
-  }
-}
+export default {}
 </script>
 
 <style lang="scss"></style>
