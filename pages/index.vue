@@ -1,11 +1,11 @@
 <template lang="pug">
 .container
-  p.pagepage page
-  logo
+  p webgltest
+  client-only
+    //Artwork
+    WebGlBox
 </template>
 
-<script>
-export default {}
-</script>
+<script></script>
 
 <style lang="scss"></style>
