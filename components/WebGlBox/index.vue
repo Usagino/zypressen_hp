@@ -25,7 +25,7 @@ export default {
     camera.position.z = 5
 
     // === light ===
-    const light = new THREE.DirectionalLight(0xffffff)
+    const light = new THREE.DirectionalLight(0xcdeef7)
     light.position.set(0, 0, 10)
 
     // === model ===
