@@ -20,7 +20,7 @@ export default {
     { src: '~/assets/stylesheets/style.scss', lang: 'scss' }
   ],
 
-  plugins: [],
+  plugins: ['~plugins/components.js'],
 
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
@@ -36,7 +36,11 @@ export default {
   ],
 
   axios: {},
+  // build: {
+  //   extend(config, ctx) {},
+  //   transpile: ['three']
+  // }
   build: {
-    extend(config, ctx) {}
+    transpile: ['three']
   }
 }
