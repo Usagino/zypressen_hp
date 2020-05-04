@@ -52,7 +52,7 @@ export default {
     // === sceneにmodel,light, cameraを追加 ===
     this.scene.add(this.camera)
     this.scene.add(this.light)
-    // this.scene.add(this.cube)
+    // this.scene.add(this.cube) --
     this.loader.load('tel.gltf', (gltf) => {
       this.scene.add(gltf.scene)
     })
