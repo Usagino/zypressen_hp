@@ -26,7 +26,7 @@ export default {
 
     // === light ===
     const light = new THREE.DirectionalLight(0xcdeef7)
-    light.position.set(0, 0, 10)
+    light.position.set(0, 0, 100)
 
     // === model ===
 
@@ -52,8 +52,8 @@ export default {
     // === sceneにmodel,light, cameraを追加 ===
     this.scene.add(this.camera)
     this.scene.add(this.light)
-    this.scene.add(this.cube)
-    this.loader.load('test.gltf', (gltf) => {
+    // this.scene.add(this.cube)
+    this.loader.load('tel.gltf', (gltf) => {
       this.scene.add(gltf.scene)
     })
     this.controls.userPan = false
