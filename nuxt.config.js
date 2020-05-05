@@ -11,13 +11,20 @@ export default {
         content: process.env.npm_package_description || ''
       }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {
+        rel: 'style',
+        href:
+          'https://cdn.jsdelivr.net/npm/yakuhanjp@3.3.1/dist/css/yakuhanjp.min.css'
+      }
+    ]
   },
   loading: { color: '#fff' },
 
   css: [
     { src: '~/assets/stylesheets/reset.css', lang: 'css' },
-    { src: '~/assets/stylesheets/style.scss', lang: 'scss' }
+    { src: '@/assets/stylesheets/style.scss', lang: 'scss' }
   ],
 
   plugins: ['~plugins/components.js'],
@@ -32,15 +39,24 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/style-resources'
+    '@nuxtjs/style-resources',
+    'nuxt-webfontloader'
   ],
+  styleResources: {
+    scss: ['~/assets/stylesheets/style.scss']
+  },
+  webfontloader: {
+    google: {
+      families: ['Teko']
+    }
+  },
 
   axios: {},
-  // build: {
-  //   extend(config, ctx) {},
-  //   transpile: ['three']
-  // }
   build: {
+    extend(config, ctx) {},
     transpile: ['three']
   }
+  // build: {
+  //   transpile: ['three']
+  // }
 }

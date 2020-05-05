@@ -1,0 +1,11 @@
+*{
+  color: $color-white;
+  text-decoration: none;
+}
+
+a{
+  @include font-title-secondry;
+}
+ul{
+  list-style: none;
+}

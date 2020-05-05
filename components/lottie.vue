@@ -1,0 +1,46 @@
+<template>
+  <div ref="lavContainer" :style="style"></div>
+</template>
+
+<script>
+import lottie from 'lottie-web'
+export default {
+  props: {
+    options: {
+      type: Object,
+      required: true,
+      loop: true
+    },
+    height: {
+      type: Number,
+      default: 40
+    },
+    width: {
+      type: Number,
+      default: 40
+    }
+  },
+
+  data() {
+    return {
+      style: {
+        width: this.width ? `${this.width}px` : '100%',
+        height: this.height ? `${this.height}px` : '100%',
+        overflow: 'hidden',
+        margin: '0 auto'
+      }
+    }
+  },
+  mounted() {
+    this.anim = lottie.loadAnimation({
+      container: this.$refs.lavContainer,
+      renderer: 'svg',
+      loop: this.options.loop !== false,
+      autoplay: this.options.autoplay !== false,
+      animationData: this.options.animationData.default, // ここだけ変更何故かデフォルトを入れないと動かなかった… (要検証)
+      rendererSettings: this.options.rendererSettings
+    })
+    this.$emit('animCreated', this.anim)
+  }
+}
+</script>

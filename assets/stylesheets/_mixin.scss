@@ -1,3 +1,30 @@
+//font
+@mixin font-family{
+  font-family:YakuHanJP,"Teko";
+}
+@mixin font-title-primary {
+	font-size:130px;
+  @include font-family;
+	font-weight:bold;
+}
+@mixin font-title-secondry {
+	font-size:110px;
+  @include font-family;
+	font-weight:bold;
+}
+@mixin font-text-primary {
+	font-size:14px;
+	font-family:"Roboto";
+	font-weight:black;
+	line-height:220%;
+}
+@mixin font-text-tertary {
+	font-size:8px;
+	font-family:"Roboto";
+	font-weight:black;
+	line-height:200px;
+}
+
 $breakpoints: (
   'sm': 'screen and (max-width: 450px)',
   'md': 'screen and (max-width: 768px)',
