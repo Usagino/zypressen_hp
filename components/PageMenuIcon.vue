@@ -8,13 +8,13 @@
       @animCreated="handleAnimation")
   .menulist
     ul.menulist__box
-      li
+      li(@click="menuToggle")
         nuxt-link(to="/") TOP
-      li
+      li(@click="menuToggle")
         nuxt-link(to="/works") WORKS
-      li
+      li(@click="menuToggle")
         nuxt-link(to="/about") ABOUT US
-      li
+      li(@click="menuToggle")
         nuxt-link(to="/contact") CONTACT
 </template>
 
@@ -88,7 +88,7 @@ export default {
   opacity: 0;
   &__box {
     width: 100%;
-    padding: 0 240px;
+    @include secondary-margin;
     li {
       text-align: right;
     }

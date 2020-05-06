@@ -19,8 +19,10 @@ export default {}
 </script>
 
 <style lang="scss">
-.page {
+html {
   background: $color-black;
+}
+.page {
   min-height: 100vh;
   width: 100vw;
   overflow: hidden;

@@ -17,6 +17,7 @@
     "nuxt": "^2.0.0",
     "nuxt-webfontloader": "^1.1.0",
     "three": "^0.116.1",
+    "unsplash-js": "^6.0.0",
     "vue-lottie": "^0.2.1"
   },
   "devDependencies": {

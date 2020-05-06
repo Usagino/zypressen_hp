@@ -1,9 +1,63 @@
 <template lang="pug">
   .container
+    .works
+      .works__item(v-for="image in imageObj")
+        img(:src="image.urls.small")
 </template>
 
 <script>
-export default {}
+import Unsplash, { toJson } from 'unsplash-js'
+
+export default {
+  async asyncData() {
+    const hi = await 'hi'
+    console.log(hi, Unsplash)
+
+    const unsplash = new Unsplash({
+      accessKey: 'mbG-P-q7ubPVqmXbZYLHaLJi5B_GuIvoNX6sahRHkRU',
+      // Optionally you can also configure a custom header to be sent with every request
+      headers: {
+        'X-Custom-Header': 'foo'
+      },
+      // Optionally if using a node-fetch polyfill or a version of fetch which supports the timeout option, you can configure the request timeout for all requests
+      timeout: 1000 // values set in ms
+    })
+    return unsplash.search
+      .photos('yellow', 1, 20, { orientation: 'portrait' })
+      .then(toJson)
+      .then((json) => {
+        const results = json.results
+        console.log(results)
+
+        return { imageObj: results }
+      })
+  },
+  data() {
+    return {
+      imageObj: []
+    }
+  }
+}
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.works {
+  margin: 0 auto;
+  @include secondary-margin;
+  box-sizing: border-box;
+  padding-top: 180px;
+  width: 100%;
+  column-count: 3;
+  column-gap: 0;
+  &__item {
+    padding: 12px;
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+}
+</style>

@@ -27,7 +27,7 @@ export default {
     { src: '@/assets/stylesheets/style.scss', lang: 'scss' }
   ],
 
-  plugins: ['~plugins/components.js'],
+  plugins: ['~plugins/components.js', { src: '~/plugins/axios', ssr: false }],
 
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
