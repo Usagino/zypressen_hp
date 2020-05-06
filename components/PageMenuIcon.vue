@@ -10,12 +10,16 @@
     ul.menulist__box
       li(@click="menuToggle")
         nuxt-link(to="/") TOP
+        img.stokerImage(:src="imagePath[0]")
       li(@click="menuToggle")
         nuxt-link(to="/works") WORKS
+        img.stokerImage(:src="imagePath[1]")
       li(@click="menuToggle")
         nuxt-link(to="/about") ABOUT US
+        img.stokerImage(:src="imagePath[2]")
       li(@click="menuToggle")
         nuxt-link(to="/contact") CONTACT
+        img.stokerImage(:src="imagePath[3]")
 </template>
 
 <script>
@@ -25,6 +29,12 @@ import * as menuIcon from '~/assets/animation/menu_icon.json'
 export default {
   data() {
     return {
+      imagePath: [
+        '/menu/top.jpg',
+        '/menu/works.jpg',
+        '/menu/about.jpg',
+        '/menu/contact.jpg'
+      ],
       lottieOptions: {
         animationData: menuIcon,
         loop: false,
@@ -32,6 +42,20 @@ export default {
         speed: 1,
         toggle: true
       }
+    }
+  },
+  mounted() {
+    window.onload = function() {
+      // マウス移動時のイベントをBODYタグに登録する
+      document.body.addEventListener('mousemove', (e) => {
+        const mX = e.pageX
+        const mY = e.pageY
+        console.log(mX, mY)
+        TweenMax.set('.stokerImage', {
+          top: mY - 200,
+          left: mX - 500
+        })
+      })
     }
   },
   methods: {
@@ -92,10 +116,35 @@ export default {
   opacity: 0;
   &__box {
     width: 100%;
+    position: absolute;
     @include secondary-margin;
+    box-sizing: border-box;
+    z-index: 2000;
     li {
       text-align: right;
+      a {
+        position: relative;
+        z-index: 2000;
+      }
+      a:hover {
+        color: transparent;
+        -webkit-text-stroke: 0.1px $color-white;
+        // text-shadow: $color-white 1px 1px 0px, $color-white -1px 1px 0px,
+        //   $color-white 1px -1px 0px, $color-white -1px -1px 0px;
+      }
+      a:hover + .stokerImage {
+        opacity: 1;
+      }
     }
   }
+}
+.stokerImage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+  width: 500px;
+  height: auto;
+  opacity: 0;
 }
 </style>
