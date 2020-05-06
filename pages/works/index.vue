@@ -2,7 +2,7 @@
   .container
     .works
       .works__item(v-for="image in imageObj")
-        img(:src="image.urls.small")
+        img(:src="image.urls.thumb")
 </template>
 
 <script>
@@ -10,26 +10,18 @@ import Unsplash, { toJson } from 'unsplash-js'
 
 export default {
   async asyncData() {
-    const hi = await 'hi'
-    console.log(hi, Unsplash)
-
     const unsplash = new Unsplash({
       accessKey: 'mbG-P-q7ubPVqmXbZYLHaLJi5B_GuIvoNX6sahRHkRU',
       // Optionally you can also configure a custom header to be sent with every request
       headers: {
         'X-Custom-Header': 'foo'
-      },
-      // Optionally if using a node-fetch polyfill or a version of fetch which supports the timeout option, you can configure the request timeout for all requests
-      timeout: 1000 // values set in ms
+      }
     })
-    return unsplash.search
-      .photos('yellow', 1, 20, { orientation: 'portrait' })
+    return await unsplash.search
+      .photos('foggy forest', 1, 20)
       .then(toJson)
       .then((json) => {
-        const results = json.results
-        console.log(results)
-
-        return { imageObj: results }
+        return { imageObj: json.results }
       })
   },
   data() {
