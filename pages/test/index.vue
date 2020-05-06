@@ -118,8 +118,10 @@ export default {
   z-index: 20;
   bottom: 70px;
   left: 70px;
+  display: flex;
+  flex-direction: column;
   input {
-    color: red;
+    width: 400px;
   }
 }
 </style>
