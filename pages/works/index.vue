@@ -2,7 +2,7 @@
   .container
     .works
       .works__item(v-for="image in imageObj")
-        img(:src="image.urls.thumb")
+        img(:src="image.urls.small")
 </template>
 
 <script>
@@ -41,11 +41,19 @@ export default {
   width: 100%;
   column-count: 3;
   column-gap: 0;
+  @include mq(sm) {
+    column-count: 1;
+    padding: 0px;
+    padding-top: $pri-value;
+  }
   &__item {
     padding: 12px;
     -webkit-column-break-inside: avoid;
     page-break-inside: avoid;
     break-inside: avoid;
+    @include mq(sm) {
+      padding: 12px 0px;
+    }
     img {
       width: 100%;
       height: auto;

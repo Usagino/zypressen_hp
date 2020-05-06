@@ -76,13 +76,19 @@ $breakpoints: (
 
 @mixin default-pc-width{
   max-width: $default-size;
-  padding-left: 70px;
-  padding-right: 70px;
+  padding-left: $pri-value;
+  padding-right: $pri-value;
   margin: auto;
 }
 @mixin primary-margin{
-  padding: 0 70px;
+  padding: 0 $pri-value;
+  @include mq(sm){
+    padding: 0 16px;
+  }
 }
 @mixin secondary-margin{
-  padding: 0 240px;
+  padding: 0 $sec-value;
+  @include mq(sm)  {
+    padding: 0 16px;
+  }
 }

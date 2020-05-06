@@ -73,6 +73,10 @@ export default {
   right: 70px;
   cursor: pointer;
   z-index: 1000;
+  @include mq(sm) {
+    top: 32px;
+    right: 32px;
+  }
 }
 .menulist {
   @include full-screen;

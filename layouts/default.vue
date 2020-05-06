@@ -28,11 +28,18 @@ html {
   overflow: hidden;
   &__logo {
     position: fixed;
-    top: 70px;
-    left: 70px;
+    top: $pri-value;
+    left: $pri-value;
     height: 18px;
     font-size: medium;
     z-index: 1000;
+    @include mq(sm) {
+      left: 0px;
+      right: 0px;
+      margin: auto;
+      width: fit-content;
+      top: 32px;
+    }
     img {
       height: 18px;
       width: auto;
@@ -40,11 +47,14 @@ html {
   }
   &__copylight {
     position: fixed;
-    bottom: 70px;
-    right: 70px;
+    bottom: $pri-value;
+    right: $pri-value;
     z-index: 1000;
     display: flex;
     @include gap-right(16px);
+    @include mq(sm) {
+      display: none;
+    }
 
     &__image {
       font-size: medium;
