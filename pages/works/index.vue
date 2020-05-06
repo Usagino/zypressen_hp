@@ -10,7 +10,7 @@ import Unsplash, { toJson } from 'unsplash-js'
 
 export default {
   async asyncData() {
-    const unsplash = new Unsplash({
+    const unsplash = await new Unsplash({
       accessKey: 'mbG-P-q7ubPVqmXbZYLHaLJi5B_GuIvoNX6sahRHkRU',
       // Optionally you can also configure a custom header to be sent with every request
       headers: {
@@ -18,7 +18,7 @@ export default {
       }
     })
     return await unsplash.search
-      .photos('foggy forest', 1, 20)
+      .photos('monotone', 1, 10)
       .then(toJson)
       .then((json) => {
         return { imageObj: json.results }
