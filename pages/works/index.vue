@@ -11,13 +11,13 @@
 
 export default {
   async asyncData({ app, env }) {
-    console.log(global.fetch)
     const { data } = await app.$axios.get(
       'https://zypressen.microcms.io/api/v1/works',
       {
         headers: { 'X-API-KEY': env.CMSKEY }
       }
     )
+    console.log(data)
     // global.fetch = require('node-fetch')
     // const unsplash = await new Unsplash({
     //   accessKey: 'mbG-P-q7ubPVqmXbZYLHaLJi5B_GuIvoNX6sahRHkRU',
