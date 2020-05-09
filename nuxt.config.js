@@ -40,7 +40,8 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
-    'nuxt-webfontloader'
+    'nuxt-webfontloader',
+    'nuxt-user-agent'
   ],
   styleResources: {
     scss: ['~/assets/stylesheets/style.scss']

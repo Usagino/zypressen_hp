@@ -10,16 +10,16 @@
     ul.menulist__box
       li(@click="menuToggle")
         nuxt-link(to="/") TOP
-        img.stokerImage(:src="imagePath[0]")
+        img.stokerImage(src="/menu/top.jpg")
       li(@click="menuToggle")
         nuxt-link(to="/works") WORKS
-        img.stokerImage(:src="imagePath[1]")
+        img.stokerImage(src="/menu/works.jpg")
       li(@click="menuToggle")
         nuxt-link(to="/about") ABOUT US
-        img.stokerImage(:src="imagePath[2]")
+        img.stokerImage(src="/menu/about.jpg")
       li(@click="menuToggle")
         nuxt-link(to="/contact") CONTACT
-        img.stokerImage(:src="imagePath[3]")
+        img.stokerImage(src="/menu/contact.jpg")
 </template>
 
 <script>
@@ -45,17 +45,18 @@ export default {
     }
   },
   mounted() {
-    window.onload = function() {
-      // マウス移動時のイベントをBODYタグに登録する
-      document.body.addEventListener('mousemove', (e) => {
-        const mX = e.pageX
-        const mY = e.pageY
-        console.log(mX, mY)
-        TweenMax.set('.stokerImage', {
-          top: mY - 200,
-          left: mX - 500
+    if (this.$ua.deviceType() === 'pc') {
+      window.onload = function() {
+        // マウス移動時のイベントをBODYタグに登録する
+        document.body.addEventListener('mousemove', (e) => {
+          const mX = e.pageX
+          const mY = e.pageY
+          TweenMax.to('.stokerImage', 0.5, {
+            top: mY - 200,
+            left: mX - 700
+          })
         })
-      })
+      }
     }
   },
   methods: {
@@ -125,12 +126,17 @@ export default {
       a {
         position: relative;
         z-index: 2000;
+        @include font-title-secondry;
       }
       a:hover {
-        color: transparent;
-        -webkit-text-stroke: 0.1px $color-white;
-        // text-shadow: $color-white 1px 1px 0px, $color-white -1px 1px 0px,
-        //   $color-white 1px -1px 0px, $color-white -1px -1px 0px;
+        color: $color-black;
+        // -webkit-text-stroke: 0.1px $color-white;
+        text-shadow: $color-white 1px 1px 0px, $color-white -1px 1px 0px,
+          $color-white 1px -1px 0px, $color-white -1px -1px 0px;
+        @include mq(sm) {
+          color: $color-white;
+          -webkit-text-stroke: unset;
+        }
       }
       a:hover + .stokerImage {
         opacity: 1;
@@ -139,12 +145,16 @@ export default {
   }
 }
 .stokerImage {
+  @include mq(sm) {
+    display: none;
+  }
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1001;
-  width: 500px;
-  height: auto;
+  width: 600px;
+  height: 400px;
+  object-fit: cover;
   opacity: 0;
 }
 </style>

@@ -1,6 +1,6 @@
 <template lang="pug">
 .container
-
+  nuxt-link(to="/test") test
   p webgltest
 </template>
 
