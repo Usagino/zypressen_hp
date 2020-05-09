@@ -12,6 +12,12 @@
   @include font-family;
 	font-weight:bold;
 }
+@mixin font-nav {
+	font-size:18px;
+	@include font-family;
+	font-weight:bold;
+  letter-spacing: 2px;
+}
 @mixin font-text-primary {
 	font-size:14px;
 	font-family:"Roboto";

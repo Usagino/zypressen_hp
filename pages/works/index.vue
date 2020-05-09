@@ -18,6 +18,7 @@ export default {
         headers: { 'X-API-KEY': process.env.CMSKEY }
       }
     )
+    console.log(data)
     // const unsplash = await new Unsplash({
     //   accessKey: 'mbG-P-q7ubPVqmXbZYLHaLJi5B_GuIvoNX6sahRHkRU',
     //   headers: {
