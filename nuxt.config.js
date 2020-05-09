@@ -66,6 +66,7 @@ export default {
     fallback: true,
     async routes() {
       console.log('Generate start')
+      console.log('🔑', cmskey)
       const data = await axios.get(
         'https://zypressen.microcms.io/api/v1/works',
         {
