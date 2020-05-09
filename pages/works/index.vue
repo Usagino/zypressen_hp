@@ -17,7 +17,6 @@ export default {
         headers: { 'X-API-KEY': env.CMSKEY }
       }
     )
-    console.log(data)
     // global.fetch = require('node-fetch')
     // const unsplash = await new Unsplash({
     //   accessKey: 'mbG-P-q7ubPVqmXbZYLHaLJi5B_GuIvoNX6sahRHkRU',

@@ -1,4 +1,4 @@
-import axios from 'axios'
+const axios = require('axios')
 require('dotenv').config()
 const { CMSKEY } = process.env.CMSKEY
 export default {
@@ -68,15 +68,15 @@ export default {
 
       const posts = axios
         .get('https://zypressen.microcms.io/api/v1/works', {
-          headers: { 'X-API-KEY': process.env.CMSKEY }
+          headers: { 'X-API-KEY': 'a1952c67-b611-4705-af90-6a22251f2b8b' }
         })
         .then((res) => {
           return res.data.contents.map((post) => {
+            console.log('/works/' + post.id)
             return '/works/' + post.id
           })
         })
 
-      console.table(posts)
       console.log('🏁Generate Finish')
       return Promise.all([posts]).then((values) => {
         return values.join().split(',')
