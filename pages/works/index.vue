@@ -18,7 +18,6 @@ export default {
         headers: { 'X-API-KEY': process.env.CMSKEY }
       }
     )
-    // global.fetch = require('node-fetch')
     // const unsplash = await new Unsplash({
     //   accessKey: 'mbG-P-q7ubPVqmXbZYLHaLJi5B_GuIvoNX6sahRHkRU',
     //   headers: {
@@ -33,16 +32,7 @@ export default {
     //   .then((json) => {
     //     console.dir(json)
     //   })
-    // unsplash.search
-    //   .photos('cats', 1)
-    //   .then(toJson)
-    //   .then((json) => {
-    //     // Do something with the json object
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //   })
-    // const { images } = unsplash.search.photos('dog', 1, 20).then(toJson)
+
     // console.log(images)
     return {
       WorksArray: data.contents
