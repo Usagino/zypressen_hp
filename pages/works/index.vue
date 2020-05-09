@@ -42,9 +42,6 @@ export default {
     return {
       WorksArray: []
     }
-  },
-  mounted() {
-    console.log(this.WorksArray[0])
   }
 }
 </script>

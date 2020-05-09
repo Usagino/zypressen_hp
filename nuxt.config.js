@@ -1,6 +1,6 @@
 const axios = require('axios')
 require('dotenv').config()
-const { CMSKEY } = process.env.CMSKEY
+const { CMSKEY } = process.env
 export default {
   mode: 'universal',
   head: {
