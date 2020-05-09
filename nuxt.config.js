@@ -64,24 +64,23 @@ export default {
   generate: {
     interval: 2000,
     fallback: true,
-    async routes() {
+    routes() {
       console.log('Generate start')
-      console.log('🔑', cmskey)
-      const data = await axios.get(
-        'https://zypressen.microcms.io/api/v1/works',
-        {
-          headers: { 'X-API-KEY': cmskey }
-        }
-      )
-      const paginateRes = data.data.contents.map((res) => {
-        return {
-          route: '/works/' + res.id,
-          payload: res.id
-        }
-      })
-      console.table(paginateRes)
+      console.log('🔑', process.env.CMSKEY)
+
+      const paginate = axios
+        .get('https://zypressen.microcms.io/api/v1/works', {
+          headers: { 'X-API-KEY': process.env.CMSKEY }
+        })
+        .then((res) => {
+          return res.data.contents.map((data) => {
+            return '/works/' + res.id
+          })
+        })
+
+      console.table(paginate)
       console.log('🏁Generate Finish')
-      return Promise.all([paginateRes]).then((values) => {
+      return Promise.all([paginate]).then((values) => {
         return [...values[0]]
       })
     }
