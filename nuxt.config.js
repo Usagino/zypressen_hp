@@ -1,6 +1,6 @@
 import axios from 'axios'
 require('dotenv').config()
-
+const cmskey = process.env.CMSKEY
 export default {
   mode: 'universal',
   head: {
@@ -53,7 +53,9 @@ export default {
       families: ['Teko']
     }
   },
-
+  env: {
+    cmskey: process.env.CMSKEY
+  },
   axios: {},
   build: {
     extend(config, ctx) {},
@@ -66,7 +68,7 @@ export default {
       const data = await axios.get(
         'https://zypressen.microcms.io/api/v1/works',
         {
-          headers: { 'X-API-KEY': process.env.CMSKEY }
+          headers: { 'X-API-KEY': cmskey }
         }
       )
       const paginateRes = data.data.contents.map((res) => {
