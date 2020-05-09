@@ -11,7 +11,7 @@
 import axios from 'axios'
 
 export default {
-  async asyncData({ app }) {
+  async asyncData() {
     const { data } = await axios.get(
       'https://zypressen.microcms.io/api/v1/works',
       {

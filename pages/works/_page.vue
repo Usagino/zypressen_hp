@@ -20,14 +20,13 @@
 import axios from 'axios'
 
 export default {
-  async asyncData({ app, params }) {
+  async asyncData({ params }) {
     const { data } = await axios.get(
       'https://zypressen.microcms.io/api/v1/works/' + params.page,
       {
         headers: { 'X-API-KEY': process.env.CMSKEY }
       }
     )
-
     return {
       Work: data
     }
