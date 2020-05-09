@@ -67,17 +67,16 @@ export default {
     async routes() {
       console.log('Generate start')
       console.log('🔑', cmskey)
-      const apikey = String(cmskey)
       const data = await axios.get(
         'https://zypressen.microcms.io/api/v1/works',
         {
-          headers: { 'X-API-KEY': apikey }
+          headers: { 'X-API-KEY': cmskey }
         }
       )
       const paginateRes = data.data.contents.map((res) => {
         return {
           route: '/works/' + res.id,
-          payload: { data }
+          payload: res.id
         }
       })
       console.table(paginateRes)
