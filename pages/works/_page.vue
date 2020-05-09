@@ -19,8 +19,7 @@
 // import color from 'img-color'
 
 export default {
-  async asyncData({ app, params, env }) {
-    console.log('🔑', env.CMSKEY)
+  async asyncData({ app, params }) {
     const { data } = await app.$axios.get(
       'https://zypressen.microcms.io/api/v1/works/' + params.page,
       {

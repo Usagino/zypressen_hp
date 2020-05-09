@@ -10,7 +10,7 @@
 // import Unsplash, { toJson } from 'unsplash-js'
 
 export default {
-  async asyncData({ app, env }) {
+  async asyncData({ app }) {
     const { data } = await app.$axios.get(
       'https://zypressen.microcms.io/api/v1/works',
       {
