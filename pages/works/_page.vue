@@ -20,7 +20,7 @@
 
 export default {
   async asyncData({ app, params, env }) {
-    // console.log('🔑', env.CMSKEY)
+    console.log('🔑', env.CMSKEY)
     const { data } = await app.$axios.get(
       'https://zypressen.microcms.io/api/v1/works/' + params.page,
       {
