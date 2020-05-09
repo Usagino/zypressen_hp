@@ -24,7 +24,7 @@ export default {
     const { data } = await app.$axios.get(
       'https://zypressen.microcms.io/api/v1/works/' + params.page,
       {
-        headers: { 'X-API-KEY': env.CMSKEY }
+        headers: { 'X-API-KEY': 'a1952c67-b611-4705-af90-6a22251f2b8b' }
       }
     )
 
