@@ -1,3 +1,6 @@
+import axios from 'axios'
+require('dotenv').config()
+
 export default {
   mode: 'universal',
   head: {
@@ -27,18 +30,17 @@ export default {
     { src: '@/assets/stylesheets/style.scss', lang: 'scss' }
   ],
 
-  plugins: ['~plugins/components.js', { src: '~/plugins/axios', ssr: false }],
-
-  buildModules: [
-    // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module',
-    // Doc: https://github.com/nuxt-community/stylelint-module
-    '@nuxtjs/stylelint-module'
+  plugins: [
+    '~plugins/components.js',
+    '~plugins/day.js',
+    { src: '~/plugins/axios', ssr: false }
   ],
 
+  buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/stylelint-module'],
+
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/dotenv',
     '@nuxtjs/style-resources',
     'nuxt-webfontloader',
     'nuxt-user-agent'
@@ -56,8 +58,26 @@ export default {
   build: {
     extend(config, ctx) {},
     transpile: ['three']
+  },
+  generate: {
+    interval: 2000,
+    async routes() {
+      const data = await axios.get(
+        'https://zypressen.microcms.io/api/v1/works',
+        {
+          headers: { 'X-API-KEY': process.env.CMSKEY }
+        }
+      )
+      const paginateRes = data.data.contents.map((res) => {
+        return {
+          route: '/works/' + res.id,
+          payload: { data }
+        }
+      })
+      console.table(paginateRes)
+      return Promise.all([paginateRes]).then((values) => {
+        return [...values[0]]
+      })
+    }
   }
-  // build: {
-  //   transpile: ['three']
-  // }
 }

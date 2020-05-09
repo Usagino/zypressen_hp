@@ -5,11 +5,11 @@
     .page__copylight
       p.page__copylight__text @2020ZYPRESSEN
       a.page__copylight__image(href="/twitter.com")
-        img(src="icon_twitter.svg")
+        img(src="/DEFAULT/icon_twitter.svg")
       a.page__copylight__image(href="/facebook.com")
-        img(src="icon_facebook.svg")
+        img(src="/DEFAULT/icon_facebook.svg")
       a.page__copylight__image(href="/instagram.com")
-        img(src="icon_instagram.svg")
+        img(src="/DEFAULT/icon_instagram.svg")
     PageMenuIcon
     nuxt
 </template>
