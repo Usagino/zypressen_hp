@@ -17,10 +17,11 @@
 
 <script>
 // import color from 'img-color'
+import axios from 'axios'
 
 export default {
   async asyncData({ app, params }) {
-    const { data } = await app.$axios.get(
+    const { data } = await axios.get(
       'https://zypressen.microcms.io/api/v1/works/' + params.page,
       {
         headers: { 'X-API-KEY': process.env.CMSKEY }

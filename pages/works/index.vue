@@ -8,10 +8,11 @@
 
 <script>
 // import Unsplash, { toJson } from 'unsplash-js'
+import axios from 'axios'
 
 export default {
   async asyncData({ app }) {
-    const { data } = await app.$axios.get(
+    const { data } = await axios.get(
       'https://zypressen.microcms.io/api/v1/works',
       {
         headers: { 'X-API-KEY': process.env.CMSKEY }
