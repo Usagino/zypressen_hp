@@ -80,6 +80,7 @@ export default {
         }
       })
       console.table(paginateRes)
+      console.log('🏁Generate Finish')
       return Promise.all([paginateRes]).then((values) => {
         return [...values[0]]
       })
