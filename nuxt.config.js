@@ -65,6 +65,7 @@ export default {
     interval: 2000,
     fallback: true,
     async routes() {
+      console.log('Generate start')
       const data = await axios.get(
         'https://zypressen.microcms.io/api/v1/works',
         {
