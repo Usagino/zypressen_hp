@@ -1,7 +1,6 @@
 <template lang="pug">
 .page-scroll
   svg(
-    v-if="canScroll()"
     :viewBox="`0 0 ${Size} ${Size}`"
     :width="Size"
     :height="Size"
