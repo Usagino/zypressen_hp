@@ -11,6 +11,7 @@
       a.page__copylight__image(href="/instagram.com")
         img(src="/DEFAULT/icon_instagram.svg")
     PageMenuIcon
+    PageScroll
     nuxt
 </template>
 

@@ -6,11 +6,15 @@
 	font-size:130px;
   @include font-family;
 	font-weight:bold;
+
 }
 @mixin font-title-secondry {
 	font-size:110px;
   @include font-family;
 	font-weight:bold;
+  @include mq(sm){
+    font-size: 48px;
+  }
 }
 @mixin font-nav {
 	font-size:18px;
@@ -80,11 +84,15 @@ $breakpoints: (
   }
 }
 
-@mixin default-pc-width{
+@mixin default-width{
   max-width: $default-size;
   padding-left: $pri-value;
   padding-right: $pri-value;
   margin: auto;
+  @include mq(sm){
+    padding-left: 48px;
+    padding-right: 48px;
+  }
 }
 @mixin primary-margin{
   padding: 0 $pri-value;
