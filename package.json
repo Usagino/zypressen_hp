@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
+    "curtainsjs": "^6.1.0",
     "dayjs": "^1.8.26",
     "es6-promise": "^4.2.8",
     "gsap": "^3.2.6",
@@ -41,6 +42,7 @@
     "prettier": "^1.19.1",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
+    "raw-loader": "^4.0.1",
     "sass-loader": "^8.0.2",
     "stylelint": "^13.3.3"
   }

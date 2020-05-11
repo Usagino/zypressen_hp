@@ -1,6 +1,5 @@
 <template lang="pug">
 .container
-
   .first-thumbnail(:style="{backgroundImage:Thumbnail}")
     .first-thumbnail--title
       h1 {{Work.TITLE}}
@@ -30,7 +29,6 @@
 </template>
 
 <script>
-// import color from 'img-color'
 import axios from 'axios'
 
 export default {
@@ -69,6 +67,7 @@ export default {
       Body: ' '
     }
   },
+  mounted() {},
   methods: {}
 }
 </script>

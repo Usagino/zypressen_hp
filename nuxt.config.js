@@ -58,7 +58,14 @@ export default {
   },
   axios: {},
   build: {
-    extend(config, ctx) {},
+    extend(config, ctx) {
+      if (config.module) {
+        config.module.rules.push({
+          test: /\.(vert|frag)$/i,
+          use: ['raw-loader']
+        })
+      }
+    },
     transpile: ['three']
   },
   generate: {

@@ -9,19 +9,23 @@
 
 <script>
 import * as THREE from 'three'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 export default {
   data() {
     return {
-      cameraX: 100,
-      cameraY: 100,
-      cameraZ: 100,
+      cameraX: 0,
+      cameraY: 20,
+      cameraZ: 150,
       renderer: null,
       scene: null,
       camera: null,
-      DirectionalLight: null,
+      Light1: null,
       plane: null,
-      cube: null
+      cube: null,
+      loarder: null,
+      model: null,
+      clock: null
     }
   },
   mounted() {
@@ -44,8 +48,15 @@ export default {
       this.renderer.render(this.scene, this.camera)
     },
     init() {
-      this.renderer = new THREE.WebGLRenderer()
       this.scene = new THREE.Scene()
+      this.clock = new THREE.Clock()
+
+      // renderer
+      this.renderer = new THREE.WebGLRenderer()
+      this.renderer.setClearColor(new THREE.Color(0x616161))
+      this.renderer.shadowMap.enabled = true
+      this.renderer.gammaOutput = true
+      this.renderer.setSize(window.innerWidth, window.innerHeight)
 
       // camera
       this.camera = new THREE.PerspectiveCamera(
@@ -59,36 +70,35 @@ export default {
       this.camera.position.z = this.cameraZ
       this.camera.lookAt(this.scene.position)
 
-      // Light
-      this.DirectionalLight = new THREE.DirectionalLight(
-        0xffffff,
-        4,
-        30,
-        Math.PI / 6,
-        0,
-        0.5
-      )
-      this.DirectionalLight.position.set(0, 10, 100)
-      this.scene.add(this.DirectionalLight)
-
-      this.renderer.setClearColor(new THREE.Color(0x616161))
-      this.renderer.setSize(window.innerWidth, window.innerHeight)
+      // Light1
+      this.Light1 = new THREE.SpotLight(0xffffff, 2, 500, Math.PI / 4, 1)
+      this.Light1.position.set(70, 40, 80)
+      this.Light1.castShadow = true
+      this.scene.add(this.Light1)
 
       // cube
-      const cubeGeometry = new THREE.BoxGeometry(20, 20, 20)
-      const cubeMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff })
-      this.cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
-      this.scene.add(this.cube)
+      // const cubeGeometry = new THREE.BoxGeometry(20, 20, 20)
+      // const cubeMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff })
+      // this.cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
+      // this.scene.add(this.cube)
+
+      // 3Dmodel
+      this.loader = new GLTFLoader()
+      this.loader.load('tel.gltf', (gltf) => {
+        this.model = gltf.scene
+        this.model.name = 'telphoneBox'
+        this.model.scale.set(10.0, 10.0, 10.0)
+        this.model.castShadow = true
+        this.scene.add(this.model)
+      })
 
       // Helpers
-      const axes = new THREE.AxisHelper(250)
+      const axes = new THREE.AxesHelper(250)
       this.scene.add(axes)
-      const gridHelper = new THREE.GridHelper(200, 50) // 引数は サイズ、1つのグリッドの大きさ
-      this.scene.add(gridHelper)
-      const DirectionalLightHelper = new THREE.DirectionalLightHelper(
-        this.DirectionalLight
-      )
-      this.scene.add(DirectionalLightHelper)
+      // const gridHelper = new THREE.GridHelper(200, 50) // 引数は サイズ、1つのグリッドの大きさ
+      // this.scene.add(gridHelper)
+      const LightHelper = new THREE.DirectionalLightHelper(this.Light1)
+      this.scene.add(LightHelper)
 
       this.renderer.render(this.scene, this.camera)
 
@@ -99,8 +109,17 @@ export default {
       document
         .getElementById('WebGL-output')
         .appendChild(this.renderer.domElement)
-      this.cube.rotation.z += 0.1
+      // this.cube.rotation.y += 0.005
+      if (this.model) {
+        this.model.rotation.y -= 0.005
+      }
       requestAnimationFrame(this.render)
+      this.renderer.render(this.scene, this.camera)
+    },
+    modelAnimate(model) {
+      console.log(model.rotation)
+      model.rotation.y += 0.005
+      requestAnimationFrame(this.animate)
       this.renderer.render(this.scene, this.camera)
     },
     onResize() {
@@ -112,7 +131,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .input__box {
   position: fixed;
   z-index: 20;
@@ -123,5 +142,8 @@ export default {
   input {
     width: 400px;
   }
+}
+.page-scroll {
+  display: none !important;
 }
 </style>
