@@ -127,6 +127,7 @@ export default {
         position: relative;
         z-index: 2000;
         @include font-title-secondry;
+        font-size: 130px;
       }
       a:hover {
         color: $color-black;

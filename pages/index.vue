@@ -2,6 +2,7 @@
 .container
   nuxt-link(to="/test") test
   p webgltest
+  telphoneBox
 </template>
 
 <script></script>

@@ -1,32 +1,47 @@
 <template lang="pug">
   .container
     .works
-      .works__item(v-for="image in imageObj")
-        img(:src="image.urls.small")
+      nuxt-link.works__item(v-for="works in WorksArray" :to="'/works/'+works.id" :key="works.id")
+        .works__imgbox
+          img(:src="works.THUMBNAIL.url")
 </template>
 
 <script>
-import Unsplash, { toJson } from 'unsplash-js'
+// import Unsplash, { toJson } from 'unsplash-js'
+import axios from 'axios'
 
 export default {
   async asyncData() {
-    const unsplash = await new Unsplash({
-      accessKey: 'mbG-P-q7ubPVqmXbZYLHaLJi5B_GuIvoNX6sahRHkRU',
-      // Optionally you can also configure a custom header to be sent with every request
-      headers: {
-        'X-Custom-Header': 'foo'
+    const { data } = await axios.get(
+      'https://zypressen.microcms.io/api/v1/works',
+      {
+        headers: { 'X-API-KEY': process.env.CMSKEY }
       }
-    })
-    return await unsplash.search
-      .photos('monotone', 1, 10)
-      .then(toJson)
-      .then((json) => {
-        return { imageObj: json.results }
-      })
+    )
+    console.log(data)
+    // const unsplash = await new Unsplash({
+    //   accessKey: 'mbG-P-q7ubPVqmXbZYLHaLJi5B_GuIvoNX6sahRHkRU',
+    //   headers: {
+    //     'X-Custom-Header': 'foo'
+    //   },
+    //   timeout: 2000
+    // })
+    // console.log(unsplash, toJson)
+    // unsplash.photos
+    //   .getRandomPhoto()
+    //   .then((res) => res.json())
+    //   .then((json) => {
+    //     console.dir(json)
+    //   })
+
+    // console.log(images)
+    return {
+      WorksArray: data.contents
+    }
   },
   data() {
     return {
-      imageObj: []
+      WorksArray: []
     }
   }
 }
@@ -51,12 +66,35 @@ export default {
     -webkit-column-break-inside: avoid;
     page-break-inside: avoid;
     break-inside: avoid;
+    display: block;
+
     @include mq(sm) {
       padding: 12px 0px;
     }
+  }
+  &__imgbox {
+    overflow: hidden;
+    box-sizing: border-box;
+    &:hover {
+      cursor: pointer;
+      img {
+        transform: scale(1.1);
+        -webkit-filter: grayscale(0%);
+        -moz-filter: grayscale(0%);
+        -ms-filter: grayscale(0%);
+        -o-filter: grayscale(0%);
+        filter: grayscale(0%);
+      }
+    }
     img {
+      transition: all 0.3s cubic-bezier(0.45, 0.05, 0.66, 0.32);
       width: 100%;
       height: auto;
+      -webkit-filter: grayscale(100%);
+      -moz-filter: grayscale(100%);
+      -ms-filter: grayscale(100%);
+      -o-filter: grayscale(100%);
+      filter: grayscale(100%);
     }
   }
 }

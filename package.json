@@ -13,17 +13,22 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
+    "curtainsjs": "^6.1.0",
+    "dayjs": "^1.8.26",
     "es6-promise": "^4.2.8",
     "gsap": "^3.2.6",
+    "img-color": "^1.0.2",
     "isomorphic-fetch": "^2.2.1",
     "nuxt": "^2.0.0",
     "nuxt-user-agent": "^1.2.2",
     "nuxt-webfontloader": "^1.1.0",
+    "rgbaster": "^2.1.1",
     "three": "^0.116.1",
     "unsplash-js": "^6.0.0",
     "vue-lottie": "^0.2.1"
   },
   "devDependencies": {
+    "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/eslint-config": "^2.0.0",
     "@nuxtjs/eslint-module": "^1.0.0",
     "@nuxtjs/style-resources": "^1.0.0",
@@ -37,6 +42,7 @@
     "prettier": "^1.19.1",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
+    "raw-loader": "^4.0.1",
     "sass-loader": "^8.0.2",
     "stylelint": "^13.3.3"
   }

@@ -1,3 +1,6 @@
+const axios = require('axios')
+require('dotenv').config()
+const { CMSKEY } = process.env
 export default {
   mode: 'universal',
   head: {
@@ -27,18 +30,17 @@ export default {
     { src: '@/assets/stylesheets/style.scss', lang: 'scss' }
   ],
 
-  plugins: ['~plugins/components.js', { src: '~/plugins/axios', ssr: false }],
-
-  buildModules: [
-    // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module',
-    // Doc: https://github.com/nuxt-community/stylelint-module
-    '@nuxtjs/stylelint-module'
+  plugins: [
+    '~plugins/components.js',
+    '~plugins/day.js',
+    { src: '~/plugins/axios', ssr: false }
   ],
 
+  buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/stylelint-module'],
+
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/dotenv',
     '@nuxtjs/style-resources',
     'nuxt-webfontloader',
     'nuxt-user-agent'
@@ -51,13 +53,41 @@ export default {
       families: ['Teko']
     }
   },
-
+  env: {
+    CMSKEY
+  },
   axios: {},
   build: {
-    extend(config, ctx) {},
+    extend(config, ctx) {
+      if (config.module) {
+        config.module.rules.push({
+          test: /\.(vert|frag)$/i,
+          use: ['raw-loader']
+        })
+      }
+    },
     transpile: ['three']
+  },
+  generate: {
+    routes() {
+      console.log('Generate start')
+      console.log('🔑', process.env.CMSKEY)
+
+      const posts = axios
+        .get('https://zypressen.microcms.io/api/v1/works', {
+          headers: { 'X-API-KEY': process.env.CMSKEY }
+        })
+        .then((res) => {
+          return res.data.contents.map((post) => {
+            console.log('/works/' + post.id)
+            return '/works/' + post.id
+          })
+        })
+
+      console.log('🏁Generate Finish')
+      return Promise.all([posts]).then((values) => {
+        return values.join().split(',')
+      })
+    }
   }
-  // build: {
-  //   transpile: ['three']
-  // }
 }
