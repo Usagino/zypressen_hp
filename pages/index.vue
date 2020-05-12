@@ -1,11 +1,18 @@
 <template lang="pug">
 .container
   nuxt-link(to="/test") test
-  p webgltest
   telphoneBox
 </template>
 
-<script></script>
+<script>
+export default {
+  methods: {
+    hoge() {
+      console.log(this.$nuxt.$emit)
+    }
+  }
+}
+</script>
 
 <style lang="scss">
 .container {

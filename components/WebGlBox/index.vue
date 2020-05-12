@@ -2,8 +2,6 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-
-// import 3Dmodel from '~/assets/webgl/test.gltf'
 export default {
   data() {
     // === scene ===
@@ -56,12 +54,6 @@ export default {
     this.loader.load('tel.gltf', (gltf) => {
       this.scene.add(gltf.scene)
     })
-    this.controls.userPan = false
-    this.controls.userPanSpeed = 0.0
-    this.controls.maxDistance = 5000.0
-    this.controls.maxPolarAngle = Math.PI * 0.495
-    this.controls.autoRotate = true
-    this.controls.autoRotateSpeed = 4.0
   },
   mounted() {
     this.canRender = true

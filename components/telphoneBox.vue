@@ -1,47 +1,42 @@
 <template lang="pug">
 .telphoneBox
-  #WebGL-output
+  .events
+    p(@click="defaultPositionAnimate()")  Default position
+    p(@click="animate()") animate
+
+    p(@click="animate2()") animate2
+  #WebGLarea
 </template>
 
 <script>
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { TweenMax } from 'gsap'
 
 export default {
   data() {
     return {
-      cameraX: 0,
-      cameraY: 20,
-      cameraZ: 150,
       renderer: null,
       scene: null,
       camera: null,
-      Light1: null,
+      Light: null,
       plane: null,
       cube: null,
       loarder: null,
       model: null,
-      clock: null
+      clock: null,
+      animationSpeed: 3
     }
   },
-  mounted() {
-    this.init()
+  mounted() {},
+  created() {
+    if (process.client) {
+      this.init()
+    }
   },
   methods: {
-    cameraXChange() {
-      this.camera.position.x = this.cameraX
-      this.camera.lookAt(new THREE.Vector3(0, 0, 0))
-      this.renderer.render(this.scene, this.camera)
-    },
-    cameraYChange() {
-      this.camera.position.y = this.cameraY
-      this.camera.lookAt(new THREE.Vector3(0, 0, 0))
-      this.renderer.render(this.scene, this.camera)
-    },
-    cameraZChange() {
-      this.camera.position.z = this.cameraZ
-      this.camera.lookAt(new THREE.Vector3(0, 0, 0))
-      this.renderer.render(this.scene, this.camera)
+    hoge() {
+      console.log('hoge')
     },
     init() {
       this.scene = new THREE.Scene()
@@ -61,49 +56,29 @@ export default {
         0.1,
         1000
       )
-      this.camera.position.x = this.cameraX
-      this.camera.position.y = this.cameraY
-      this.camera.position.z = this.cameraZ
+      this.camera.position.set(0, 20, 150)
       this.camera.lookAt(this.scene.position)
 
-      // Light1
-      this.Light1 = new THREE.SpotLight(0x6f6f6f, 2, 500, Math.PI / 4, 1)
-      this.Light1.position.set(70, 40, 80)
-      this.Light1.castShadow = true
-      this.scene.add(this.Light1)
-
-      // cube
-      // const cubeGeometry = new THREE.BoxGeometry(20, 20, 20)
-      // const cubeMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff })
-      // this.cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
-      // this.scene.add(this.cube)
+      // Light
+      this.Light = new THREE.SpotLight(0x6f6f6f, 2, 500, Math.PI / 4, 1)
+      this.Light.position.set(70, 40, 80)
+      this.Light.castShadow = true
+      this.scene.add(this.Light)
 
       // 3Dmodel
       this.loader = new GLTFLoader()
       this.loader.load('tel.gltf', (gltf) => {
         this.model = gltf.scene
-        this.model.name = 'telphoneBox'
         this.model.scale.set(10.0, 10.0, 10.0)
         this.model.castShadow = true
         this.scene.add(this.model)
       })
-
-      // Helpers
-      // this.Helpers()
-
-      this.renderer.render(this.scene, this.camera)
-
       this.render()
+      this.renderer.render(this.scene, this.camera)
       window.addEventListener('resize', this.onResize, false)
     },
     render() {
-      document
-        .getElementById('WebGL-output')
-        .appendChild(this.renderer.domElement)
-      // this.cube.rotation.y += 0.005
-      if (this.model) {
-        this.model.rotation.y -= 0.005
-      }
+      document.getElementById('WebGLarea').appendChild(this.renderer.domElement)
       requestAnimationFrame(this.render)
       this.renderer.render(this.scene, this.camera)
     },
@@ -123,8 +98,30 @@ export default {
       this.scene.add(axes)
       // const gridHelper = new THREE.GridHelper(200, 50) // 引数は サイズ、1つのグリッドの大きさ
       // this.scene.add(gridHelper)
-      const LightHelper = new THREE.DirectionalLightHelper(this.Light1)
+      const LightHelper = new THREE.DirectionalLightHelper(this.Light)
       this.scene.add(LightHelper)
+    },
+
+    defaultPositionAnimate() {
+      TweenMax.to(this.model.rotation, this.animationSpeed, {
+        y: 0 * Math.PI
+      })
+      TweenMax.to(this.camera.position, this.animationSpeed, { z: 150 })
+      this.renderer.render(this.scene, this.camera)
+    },
+    animate() {
+      TweenMax.to(this.model.rotation, this.animationSpeed, {
+        y: 4 * Math.PI
+      })
+      TweenMax.to(this.camera.position, this.animationSpeed, { z: 80 })
+      this.renderer.render(this.scene, this.camera)
+    },
+    animate2() {
+      TweenMax.to(this.model.rotation, this.animationSpeed, {
+        y: 12 * Math.PI
+      })
+      TweenMax.to(this.camera.position, this.animationSpeed, { z: 300 })
+      this.renderer.render(this.scene, this.camera)
     }
   }
 }
@@ -132,6 +129,23 @@ export default {
 
 <style lang="scss">
 .telphoneBox {
+  .events {
+    position: fixed;
+    z-index: 2;
+    bottom: $pri-value;
+    left: $pri-value;
+    display: flex;
+    flex-direction: row;
+    @include gap-right(20px);
+    p {
+      cursor: pointer;
+      padding: 4px 20px;
+      border-radius: 100px;
+      border: 2px solid $color-white;
+    }
+  }
+}
+#WebGLarea {
   position: fixed;
   @include full-screen;
   top: 0;
