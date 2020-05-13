@@ -1,6 +1,7 @@
 //font
 @mixin font-family{
-  font-family:'sofia pro',YakuHanJP,"Teko";
+  font-family:'Teko',YakuHanJP,"Teko";
+  font-weight: 700;
 }
 @mixin font-title-primary {
 	font-size:130px;
