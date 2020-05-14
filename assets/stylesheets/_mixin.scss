@@ -18,16 +18,16 @@
   }
 }
 @mixin font-nav {
-	font-size:18px;
+	font-size:14px;
 	@include font-family;
-	font-weight:bold;
-  letter-spacing: 2px;
+	font-weight:normal;
+  letter-spacing: 1px;
 }
 @mixin font-text-primary {
 	font-size:14px;
 	font-family:YakuHanJP,"Roboto";
-	font-weight: 700;
-	line-height:220%;
+	font-weight: normal;
+	line-height:180%;
   @include mq(sm){
 
   }

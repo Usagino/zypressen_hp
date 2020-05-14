@@ -8,7 +8,7 @@
     xmlns="http://www.w3.org/2000/svg")
     circle(
       stroke="#7A7A7A"
-      stroke-width="8"
+      stroke-width="2"
       fill-opacity="0"
       :cx="Size / 2"
       :cy="Size / 2"
@@ -16,7 +16,7 @@
     circle(
       :stroke-dasharray='Percentage+" "+MaxSize'
       stroke="#FF3D00"
-      stroke-width="8"
+      stroke-width="2"
       fill-opacity="0"
       :cx="Size / 2"
       :cy="Size / 2"
@@ -27,13 +27,12 @@
 export default {
   data() {
     return {
-      Size: 0,
+      Size: 68,
       Percentage: 0,
       MaxSize: 0
     }
   },
   mounted() {
-    this.Size = this.uaChangeSize()
     this.MaxSize = this.Size * 3.14
 
     this.scrllAnimation()
@@ -45,32 +44,13 @@ export default {
     }
   },
   methods: {
-    uaChangeSize() {
-      if (this.$ua.deviceType() === 'smartphone') {
-        return 68
-      } else {
-        return 68
-      }
-    },
     scrllAnimation() {
       const scrollHeight =
         document.documentElement.scrollHeight -
         document.documentElement.clientHeight
       const y = document.documentElement.scrollTop
       const percentageHeight = (y / scrollHeight) * (this.Size * 3.14)
-      // console.log(`📜:${percentageHeight}%`)
       return percentageHeight
-    },
-    canScroll() {
-      if (process.browser) {
-        const cHeight = document.documentElement.scrollHeight
-        const bHeight = window.parent.screen.height
-        if (cHeight - bHeight > 0) {
-          return true
-        } else {
-          return false
-        }
-      }
     }
   }
 }

@@ -18,23 +18,7 @@ export default {
         headers: { 'X-API-KEY': process.env.CMSKEY }
       }
     )
-    console.log(data)
-    // const unsplash = await new Unsplash({
-    //   accessKey: 'mbG-P-q7ubPVqmXbZYLHaLJi5B_GuIvoNX6sahRHkRU',
-    //   headers: {
-    //     'X-Custom-Header': 'foo'
-    //   },
-    //   timeout: 2000
-    // })
-    // console.log(unsplash, toJson)
-    // unsplash.photos
-    //   .getRandomPhoto()
-    //   .then((res) => res.json())
-    //   .then((json) => {
-    //     console.dir(json)
-    //   })
 
-    // console.log(images)
     return {
       WorksArray: data.contents
     }

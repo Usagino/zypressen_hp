@@ -5,11 +5,11 @@
     .page__copylight
       p.page__copylight__text @2020ZYPRESSEN
       a.page__copylight__image(href="/twitter.com")
-        img(src="/DEFAULT/icon_twitter.svg")
+        img(src="/DEFAULT/twitter.svg")
       a.page__copylight__image(href="/facebook.com")
-        img(src="/DEFAULT/icon_facebook.svg")
+        img(src="/DEFAULT/facebook.svg")
       a.page__copylight__image(href="/instagram.com")
-        img(src="/DEFAULT/icon_instagram.svg")
+        img(src="/DEFAULT/instagram.svg")
     PageMenuIcon
     PageScroll
     nuxt
@@ -56,7 +56,10 @@ html {
     @include mq(sm) {
       display: none;
     }
-
+    &__text {
+      @include font-nav;
+      line-height: 18px;
+    }
     &__image {
       font-size: medium;
       height: 16px;
