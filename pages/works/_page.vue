@@ -177,7 +177,7 @@ export default {
   }
 }
 .second-body {
-  padding-top: $pri-value;
+  padding-top: 150px;
   @include default-width;
   &__text {
     p {
@@ -190,8 +190,8 @@ export default {
     display: flex;
     flex-direction: row;
     &--color {
-      height: 32px;
-      width: 32px;
+      height: 24px;
+      width: 24px;
       @include mq(sm) {
         height: 18px;
         width: 18px;
@@ -200,7 +200,7 @@ export default {
   }
 }
 .third-images {
-  padding: $pri-value 0px $sec-value;
+  padding: 150px 0px 40px;
   @include default-width;
   @include gap-bottom(24px);
   @include mq(sm) {

@@ -15,7 +15,7 @@
         nuxt-link(to="/works") WORKS
         img.stokerImage(src="/menu/works.jpg")
       li(@click="menuToggle")
-        nuxt-link(to="/about") ABOUT US
+        nuxt-link(to="/about") ABOUT
         img.stokerImage(src="/menu/about.jpg")
       li(@click="menuToggle")
         nuxt-link(to="/contact") CONTACT
@@ -118,9 +118,11 @@ export default {
   &__box {
     width: 100%;
     position: absolute;
+    padding: 220px 0;
     @include secondary-margin;
     box-sizing: border-box;
     z-index: 2000;
+
     li {
       text-align: right;
       a {
@@ -128,6 +130,7 @@ export default {
         z-index: 2000;
         @include font-title-secondry;
         font-size: 130px;
+        line-height: 100px;
       }
       a:hover {
         color: $color-black;

@@ -6,11 +6,7 @@
 
 <script>
 export default {
-  methods: {
-    hoge() {
-      console.log(this.$nuxt.$emit)
-    }
-  }
+  methods: {}
 }
 </script>
 
