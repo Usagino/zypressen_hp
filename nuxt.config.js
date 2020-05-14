@@ -50,7 +50,7 @@ export default {
   },
   webfontloader: {
     google: {
-      families: ['Teko']
+      families: ['Teko:700', 'Roboto:400,700']
     }
   },
   env: {
