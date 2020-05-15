@@ -52,6 +52,17 @@ export default {
       const percentageHeight = (y / scrollHeight) * (this.Size * 3.14)
       return percentageHeight
     }
+    // canScroll() {
+    //   if (process.browser) {
+    //     const cHeight = document.documentElement.scrollHeight
+    //     const bHeight = window.parent.screen.height
+    //     if (cHeight - bHeight > 0) {
+    //       return true
+    //     } else {
+    //       return false
+    //     }
+    //   }
+    // }
   }
 }
 </script>

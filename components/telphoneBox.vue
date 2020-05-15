@@ -1,10 +1,9 @@
 <template lang="pug">
 .telphoneBox
-  .events
-    p(@click="defaultPositionAnimate()")  Default position
-    p(@click="animate()") animate
-
-    p(@click="animate2()") animate2
+  //.events
+  //  p(@click="defaultPositionAnimate()")  Default position
+  //  p(@click="animate()") animate
+  //  p(@click="animate2()") animate2
   #WebGLarea
 </template>
 
@@ -25,14 +24,13 @@ export default {
       loarder: null,
       model: null,
       clock: null,
-      animationSpeed: 3
+      animationSpeed: 3,
+      animaChangeCount: 1
     }
   },
-  mounted() {},
-  created() {
-    if (process.client) {
-      this.init()
-    }
+  mounted() {
+    this.init()
+    this.wheelAction()
   },
   methods: {
     hoge() {
@@ -101,7 +99,6 @@ export default {
       const LightHelper = new THREE.DirectionalLightHelper(this.Light)
       this.scene.add(LightHelper)
     },
-
     defaultPositionAnimate() {
       TweenMax.to(this.model.rotation, this.animationSpeed, {
         y: 0 * Math.PI
@@ -122,6 +119,58 @@ export default {
       })
       TweenMax.to(this.camera.position, this.animationSpeed, { z: 300 })
       this.renderer.render(this.scene, this.camera)
+    },
+    animate3() {
+      TweenMax.to(this.model.rotation, this.animationSpeed, {
+        y: 4 * Math.PI
+      })
+      TweenMax.to(this.camera.position, this.animationSpeed, { z: 200 })
+      this.renderer.render(this.scene, this.camera)
+    },
+    wheelAction() {
+      // Function of the wheel. Scrolling at a constant power will do the job.
+      let wheelToggle = true
+      window.onmousewheel = (event) => {
+        const wheelPower = 200
+        if (event.wheelDelta > wheelPower && wheelToggle) {
+          console.log('👆上にホイールした', wheelToggle)
+          this.animaChangeCount -= 1
+          if (this.animaChangeCount <= 0) {
+            this.animaChangeCount = 1
+          }
+          this.changeAnimation()
+          wheelToggle = false
+          setTimeout(() => {
+            wheelToggle = true
+          }, 1000)
+        } else if (event.wheelDelta < wheelPower * -1 && wheelToggle) {
+          console.log('下にホイールした👇', wheelToggle)
+          this.animaChangeCount += 1
+          if (this.animaChangeCount >= 4) {
+            this.animaChangeCount = 4
+          }
+          this.changeAnimation()
+          wheelToggle = false
+          setTimeout(() => {
+            wheelToggle = true
+          }, 1000)
+        }
+      }
+    },
+    changeAnimation() {
+      if (this.animaChangeCount === 1) {
+        console.log(this.animaChangeCount)
+        this.defaultPositionAnimate()
+      } else if (this.animaChangeCount === 2) {
+        console.log(this.animaChangeCount)
+        this.animate()
+      } else if (this.animaChangeCount === 3) {
+        console.log(this.animaChangeCount)
+        this.animate2()
+      } else if (this.animaChangeCount === 4) {
+        console.log(this.animaChangeCount)
+        this.animate3()
+      }
     }
   }
 }
@@ -151,5 +200,9 @@ export default {
   top: 0;
   left: 0;
   z-index: -1;
+}
+html,
+body {
+  overflow: hidden;
 }
 </style>
