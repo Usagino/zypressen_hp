@@ -1,19 +1,25 @@
 <template lang="pug">
-.telphoneBox
-  //.events
-  //  p(@click="defaultPositionAnimate()")  Default position
-  //  p(@click="animate()") animate
-  //  p(@click="animate2()") animate2
+.pageAyumukun
+  .switch_linked
+    .switch_linked__wrap
+      .switch_linked__wrap__text
+        p.s-lw-top ZYPRESSEN
+        nuxt-link.s-lw-works(to="/works") WORKS
+        nuxt-link.s-lw-about(to="/about") ABOUT
+        nuxt-link.s-lw-contact(to="/contact") CONTACT
+    .switch_linked__scroll
+      p SCROLL
   #WebGLarea
 </template>
 
 <script>
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { TweenMax } from 'gsap'
+import { TimelineMax, TweenMax } from 'gsap'
 
 export default {
   data() {
+    // const tl = new TimelineMax()
     return {
       renderer: null,
       scene: null,
@@ -25,17 +31,30 @@ export default {
       model: null,
       clock: null,
       animationSpeed: 3,
-      animaChangeCount: 1
+      animaChangeCount: 1,
+      tl: new TimelineMax(),
+      CurrentClass: 'String',
+      PreviousClass: 'top',
+      modelTern: 0
     }
   },
   mounted() {
     this.init()
     this.wheelAction()
+
+    this.tl
+      .set('.s-lw-top', {
+        display: 'block'
+      })
+      .to('.s-lw-top', 0.3, {
+        y: '0%',
+        ease: 'ease-in',
+        delay: 2,
+        rotate: '0deg'
+      })
+    // this.defaultPositionAnimate()
   },
   methods: {
-    hoge() {
-      console.log('hoge')
-    },
     init() {
       this.scene = new THREE.Scene()
       this.clock = new THREE.Clock()
@@ -70,6 +89,7 @@ export default {
         this.model.scale.set(10.0, 10.0, 10.0)
         this.model.castShadow = true
         this.scene.add(this.model)
+        this.ternModel()
       })
       this.render()
       this.renderer.render(this.scene, this.camera)
@@ -99,77 +119,112 @@ export default {
       const LightHelper = new THREE.DirectionalLightHelper(this.Light)
       this.scene.add(LightHelper)
     },
+    ternModel() {
+      TweenMax.set(this.model.rotation, { y: (this.modelTern += 0.01) })
+      if (2 * Math.PI <= this.modelTern) {
+        this.modelTern = 0
+      }
+      this.renderer.render(this.scene, this.camera)
+      if (this.animaChangeCount === 1) {
+        requestAnimationFrame(this.ternModel)
+      }
+    },
+
     defaultPositionAnimate() {
-      TweenMax.to(this.model.rotation, this.animationSpeed, {
-        y: 0 * Math.PI
-      })
+      this.ternModel()
       TweenMax.to(this.camera.position, this.animationSpeed, { z: 150 })
       this.renderer.render(this.scene, this.camera)
+      this.switchText('top')
     },
-    animate() {
+    worksAnimate() {
+      const tern = 12 * Math.PI
       TweenMax.to(this.model.rotation, this.animationSpeed, {
-        y: 4 * Math.PI
+        y: tern
       })
-      TweenMax.to(this.camera.position, this.animationSpeed, { z: 80 })
-      this.renderer.render(this.scene, this.camera)
-    },
-    animate2() {
-      TweenMax.to(this.model.rotation, this.animationSpeed, {
-        y: 12 * Math.PI
-      })
+      this.modelTern = tern
       TweenMax.to(this.camera.position, this.animationSpeed, { z: 300 })
       this.renderer.render(this.scene, this.camera)
+      this.switchText('works')
     },
-    animate3() {
+    aboutAnimate() {
       TweenMax.to(this.model.rotation, this.animationSpeed, {
         y: 4 * Math.PI
       })
       TweenMax.to(this.camera.position, this.animationSpeed, { z: 200 })
       this.renderer.render(this.scene, this.camera)
+      this.switchText('about')
+    },
+    contactAnimate() {
+      const tern = 2 * Math.PI
+      TweenMax.to(this.model.rotation, this.animationSpeed, {
+        y: tern
+      })
+      this.modelTern = tern
+      TweenMax.to(this.camera.position, this.animationSpeed, { z: 400 })
+      this.renderer.render(this.scene, this.camera)
+      this.switchText('contact')
+    },
+    switchText(CurrentClass) {
+      this.tl
+        .to(`.s-lw-${this.PreviousClass}`, 0.3, {
+          y: '120%',
+          rotate: '10deg'
+        })
+        .set(`.s-lw-${this.PreviousClass}`, { display: 'none' })
+        .set(`.s-lw-${CurrentClass}`, { display: 'block' })
+        .to(`.s-lw-${CurrentClass}`, 0.3, {
+          y: '0%',
+          rotate: '0deg',
+          delay: 0.3
+        })
     },
     wheelAction() {
       // Function of the wheel. Scrolling at a constant power will do the job.
       let wheelToggle = true
       window.onmousewheel = (event) => {
-        const wheelPower = 200
+        const wheelPower = 50
         if (event.wheelDelta > wheelPower && wheelToggle) {
-          console.log('👆上にホイールした', wheelToggle)
           this.animaChangeCount -= 1
           if (this.animaChangeCount <= 0) {
-            this.animaChangeCount = 1
-          }
-          this.changeAnimation()
-          wheelToggle = false
-          setTimeout(() => {
-            wheelToggle = true
-          }, 1000)
-        } else if (event.wheelDelta < wheelPower * -1 && wheelToggle) {
-          console.log('下にホイールした👇', wheelToggle)
-          this.animaChangeCount += 1
-          if (this.animaChangeCount >= 4) {
             this.animaChangeCount = 4
           }
-          this.changeAnimation()
+          this.changeAnimation(this.animaChangeCount)
+
           wheelToggle = false
           setTimeout(() => {
             wheelToggle = true
-          }, 1000)
+          }, 3000)
+        } else if (event.wheelDelta < wheelPower * -1 && wheelToggle) {
+          this.animaChangeCount += 1
+          if (this.animaChangeCount >= 5) {
+            this.animaChangeCount = 1
+          }
+          this.changeAnimation(this.animaChangeCount)
+
+          wheelToggle = false
+          setTimeout(() => {
+            wheelToggle = true
+          }, 3000)
         }
       }
     },
-    changeAnimation() {
-      if (this.animaChangeCount === 1) {
-        console.log(this.animaChangeCount)
+    changeAnimation(animaChangeCount) {
+      if (animaChangeCount === 1) {
+        console.log(animaChangeCount, 'TOP')
         this.defaultPositionAnimate()
-      } else if (this.animaChangeCount === 2) {
-        console.log(this.animaChangeCount)
-        this.animate()
-      } else if (this.animaChangeCount === 3) {
-        console.log(this.animaChangeCount)
-        this.animate2()
-      } else if (this.animaChangeCount === 4) {
-        console.log(this.animaChangeCount)
-        this.animate3()
+        this.PreviousClass = 'top'
+      } else if (animaChangeCount === 2) {
+        console.log(animaChangeCount, 'WORKS')
+        this.worksAnimate()
+        this.PreviousClass = 'works'
+      } else if (animaChangeCount === 3) {
+        console.log(animaChangeCount, 'ABOUT')
+        this.aboutAnimate()
+        this.PreviousClass = 'about'
+      } else if (animaChangeCount === 4) {
+        console.log(animaChangeCount, 'CONTACT')
+        this.contactAnimate()
+        this.PreviousClass = 'contact'
       }
     }
   }
@@ -177,20 +232,55 @@ export default {
 </script>
 
 <style lang="scss">
-.telphoneBox {
-  .events {
-    position: fixed;
-    z-index: 2;
+.pageAyumukun {
+  position: fixed;
+  top: 0;
+  left: 0;
+  @include full-screen;
+  .switch_linked {
+    position: absolute;
     bottom: $pri-value;
-    left: $pri-value;
-    display: flex;
-    flex-direction: row;
-    @include gap-right(20px);
-    p {
-      cursor: pointer;
-      padding: 4px 20px;
-      border-radius: 100px;
-      border: 2px solid $color-white;
+    left: 0;
+    right: 0;
+    width: fit-content;
+    height: fit-content;
+    display: block;
+    margin: auto;
+    @include mq(sm) {
+      bottom: 32px;
+    }
+    &__wrap {
+      &__text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin: auto;
+        width: fit-content;
+        overflow: hidden;
+        text-align: center;
+        @include font-title-primary;
+        @include mq(sm) {
+          font-size: 56px;
+        }
+        p,
+        a {
+          display: none;
+          transform: translateY(120%) rotate(5deg);
+          transform-origin: left;
+        }
+      }
+    }
+    &__scroll {
+      text-align: center;
+      @include font-title-secondry;
+      font-size: 14px;
+      @include mq(sm) {
+        font-size: 14px;
+      }
+      p {
+        color: $color-gray;
+      }
     }
   }
 }
