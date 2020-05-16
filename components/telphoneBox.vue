@@ -30,6 +30,8 @@ export default {
       loarder: null,
       model: null,
       clock: null,
+      swipeStart: 0,
+      swipeEnd: 0,
       animationSpeed: 3,
       animaChangeCount: 1,
       tl: new TimelineMax(),
@@ -41,6 +43,7 @@ export default {
   mounted() {
     this.init()
     this.wheelAction()
+    this.swipeAciton()
 
     this.tl
       .set('.s-lw-top', {
@@ -129,7 +132,6 @@ export default {
         requestAnimationFrame(this.ternModel)
       }
     },
-
     defaultPositionAnimate() {
       this.ternModel()
       TweenMax.to(this.camera.position, this.animationSpeed, { z: 150 })
@@ -182,6 +184,7 @@ export default {
       // Function of the wheel. Scrolling at a constant power will do the job.
       let wheelToggle = true
       window.onmousewheel = (event) => {
+        console.log(event.wheelDelta)
         const wheelPower = 50
         if (event.wheelDelta > wheelPower && wheelToggle) {
           this.animaChangeCount -= 1
@@ -207,6 +210,32 @@ export default {
           }, 3000)
         }
       }
+    },
+    swipeAciton() {
+      window.addEventListener('touchstart', (event) => {
+        this.swipeStart = event.changedTouches[0].pageY
+      })
+      window.addEventListener('touchend', (event) => {
+        this.swipeEnd = event.changedTouches[0].pageY
+        const absValue = Math.abs(this.swipeStart - this.swipeEnd)
+        if (absValue > 100) {
+          if (this.swipeStart > this.swipeEnd) {
+            console.log('👇', absValue)
+            this.animaChangeCount -= 1
+            if (this.animaChangeCount <= 0) {
+              this.animaChangeCount = 4
+            }
+            this.changeAnimation(this.animaChangeCount)
+          } else {
+            console.log('☝️', absValue)
+            this.animaChangeCount += 1
+            if (this.animaChangeCount >= 5) {
+              this.animaChangeCount = 1
+            }
+            this.changeAnimation(this.animaChangeCount)
+          }
+        }
+      })
     },
     changeAnimation(animaChangeCount) {
       if (animaChangeCount === 1) {
