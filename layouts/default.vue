@@ -16,28 +16,7 @@
 </template>
 
 <script>
-import { TweenMax } from 'gsap'
-export default {
-  mounted() {
-    this.notScroll()
-  },
-  methods: {
-    notScroll() {
-      const containerClass = document.getElementsByClassName('container')
-      const containerClassHeight = containerClass[0].clientHeight
-      console.log('container', containerClassHeight)
-      const windowHeight = window.parent.screen.height
-      console.log('window', windowHeight)
-      if (containerClassHeight < windowHeight) {
-        TweenMax.set('html,body', { overflow: 'hidden' })
-      }
-      window.onresize = () => {
-        this.notScroll()
-        console.log('hi')
-      }
-    }
-  }
-}
+export default {}
 </script>
 
 <style lang="scss">
@@ -78,7 +57,7 @@ html {
       display: none;
     }
     &__text {
-      @include font-nav;
+      @include font-nav-secondary;
       line-height: 18px;
     }
     &__image {

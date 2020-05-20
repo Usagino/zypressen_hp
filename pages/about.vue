@@ -216,22 +216,14 @@ export default {
       overflow: hidden;
     }
     &--aboutus {
-      @include font-title-secondry;
-      font-size: 24px;
+      @include font-title-secondary;
       transform: translateY(120%) rotate(5deg);
       transform-origin: left top;
-      @include mq(sm) {
-        font-size: 18px;
-      }
     }
     h1 {
-      @include font-title-secondry;
-      font-size: 60px;
+      @include font-title-secondary;
       transform: translateY(120%) rotate(5deg);
       transform-origin: left top;
-      @include mq(sm) {
-        font-size: 28px;
-      }
     }
     &--explanation {
       @include font-text-primary;
@@ -259,8 +251,6 @@ export default {
     @include flex-middle;
     a {
       margin: 0 auto;
-      @include font-title-secondry;
-      font-size: 18px;
       display: flex;
       flex-direction: column;
       &::after {

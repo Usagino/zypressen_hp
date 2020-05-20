@@ -128,8 +128,7 @@ export default {
       a {
         position: relative;
         z-index: 2000;
-        @include font-title-secondry;
-        font-size: 130px;
+        @include font-title-first;
         line-height: 100px;
       }
       a:hover {

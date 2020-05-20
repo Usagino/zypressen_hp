@@ -1,4 +1,10 @@
-
+html{
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display:none;
+  }
+}
+html
 *{
   color: $color-white;
   text-decoration: none;
@@ -9,4 +15,7 @@ a{
 }
 ul{
   list-style: none;
+}
+h1,h2{
+  @include font-title-first
 }

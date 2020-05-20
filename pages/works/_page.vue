@@ -1,20 +1,23 @@
 <template lang="pug">
-.container
-  .first-thumbnail(:style="{backgroundImage:Thumbnail}")
-    .first-thumbnail--title
-      h1 {{Work.TITLE}}
-      p -{{this.$dayjs(this.Work.DATE).format('YYYY')}}
-    .first-thumbnail--scroll
-      p scroll
-    .first-thumbnail--navwrap
-      .first-thumbnail--next.first-thumbnail--nav(v-if="Pagination.next !== '/works/undefined'")
-        nuxt-link(:to="Pagination.next")
-          p NEXT
-          span
-      .first-thumbnail--back.first-thumbnail--nav(v-if="Pagination.back !== '/works/undefined'")
-        nuxt-link(:to="Pagination.back")
-          p BACK
-          span
+.container.works-page
+  .first-thumbnail(:style="{backgroundImage:Thumbnail,backgroundSize:BackgroundSize+'%'}")
+    .first-thumbnail--screen
+      .first-thumbnail--title
+        span.first-thumbnail--textwrap
+          h1 {{Work.TITLE}}
+        span.first-thumbnail--textwrap.first-thumbnail--title__date
+          p -{{this.$dayjs(this.Work.DATE).format('YYYY')}}
+      .first-thumbnail--scroll
+        p scroll
+      .first-thumbnail--navwrap
+        .first-thumbnail--next.first-thumbnail--nav(v-if="Pagination.next !== '/works/undefined'")
+          nuxt-link(:to="Pagination.next")
+            p NEXT
+            span
+        .first-thumbnail--back.first-thumbnail--nav(v-if="Pagination.back !== '/works/undefined'")
+          nuxt-link(:to="Pagination.back")
+            p BACK
+            span
   .second-body
     .second-body__text
       p(v-html="Body")
@@ -23,14 +26,14 @@
         v-for="color in Colors"
         :style="{backgroundColor:color.COLOR}")
   .third-images
-    img.third-images--image(v-for="image in Work.IMAGE" :src="image.IMAGE.url" :key="image.index")
-  .four-nextpage(v-if="Pagination.next !== '/works/undefined'")
-    nuxt-link(:to="Pagination.next") NEXT WORK
+    span.third-images__wrap(v-for="image in Work.IMAGE" :key="image.index" )
+      .third-images--image(:style="{backgroundImage:BodyImage(image.IMAGE.url),backgroundSize:'150%',backgroundPosition:'center'}")
 </template>
 
 <script>
 import axios from 'axios'
-
+import { TimelineMax } from 'gsap'
+import inView from 'in-view'
 export default {
   async asyncData({ params }) {
     const { data } = await axios.get(
@@ -64,32 +67,78 @@ export default {
       Colors: [],
       IdArray: [],
       Pagination: {},
-      Body: ' '
+      Body: ' ',
+      BackgroundSize: '150%'
     }
   },
-  mounted() {},
-  methods: {}
+  mounted() {
+    this.imageDisplay()
+
+    window.onscroll = () => {
+      const windowHeight = window.parent.screen.height
+      const y = document.documentElement.scrollTop
+      // console.log(this.BackgroundSize)
+      if (y < windowHeight) {
+        const size = y * 0.1 + 100
+        this.BackgroundSize = size
+      }
+    }
+    // this.titleAnimationHide()
+  },
+  methods: {
+    imageDisplay() {
+      const tl = new TimelineMax()
+      const baseElWidth = document.getElementsByClassName(
+        'second-body__text'
+      )[0].clientWidth
+      const windowWidth = window.innerWidth
+      // const windowHeight = window.parent.screen.height
+      console.log(baseElWidth, windowWidth)
+      tl.set('.third-images--image:first-child', {
+        scale: baseElWidth / windowWidth
+      })
+      inView.offset(500)
+      inView('.third-images').on('enter', (el) => {
+        tl.to('.third-images--image:first-child', 0.5, {
+          backgroundSize: '100%',
+          scale: 1,
+          ease: 'easeOut'
+        })
+      })
+    },
+    BodyImage(image) {
+      return 'url("' + image + '")'
+    }
+  }
 }
 </script>
 
 <style lang="scss">
+.works-page {
+  position: relative;
+  scroll-snap-type: y;
+  overflow: auto;
+}
 .first-thumbnail {
   @include full-screen;
   background-size: cover;
   background-position: center;
-  @include flex-middle;
+  background-attachment: fixed;
+  background-size: 100%;
   position: relative;
+  &--screen {
+    @include full-screen;
+    @include flex-middle;
+    position: relative;
+  }
   &--title {
-    h1 {
-      @include font-title-secondry;
+    &__date {
+      margin-left: auto;
     }
+
     p {
-      @include font-title-secondry;
-      font-size: 44px;
+      @include font-title-secondary;
       text-align: right;
-      @include mq(sm) {
-        font-size: 24px;
-      }
     }
   }
   &--navwrap {
@@ -103,7 +152,7 @@ export default {
     }
   }
   &--nav {
-    position: absolute;
+    position: fixed;
     margin: auto;
     height: fit-content;
     top: 0px;
@@ -118,7 +167,7 @@ export default {
       flex-direction: column;
     }
     p {
-      @include font-nav;
+      @include font-nav-secondary;
       padding: 6px;
       @include mq(sm) {
         padding: 0px;
@@ -172,12 +221,19 @@ export default {
     width: fit-content;
     p {
       display: inline-block;
-      @include font-nav;
+      @include font-nav-primary;
     }
   }
+  &--textwrap {
+    overflow: hidden;
+    display: block;
+    width: fit-content;
+    height: fit-content;
+  }
 }
+
 .second-body {
-  padding-top: 150px;
+  padding: 140px 0px;
   @include default-width;
   &__text {
     p {
@@ -200,24 +256,25 @@ export default {
   }
 }
 .third-images {
-  padding: 150px 0px 40px;
-  @include default-width;
-  @include gap-bottom(24px);
+  padding-bottom: 160px;
+  // @include default-width;
+
+  @include gap-bottom(2px);
   @include mq(sm) {
     padding: 32px 0px 0px;
   }
+  &__wrap {
+    display: block;
+  }
   &--image {
+    transform-origin: center center;
     width: 100%;
     height: auto;
-  }
-}
-.four-nextpage {
-  margin: 88px auto;
-  @include flex-middle;
-  a {
-    @include font-title-secondry;
-    font-size: 24px;
-    display: inline-block;
+    @include full-screen;
+    // background-size: cover;
+    background-position: center;
+    background-size: 100%;
+    background: $color-gray;
   }
 }
 </style>

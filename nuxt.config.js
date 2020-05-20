@@ -33,6 +33,7 @@ export default {
   plugins: [
     '~plugins/components.js',
     '~plugins/day.js',
+    '~plugins/globalMethods.js',
     { src: '~/plugins/axios', ssr: false }
   ],
 
