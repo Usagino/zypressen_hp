@@ -184,7 +184,6 @@ export default {
       // Function of the wheel. Scrolling at a constant power will do the job.
       let wheelToggle = true
       window.onmousewheel = (event) => {
-        console.log(event.wheelDelta)
         const wheelPower = 50
         if (event.wheelDelta > wheelPower && wheelToggle) {
           this.animaChangeCount -= 1
