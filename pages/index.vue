@@ -10,8 +10,4 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.container {
-  color: $color-orange;
-}
-</style>
+<style lang="scss"></style>

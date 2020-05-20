@@ -319,8 +319,4 @@ export default {
   left: 0;
   z-index: -1;
 }
-html,
-body {
-  overflow: hidden;
-}
 </style>
