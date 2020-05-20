@@ -31,7 +31,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .works {
   margin: 0 auto;
   @include secondary-margin;

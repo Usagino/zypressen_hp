@@ -110,3 +110,9 @@ $breakpoints: (
     padding: 0 16px;
   }
 }
+@mixin overflow-visible{
+  html,
+  body {
+    overflow: visible;
+  }
+}
