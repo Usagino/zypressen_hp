@@ -130,7 +130,7 @@ export default {
   background-attachment: fixed;
   background-size: 100%;
   position: relative;
-  height: 180vh;
+  height: 200vh;
   &--screen {
     @include full-screen;
     @include flex-middle;
@@ -245,7 +245,7 @@ export default {
   position: absolute;
   bottom: 0px;
   left: 100%;
-  height: 80vh;
+  height: 100vh;
   width: 300vw;
 }
 .second-body {
