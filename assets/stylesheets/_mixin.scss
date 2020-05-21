@@ -1,42 +1,14 @@
 //font
-@mixin font-family{
-  font-family:'Teko',YakuHanJP,"Roboto";
+@font-face {
+  font-family: "Titling Gothic FB Wd Bd";
+   font-display: swap;
+   font-style: normal;
+   font-weight: normal;
 }
-// @mixin font-title-primary {
-// 	font-size:130px;
-//   @include font-family;
-// 	font-weight:bold;
-//
-// }
-// @mixin font-title-secondry {
-// 	font-size:110px;
-//   @include font-family;
-// 	font-weight:bold;
-//   @include mq(sm){
-//     font-size: 48px;
-//   }
-// }
-// @mixin font-nav {
-// 	font-size:14px;
-// 	@include font-family;
-// 	font-weight:normal;
-//   letter-spacing: 1px;
-// }
-// @mixin font-text-primary {
-// 	font-size:14px;
-// 	font-family:YakuHanJP,"Roboto";
-// 	font-weight: normal;
-// 	line-height:180%;
-//   @include mq(sm){
-//
-//   }
-// }
-// @mixin font-text-tertary {
-// 	font-size:8px;
-// 	font-family:YakuHanJP,"Roboto";
-// 	font-weight: 700;
-// 	line-height:200px;
-// }
+@mixin font-family{
+  font-family:'Titling Gothic FB Wd Bd',YakuHanJP,"Roboto";
+}
+
 $color-black: rgba(0,0,0,1);
 $color-white: rgba(255,255,255,1);
 $color-glay: rgba(122,122,122,1);

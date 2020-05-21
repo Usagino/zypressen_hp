@@ -20,6 +20,11 @@ export default {
         rel: 'style',
         href:
           'https://cdn.jsdelivr.net/npm/yakuhanjp@3.3.1/dist/css/yakuhanjp.min.css'
+      },
+      {
+        rel: 'stylesheet',
+        type: 'text/css',
+        href: '//cloud.typenetwork.com/projects/3724/fontface.css/'
       }
     ]
   },
