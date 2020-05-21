@@ -79,7 +79,7 @@ export default {
       const y = document.documentElement.scrollTop
       // console.log(this.BackgroundSize)
       if (y < windowHeight) {
-        const size = y * 0.1 + 100
+        const size = y * 0.06 + 100
         this.BackgroundSize = size
       }
     }
@@ -157,6 +157,7 @@ export default {
     height: fit-content;
     top: 0px;
     bottom: 0px;
+    z-index: 2;
     @include mq(sm) {
       position: relative;
     }
