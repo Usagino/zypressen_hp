@@ -18,6 +18,8 @@
           nuxt-link(:to="Pagination.back")
             p BACK
             span
+    .cover-wrap
+
   .second-body
     .second-body__text
       p(v-html="Body")
@@ -32,7 +34,7 @@
 
 <script>
 import axios from 'axios'
-import { TimelineMax } from 'gsap'
+import { TimelineMax, TweenMax } from 'gsap'
 import inView from 'in-view'
 export default {
   async asyncData({ params }) {
@@ -73,15 +75,17 @@ export default {
   },
   mounted() {
     this.imageDisplay()
-
     window.onscroll = () => {
-      const windowHeight = window.parent.screen.height
+      const windowHeight = window.innerHeight
       const y = document.documentElement.scrollTop
       // console.log(this.BackgroundSize)
       if (y < windowHeight) {
         const size = y * 0.06 + 100
         this.BackgroundSize = size
       }
+      console.log(y / windowHeight + 100)
+      const transformValue = 100 - (y / windowHeight) * 100
+      TweenMax.to('.cover-wrap', 0.2, { left: transformValue + '%' })
     }
     // this.titleAnimationHide()
   },
@@ -94,12 +98,12 @@ export default {
       const windowWidth = window.innerWidth
       // const windowHeight = window.parent.screen.height
       console.log(baseElWidth, windowWidth)
-      tl.set('.third-images--image:first-child', {
+      tl.set('.third-images--image', {
         scale: baseElWidth / windowWidth
       })
       inView.offset(500)
       inView('.third-images').on('enter', (el) => {
-        tl.to('.third-images--image:first-child', 0.5, {
+        tl.to('.third-images--image', 0.5, {
           backgroundSize: '100%',
           scale: 1,
           ease: 'easeOut'
@@ -126,6 +130,7 @@ export default {
   background-attachment: fixed;
   background-size: 100%;
   position: relative;
+  height: 180vh;
   &--screen {
     @include full-screen;
     @include flex-middle;
@@ -232,7 +237,17 @@ export default {
     height: fit-content;
   }
 }
-
+.cover-wrap {
+  // @include full-screen;
+  background: $color-black;
+  content: '';
+  // opacity: 0;
+  position: absolute;
+  bottom: 0px;
+  left: 100%;
+  height: 80vh;
+  width: 300vw;
+}
 .second-body {
   padding: 140px 0px;
   @include default-width;
