@@ -287,10 +287,7 @@ export default {
         width: fit-content;
         overflow: hidden;
         text-align: center;
-        @include font-title-primary;
-        @include mq(sm) {
-          font-size: 56px;
-        }
+        @include font-title-first;
         p,
         a {
           display: none;
@@ -301,11 +298,7 @@ export default {
     }
     &__scroll {
       text-align: center;
-      @include font-title-secondry;
-      font-size: 14px;
-      @include mq(sm) {
-        font-size: 14px;
-      }
+      @include font-nav-primary;
       p {
         color: $color-gray;
       }

@@ -13,11 +13,13 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/pwa": "^3.0.0-beta.20",
     "curtainsjs": "^6.1.0",
     "dayjs": "^1.8.26",
     "es6-promise": "^4.2.8",
     "gsap": "^3.2.6",
     "img-color": "^1.0.2",
+    "in-view": "^0.6.1",
     "isomorphic-fetch": "^2.2.1",
     "nuxt": "^2.0.0",
     "nuxt-user-agent": "^1.2.2",

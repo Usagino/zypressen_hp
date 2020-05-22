@@ -30,6 +30,8 @@ export default {
       console.log('window', windowHeight)
       if (containerClassHeight < windowHeight) {
         TweenMax.set('html,body', { overflow: 'hidden' })
+      } else {
+        TweenMax.set('html,body', { overflow: 'scroll' })
       }
       window.onresize = () => {
         this.notScroll()
@@ -78,7 +80,7 @@ html {
       display: none;
     }
     &__text {
-      @include font-nav;
+      @include font-nav-secondary;
       line-height: 18px;
     }
     &__image {
