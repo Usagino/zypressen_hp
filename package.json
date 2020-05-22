@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/pwa": "^3.0.0-beta.20",
     "curtainsjs": "^6.1.0",
     "dayjs": "^1.8.26",
     "es6-promise": "^4.2.8",

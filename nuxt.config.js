@@ -36,7 +36,7 @@ export default {
   ],
 
   plugins: [
-    '~plugins/components.js',
+    '@/plugins/components.js',
     '~plugins/day.js',
     '~plugins/globalMethods.js',
     { src: '~/plugins/axios', ssr: false }
@@ -45,12 +45,17 @@ export default {
   buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/stylelint-module'],
 
   modules: [
+    '@nuxtjs/pwa',
     '@nuxtjs/axios',
     '@nuxtjs/dotenv',
     '@nuxtjs/style-resources',
     'nuxt-webfontloader',
     'nuxt-user-agent'
   ],
+  manifest: {
+    name: 'ZYPRESSEN',
+    lang: 'ja'
+  },
   styleResources: {
     scss: ['~/assets/stylesheets/style.scss']
   },

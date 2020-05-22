@@ -1,6 +1,6 @@
 <template lang="pug">
 .container.works-page
-  .first-thumbnail(:style="{backgroundImage:Thumbnail,backgroundSize:BackgroundSize+'%'}")
+  .first-thumbnail(:style="{backgroundImage:BodyImage(ThumbnailImage),backgroundSize:BackgroundSize+'%'}")
     .first-thumbnail--screen
       .first-thumbnail--title
         span.first-thumbnail--textwrap
@@ -19,7 +19,6 @@
             p BACK
             span
     .cover-wrap
-
   .second-body
     .second-body__text
       p(v-html="Body")
@@ -28,8 +27,8 @@
         v-for="color in Colors"
         :style="{backgroundColor:color.COLOR}")
   .third-images
-    span.third-images__wrap(v-for="image in Work.IMAGE" :key="image.index" )
-      .third-images--image(:style="{backgroundImage:BodyImage(image.IMAGE.url),backgroundSize:'150%',backgroundPosition:'center'}")
+    span.third-images__wrap(v-for="(image,index) in Work.IMAGE" :key="image.index" )
+      .third-images--image(:class="'page-image-' + index" :style="{backgroundImage:BodyImage(image.IMAGE.url),backgroundSize:'150%',backgroundPosition:'center'}")
 </template>
 
 <script>
@@ -58,7 +57,8 @@ export default {
       Thumbnail: 'url("' + work.THUMBNAIL.url + '")',
       Colors: work.COLOR,
       Pagination: pagination,
-      Body: work.BODY
+      Body: work.BODY,
+      ThumbnailImage: work.THUMBNAIL.url
     }
   },
   data() {
@@ -66,16 +66,27 @@ export default {
       Data: null,
       Work: {},
       Thumbnail: '',
+      ThumbnailImage: '',
       Colors: [],
       IdArray: [],
       Pagination: {},
       Body: ' ',
-      BackgroundSize: '150%'
+      BackgroundSize: '150%',
+      firstThumbnail: {
+        backgroundImage: this.changeWebp(this.Thumbnail),
+        backgroundSize: this.BackgroundSize + '%'
+      }
     }
   },
   mounted() {
     this.imageDisplay()
+    this.hideDisplay()
     window.onscroll = () => {
+      this.hideDisplay()
+    }
+  },
+  methods: {
+    hideDisplay() {
       const windowHeight = window.innerHeight
       const y = document.documentElement.scrollTop
       // console.log(this.BackgroundSize)
@@ -83,13 +94,11 @@ export default {
         const size = y * 0.06 + 100
         this.BackgroundSize = size
       }
-      console.log(y / windowHeight + 100)
-      const transformValue = 100 - (y / windowHeight) * 100
-      TweenMax.to('.cover-wrap', 0.2, { left: transformValue + '%' })
-    }
-    // this.titleAnimationHide()
-  },
-  methods: {
+      const transformValue = (y / windowHeight) * 100
+      if (transformValue <= 120) {
+        TweenMax.set('.cover-wrap', { width: transformValue + 'vw' })
+      }
+    },
     imageDisplay() {
       const tl = new TimelineMax()
       const baseElWidth = document.getElementsByClassName(
@@ -97,13 +106,12 @@ export default {
       )[0].clientWidth
       const windowWidth = window.innerWidth
       // const windowHeight = window.parent.screen.height
-      console.log(baseElWidth, windowWidth)
-      tl.set('.third-images--image', {
+      tl.set('.page-image-0', {
         scale: baseElWidth / windowWidth
       })
       inView.offset(500)
       inView('.third-images').on('enter', (el) => {
-        tl.to('.third-images--image', 0.5, {
+        tl.to('.page-image-0', 0.3, {
           backgroundSize: '100%',
           scale: 1,
           ease: 'easeOut'
@@ -111,7 +119,8 @@ export default {
       })
     },
     BodyImage(image) {
-      return 'url("' + image + '")'
+      const picture = this.changeWebp(image)
+      return 'url("' + picture + '")'
     }
   }
 }
@@ -244,9 +253,9 @@ export default {
   // opacity: 0;
   position: absolute;
   bottom: 0px;
-  left: 100%;
+  right: 0px;
   height: 100vh;
-  width: 300vw;
+  width: 0vw;
 }
 .second-body {
   padding: 140px 0px;
@@ -274,7 +283,6 @@ export default {
 .third-images {
   padding-bottom: 160px;
   // @include default-width;
-
   @include gap-bottom(2px);
   @include mq(sm) {
     padding: 32px 0px 0px;
@@ -283,10 +291,12 @@ export default {
     display: block;
   }
   &--image {
+    will-change: transform;
     transform-origin: center center;
-    width: 100%;
+    width: 100vw;
     height: auto;
     @include full-screen;
+    height: calc(1000vw / 16);
     // background-size: cover;
     background-position: center;
     background-size: 100%;

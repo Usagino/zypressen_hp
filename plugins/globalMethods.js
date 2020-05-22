@@ -6,6 +6,13 @@ Vue.mixin({
     this.notScroll()
   },
   methods: {
+    changeWebp(image) {
+      if (this.$ua.browser() === 'Safari') {
+        return image
+      } else {
+        return image + '?fm=webp'
+      }
+    },
     notScroll() {
       const containerClass = document.getElementsByClassName('container')
       const containerClassHeight = containerClass[0].clientHeight

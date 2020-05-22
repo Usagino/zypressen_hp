@@ -3,7 +3,7 @@
     .works
       nuxt-link.works__item(v-for="works in WorksArray" :to="'/works/'+works.id" :key="works.id")
         .works__imgbox
-          img(:src="works.THUMBNAIL.url")
+          img(:src="changeWebp(works.THUMBNAIL.url)")
 </template>
 
 <script>
@@ -27,7 +27,19 @@ export default {
     return {
       WorksArray: []
     }
+  },
+  mounted() {
+    console.log(this.changeWebp(this.WorksArray[0].THUMBNAIL.url))
   }
+  // methods: {
+  //   changeWebp(image) {
+  //     if (this.$ua.browser() === 'Safari') {
+  //       return image
+  //     } else {
+  //       return image + '?fm=webp'
+  //     }
+  //   }
+  // }
 }
 </script>
 

@@ -1,5 +1,7 @@
 html{
   scrollbar-width: none;
+  overflow-x: hidden;
+  max-width: 100vw;
   &::-webkit-scrollbar {
     display:none;
   }
@@ -8,6 +10,7 @@ html
 *{
   color: $color-white;
   text-decoration: none;
+
 }
 
 a{
@@ -18,4 +21,8 @@ ul{
 }
 h1,h2{
   @include font-title-first
+}
+.container{
+  overflow-x: hidden;
+  max-width: 100vw;
 }
