@@ -118,9 +118,9 @@ export default {
     dustAdd() {
       const geometry = new THREE.Geometry()
       // 表示する範囲を宣言して
-      const SIZE = 500
+      const SIZE = 200
       // 表示するパーティクルの数を決めて
-      const LENGTH = 1000000
+      const LENGTH = 10000
       // その数まで四方八方に表示させるループ処理をする
       for (let i = 0; i < LENGTH; i++) {
         geometry.vertices.push(
