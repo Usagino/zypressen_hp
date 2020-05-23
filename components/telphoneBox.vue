@@ -143,7 +143,6 @@ export default {
       this.dusts = new THREE.Points(geometry, material)
       TweenMax.to(this.dusts.rotation, 600, {
         y: -2 * Math.PI,
-        z: -4 * Math.PI,
         repeat: -1
       })
       this.scene.add(this.dusts)
