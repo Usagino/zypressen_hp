@@ -1,7 +1,7 @@
 <template lang="pug">
 .container
-  nuxt-link(to="/test") test
-  telphoneBox
+  client-only
+    telphoneBox
 </template>
 
 <script>

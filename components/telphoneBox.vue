@@ -99,7 +99,7 @@ export default {
       })
 
       this.groundAdd()
-      this.dustAdd()
+      // this.dustAdd()
       // this.Helpers()
       this.render()
       this.renderer.render(this.scene, this.camera)
