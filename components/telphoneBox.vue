@@ -99,7 +99,7 @@ export default {
       })
 
       this.groundAdd()
-      // this.dustAdd()
+      this.dustAdd()
       // this.Helpers()
       this.render()
       this.renderer.render(this.scene, this.camera)
@@ -133,12 +133,20 @@ export default {
       }
       const texture = new THREE.TextureLoader().load('/dust.png')
       // const material = new THREE.MeshBasicMaterial({ map: texture })
-      const material = new THREE.PointsMaterial({
-        // color: '0xffffff',
-        size: 0.5,
-        map: texture,
-        transparent: true
-      })
+      let material = new THREE.PointsMaterial()
+      console.log(material.map)
+      if (material.map) {
+        console.log('dispose')
+        material.map.dispose() // これを必ず呼ぶこと！！！
+        material.map = texture
+      } else {
+        material = new THREE.PointsMaterial({
+          // color: '0xffffff',
+          size: 0.5,
+          map: texture,
+          transparent: true
+        })
+      }
 
       this.dusts = new THREE.Points(geometry, material)
       TweenMax.to(this.dusts.rotation, 600, {
