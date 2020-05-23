@@ -1,12 +1,12 @@
 //font
 @font-face {
-  font-family: "Titling Gothic FB Wd Bd";
+  font-family: "Titling Gothic FB Extd Bd";
    font-display: swap;
    font-style: normal;
    font-weight: normal;
 }
 @mixin font-family{
-  font-family:'Titling Gothic FB Wd Bd',YakuHanJP,"Roboto";
+  font-family:'Titling Gothic FB Extd Bd',YakuHanJP,"Roboto";
 }
 
 $color-black: rgba(0,0,0,1);
