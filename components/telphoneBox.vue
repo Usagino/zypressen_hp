@@ -142,7 +142,7 @@ export default {
       } else {
         material = new THREE.PointsMaterial({
           // color: '0xffffff',
-          size: 0.5,
+          size: 2,
           map: texture,
           transparent: true
         })
