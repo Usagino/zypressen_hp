@@ -4,7 +4,7 @@ const { CMSKEY } = process.env
 export default {
   mode: 'universal',
   head: {
-    title: process.env.npm_package_name || '',
+    title: 'ZYPRESSEN',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },

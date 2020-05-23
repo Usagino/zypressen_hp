@@ -6,8 +6,6 @@
       p.page__copylight__text @2020ZYPRESSEN
       a.page__copylight__image(href="/twitter.com")
         img(src="/DEFAULT/twitter.svg")
-      a.page__copylight__image(href="/facebook.com")
-        img(src="/DEFAULT/facebook.svg")
       a.page__copylight__image(href="/instagram.com")
         img(src="/DEFAULT/instagram.svg")
     PageMenuIcon

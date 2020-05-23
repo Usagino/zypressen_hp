@@ -28,6 +28,8 @@ export default {
       plane: null,
       cube: null,
       loarder: null,
+      ground: null,
+      dusts: null,
       model: null,
       clock: null,
       swipeStart: 0,
@@ -68,7 +70,8 @@ export default {
       this.renderer.shadowMap.enabled = true
       this.renderer.gammaOutput = true
       this.renderer.setSize(window.innerWidth, window.innerHeight)
-
+      // fog
+      this.scene.fog = new THREE.Fog(0x000000, -20, 300)
       // camera
       this.camera = new THREE.PerspectiveCamera(
         45,
@@ -80,8 +83,8 @@ export default {
       this.camera.lookAt(this.scene.position)
 
       // Light
-      this.Light = new THREE.SpotLight(0x6f6f6f, 2, 500, Math.PI / 4, 1)
-      this.Light.position.set(70, 40, 80)
+      this.Light = new THREE.DirectionalLight(0xffffff, 4)
+      this.Light.position.set(40, 120, 80)
       this.Light.castShadow = true
       this.scene.add(this.Light)
 
@@ -94,19 +97,59 @@ export default {
         this.scene.add(this.model)
         this.ternModel()
       })
+
+      this.groundAdd()
+      this.dustAdd()
+      // this.Helpers()
       this.render()
       this.renderer.render(this.scene, this.camera)
       window.addEventListener('resize', this.onResize, false)
     },
+    groundAdd() {
+      const groundGeometry = new THREE.BoxGeometry(1000000, 0, 1000000)
+      const groundMaterial = new THREE.MeshBasicMaterial({
+        color: 0x0a0a0a
+      })
+      const ground = new THREE.Mesh(groundGeometry, groundMaterial)
+      ground.position.set(0, -22, 0)
+      ground.castShadow = true
+      this.scene.add(ground)
+    },
+    dustAdd() {
+      const geometry = new THREE.Geometry()
+      // 表示する範囲を宣言して
+      const SIZE = 500
+      // 表示するパーティクルの数を決めて
+      const LENGTH = 1000000
+      // その数まで四方八方に表示させるループ処理をする
+      for (let i = 0; i < LENGTH; i++) {
+        geometry.vertices.push(
+          new THREE.Vector3(
+            SIZE * (Math.random() - 0.5),
+            SIZE * (Math.random() - 0.5),
+            SIZE * (Math.random() - 0.5)
+          )
+        )
+      }
+      const texture = new THREE.TextureLoader().load('/dust.png')
+      // const material = new THREE.MeshBasicMaterial({ map: texture })
+      const material = new THREE.PointsMaterial({
+        // color: '0xffffff',
+        size: 0.5,
+        map: texture,
+        transparent: true
+      })
+
+      this.dusts = new THREE.Points(geometry, material)
+      TweenMax.to(this.dusts.rotation, 600, {
+        y: -2 * Math.PI,
+        repeat: -1
+      })
+      this.scene.add(this.dusts)
+    },
     render() {
       document.getElementById('WebGLarea').appendChild(this.renderer.domElement)
       requestAnimationFrame(this.render)
-      this.renderer.render(this.scene, this.camera)
-    },
-    modelAnimate(model) {
-      console.log(model.rotation)
-      model.rotation.y += 0.005
-      requestAnimationFrame(this.animate)
       this.renderer.render(this.scene, this.camera)
     },
     onResize() {
@@ -117,8 +160,8 @@ export default {
     Helpers() {
       const axes = new THREE.AxesHelper(250)
       this.scene.add(axes)
-      // const gridHelper = new THREE.GridHelper(200, 50) // 引数は サイズ、1つのグリッドの大きさ
-      // this.scene.add(gridHelper)
+      const gridHelper = new THREE.GridHelper(200, 50) // 引数は サイズ、1つのグリッドの大きさ
+      this.scene.add(gridHelper)
       const LightHelper = new THREE.DirectionalLightHelper(this.Light)
       this.scene.add(LightHelper)
     },
