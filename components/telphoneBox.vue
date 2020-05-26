@@ -7,8 +7,8 @@
         nuxt-link.s-lw-works(to="/works") WORKS
         nuxt-link.s-lw-about(to="/about") ABOUT
         nuxt-link.s-lw-contact(to="/contact") CONTACT
-    .switch_linked__scroll
-      p SCROLL
+  .switch_linked__scroll
+    p SCROLL
   #WebGLarea
 </template>
 
@@ -129,7 +129,7 @@ export default {
       // 表示する範囲を宣言して
       const SIZE = 200
       // 表示するパーティクルの数を決めて
-      const LENGTH = 10000
+      const LENGTH = 5000
       // その数まで四方八方に表示させるループ処理をする
       for (let i = 0; i < LENGTH; i++) {
         geometry.vertices.push(
@@ -327,9 +327,11 @@ export default {
   @include full-screen;
   .switch_linked {
     position: absolute;
-    bottom: $pri-value;
-    left: 0;
-    right: 0;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+
     width: fit-content;
     height: fit-content;
     display: block;
@@ -357,6 +359,10 @@ export default {
       }
     }
     &__scroll {
+      position: absolute;
+      bottom: $pri-value;
+      left: 0px;
+      right: 0px;
       text-align: center;
       @include font-nav-primary;
       p {

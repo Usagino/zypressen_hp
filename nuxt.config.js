@@ -50,7 +50,8 @@ export default {
     '@nuxtjs/dotenv',
     '@nuxtjs/style-resources',
     'nuxt-webfontloader',
-    'nuxt-user-agent'
+    'nuxt-user-agent',
+    '@bazzite/nuxt-optimized-images'
   ],
   manifest: {
     name: 'ZYPRESSEN',
@@ -63,6 +64,9 @@ export default {
     google: {
       families: ['Teko:700', 'Roboto:400,700']
     }
+  },
+  optimizedImages: {
+    optimizeImages: true
   },
   env: {
     CMSKEY
