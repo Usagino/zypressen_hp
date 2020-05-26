@@ -132,10 +132,7 @@ export default {
         line-height: 100px;
       }
       a:hover {
-        color: $color-black;
-        // -webkit-text-stroke: 0.1px $color-white;
-        text-shadow: $color-white 1px 1px 0px, $color-white -1px 1px 0px,
-          $color-white 1px -1px 0px, $color-white -1px -1px 0px;
+        @include textOutline;
         @include mq(sm) {
           color: $color-white;
           -webkit-text-stroke: unset;

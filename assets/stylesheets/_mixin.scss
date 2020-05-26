@@ -139,3 +139,9 @@ $breakpoints: (
     overflow: visible;
   }
 }
+@mixin textOutline{
+  color: $color-black;
+  // -webkit-text-stroke: 0.1px $color-white;
+  text-shadow: $color-white 1px 1px 0px, $color-white -1px 1px 0px,
+    $color-white 1px -1px 0px, $color-white -1px -1px 0px;
+}

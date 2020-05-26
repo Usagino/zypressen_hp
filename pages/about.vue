@@ -32,6 +32,7 @@ export default {
     }
   },
   mounted() {
+    this.notScroll()
     this.titleAnimate()
     this.textAnimate()
     this.langAnimate()

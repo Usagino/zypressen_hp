@@ -14,7 +14,9 @@
 
 <script>
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+
 import { TimelineMax, TweenMax } from 'gsap'
 
 export default {
@@ -28,6 +30,7 @@ export default {
       plane: null,
       cube: null,
       loarder: null,
+      dracoLoader: null,
       ground: null,
       dusts: null,
       model: null,
@@ -89,8 +92,14 @@ export default {
       this.scene.add(this.Light)
 
       // 3Dmodel
+      // Optional: Provide a DRACOLoader instance to decode compressed mesh data
+      this.dracoLoader = new DRACOLoader()
+      this.dracoLoader.setDecoderPath('/draco/')
       this.loader = new GLTFLoader()
-      this.loader.load('tel.gltf', (gltf) => {
+      this.loader.setDRACOLoader(this.dracoLoader)
+      // モデルのパス
+      const url = '/gltf/tel_min.gltf'
+      this.loader.load(url, (gltf) => {
         this.model = gltf.scene
         this.model.scale.set(10.0, 10.0, 10.0)
         this.model.castShadow = true
