@@ -18,16 +18,23 @@
 
 <script>
 import { TimelineMax } from 'gsap' // eslint-disable-line
-export default {}
+export default {
+  mounted() {
+    this.notScroll()
+  }
+}
 </script>
 
 <style lang="scss" scoped>
 .page-title {
   @include default-width;
   margin-top: $sec-value;
+  padding: 0 $pri-value;
+  box-sizing: border-box;
   h1 {
     @include font-title-secondary;
     padding-bottom: 20px;
+    text-align: center;
   }
   p {
     text-align: center;
@@ -41,6 +48,10 @@ export default {}
     width: 100%;
     height: 440px;
     object-fit: cover;
+  }
+  p {
+    @include font-text-primary;
+    padding: 0 $pri-value;
   }
   &__textwrap {
     @include gap-bottom(40px);

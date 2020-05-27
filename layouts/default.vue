@@ -4,10 +4,6 @@
       img.page__logo__image(src="/PageLogo.svg")
     .page__copylight
       p.page__copylight__text @2020ZYPRESSEN
-      a.page__copylight__image(href="/twitter.com")
-        img(src="/DEFAULT/twitter.svg")
-      a.page__copylight__image(href="/instagram.com")
-        img(src="/DEFAULT/instagram.svg")
     PageMenuIcon
     PageScroll
     nuxt

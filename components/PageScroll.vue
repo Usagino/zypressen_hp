@@ -72,7 +72,7 @@ export default {
   position: fixed;
   bottom: $pri-value;
   left: $pri-value;
-  z-index: 999;
+  z-index: 500;
   width: fit-content;
   height: fit-content;
   @include mq(sm) {

@@ -20,6 +20,11 @@
       li(@click="menuToggle")
         nuxt-link(to="/contact") CONTACT
         img.stokerImage(src="/menu/contact.jpg")
+    .social-button
+        a.social-button--icon(href="/twitter.com")
+          img(src="/DEFAULT/twitter.svg")
+        a.social-button--icon(href="/instagram.com")
+          img(src="/DEFAULT/instagram.svg")
 </template>
 
 <script>
@@ -41,21 +46,22 @@ export default {
         autoplay: false,
         speed: 1,
         toggle: true
-      }
+      },
+      scrollOffset: 0
     }
   },
   mounted() {
     if (this.$ua.deviceType() === 'pc') {
       window.onload = function() {
-        // マウス移動時のイベントをBODYタグに登録する
         document.body.addEventListener('mousemove', (e) => {
-          const mX = e.pageX
-          const mY = e.pageY
-          TweenMax.to('.stokerImage', 0.5, {
+          const mX = e.clientX
+          const mY = e.clientY
+          TweenMax.set('.stokerImage', {
             top: mY - 200,
             left: mX - 700
           })
         })
+        // マウス移動時のイベントをBODYタグに登録する
       }
     }
   },
@@ -66,6 +72,7 @@ export default {
     },
     menuToggle() {
       if (this.lottieOptions.toggle) {
+        TweenMax.set('html,body', { overflow: 'hidden' })
         this.anim.setDirection(1)
         this.anim.play()
         TweenMax.set('.menulist', {
@@ -74,6 +81,7 @@ export default {
         TweenMax.to('.menulist', 0.3, { opacity: 1 })
         this.lottieOptions.toggle = !this.lottieOptions.toggle
       } else {
+        TweenMax.set('html,body', { overflow: 'scroll' })
         this.anim.setDirection(-1)
         this.anim.play()
         TweenMax.to('.menulist', 0.3, {
@@ -124,7 +132,7 @@ export default {
     z-index: 2000;
 
     li {
-      text-align: right;
+      text-align: center;
       a {
         position: relative;
         z-index: 2000;
@@ -142,6 +150,12 @@ export default {
         opacity: 1;
       }
     }
+  }
+  .social-button {
+    position: absolute;
+    bottom: $pri-value;
+    left: $pri-value;
+    @include gap-right(28px);
   }
 }
 .stokerImage {
