@@ -8,7 +8,7 @@
     xmlns="http://www.w3.org/2000/svg")
     circle(
       stroke="#7A7A7A"
-      stroke-width="2"
+
       fill-opacity="0"
       :cx="Size / 2"
       :cy="Size / 2"
@@ -80,6 +80,12 @@ export default {
     transform-origin: bottom left;
     bottom: 32px;
     left: 32px;
+  }
+  circle {
+    stroke-width: 2;
+    @include mq(sm) {
+      stroke-width: 4;
+    }
   }
 }
 </style>

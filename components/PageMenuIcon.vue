@@ -20,10 +20,15 @@
       li(@click="menuToggle")
         nuxt-link(to="/contact") CONTACT
         img.stokerImage(:src="this.changeWebpLocal('/menu/contact.jpg')")
-    .social-button
-        a.social-button--icon(href="/twitter.com")
+      li.social-button__list(@click="menuToggle" v-if="this.$ua.deviceType() === 'smartphone'")
+        a.social-button--icon(href="https://twitter.com/home")
           img(src="/DEFAULT/twitter.svg")
-        a.social-button--icon(href="/instagram.com")
+        a.social-button--icon(href="https://www.instagram.com/?hl=ja")
+          img(src="/DEFAULT/instagram.svg")
+    .social-button
+        a.social-button--icon(href="https://twitter.com/home")
+          img(src="/DEFAULT/twitter.svg")
+        a.social-button--icon(href="https://www.instagram.com/?hl=ja")
           img(src="/DEFAULT/instagram.svg")
 </template>
 
@@ -130,7 +135,9 @@ export default {
     @include secondary-margin;
     box-sizing: border-box;
     z-index: 2000;
-
+    @include mq(sm) {
+      @include gap-bottom(8px);
+    }
     li {
       text-align: center;
       a {
@@ -138,6 +145,9 @@ export default {
         z-index: 2000;
         @include font-title-first;
         line-height: 100px;
+        @include mq(sm) {
+          line-height: 100%;
+        }
       }
       a:hover {
         @include textOutline;
@@ -156,6 +166,16 @@ export default {
     bottom: $pri-value;
     left: $pri-value;
     @include gap-right(28px);
+    @include mq(sm) {
+      display: none;
+      img {
+        height: 28px;
+        width: 28px;
+      }
+    }
+    &__list {
+      @include gap-right(28px);
+    }
   }
 }
 .stokerImage {
