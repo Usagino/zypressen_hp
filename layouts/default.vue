@@ -3,7 +3,7 @@
     nuxt-link.page__logo(to="/")
       img.page__logo__image(src="/PageLogo.svg")
     .page__copylight
-      p.page__copylight__text @2020ZYPRESSEN
+      p.page__copylight__text ©️2020ZYPRESSEN
     PageMenuIcon
     PageScroll
     nuxt

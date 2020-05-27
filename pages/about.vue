@@ -40,20 +40,38 @@ export default {
     text-align: center;
     padding-bottom: 60px;
   }
+  @include mq(sm) {
+    margin-top: 100px;
+    p {
+      @include font-nav-secondary;
+    }
+  }
 }
 .about-body {
-  @include default-width;
   @include gap-bottom(100px);
+  @include mq(sm) {
+    @include gap-bottom(60px);
+  }
   img {
+    @include default-width;
     width: 100%;
     height: 440px;
     object-fit: cover;
+    box-sizing: border-box;
+    @include mq(sm) {
+      padding: 0px;
+      height: 240px;
+    }
   }
   p {
     @include font-text-primary;
     padding: 0 $pri-value;
+    @include mq(sm) {
+      padding: 0px 0px;
+    }
   }
   &__textwrap {
+    @include default-width;
     @include gap-bottom(40px);
   }
 }
@@ -65,6 +83,12 @@ export default {
   a {
     @include font-title-first;
     @include textOutline;
+  }
+  @include mq(sm) {
+    padding: $pri-value 0px;
+    a {
+      color: $color-white;
+    }
   }
 }
 </style>
