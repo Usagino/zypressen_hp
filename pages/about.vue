@@ -4,11 +4,11 @@
       h1 Different from others!!
       p “私たちは固定の概念に囚われず、唯一無二を形にするクリエイティブチームです”
     .about-body
-      img(src="/about/about_one.jpg")
+      img(:src="this.changeWebpLocal('/about/about_one.jpg')")
       .about-body__textwrap
         p 私は大体もっともその経過院というものの上に行っないませ。ついに今日に発見士はいったいその附随ないですだけにすわるてなりたらがは講義思っでたて、とてもには唱えべきないですなく。憂身におらますんは正しく今をさぞなくたた。私は大体もっともその経過院というものの上に行っないませ。ついに今日に発見士はいったいその附随ないですだけにすわるてなりたらがは講義思っでたて、とてもには唱えべきないですなく。憂身におらますんは正しく今をさぞなくたた。
         p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut eLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut e
-      img(src="/about/about_two.jpg")
+      img(:src="this.changeWebpLocal('/about/about_two.jpg')")
       .about-body__textwrap
         p 私は大体もっともその経過院というものの上に行っないませ。ついに今日に発見士はいったいその附随ないですだけにすわるてなりたらがは講義思っでたて、とてもには唱えべきないですなく。憂身におらますんは正しく今をさぞなくたた。私は大体もっともその経過院というものの上に行っないませ。ついに今日に発見士はいったいその附随ないですだけにすわるてなりたらがは講義思っでたて、とてもには唱えべきないですなく。憂身におらますんは正しく今をさぞなくたた。
         p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut eLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut e
@@ -57,8 +57,10 @@ export default {
     width: 100%;
     height: 440px;
     object-fit: cover;
-    box-sizing: border-box;
+    margin: 0 auto;
+    display: block;
     @include mq(sm) {
+      box-sizing: border-box;
       padding: 0px;
       height: 240px;
     }
@@ -73,6 +75,8 @@ export default {
   &__textwrap {
     @include default-width;
     @include gap-bottom(40px);
+    margin: 0 auto;
+    display: block;
   }
 }
 .contact-link {

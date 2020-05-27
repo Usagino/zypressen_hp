@@ -10,16 +10,16 @@
     ul.menulist__box
       li(@click="menuToggle")
         nuxt-link(to="/") TOP
-        img.stokerImage(src="/menu/top.jpg")
+        img.stokerImage(:src="this.changeWebpLocal('/menu/top.jpg')")
       li(@click="menuToggle")
         nuxt-link(to="/works") WORKS
-        img.stokerImage(src="/menu/works.jpg")
+        img.stokerImage(:src="this.changeWebpLocal('/menu/works.jpg')")
       li(@click="menuToggle")
         nuxt-link(to="/about") ABOUT
-        img.stokerImage(src="/menu/about.jpg")
+        img.stokerImage(:src="this.changeWebpLocal('/menu/about.jpg')")
       li(@click="menuToggle")
         nuxt-link(to="/contact") CONTACT
-        img.stokerImage(src="/menu/contact.jpg")
+        img.stokerImage(:src="this.changeWebpLocal('/menu/contact.jpg')")
     .social-button
         a.social-button--icon(href="/twitter.com")
           img(src="/DEFAULT/twitter.svg")

@@ -10,6 +10,14 @@ Vue.mixin({
         return image + '?fm=webp'
       }
     },
+    changeWebpLocal(image) {
+      console.log(this.$ua.browser())
+      if (this.$ua.browser() === 'Safari') {
+        return image
+      } else {
+        return image + '.webp'
+      }
+    },
     notScroll() {
       console.log('not scroll')
       const containerClass = document.getElementsByClassName('container')

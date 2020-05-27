@@ -103,10 +103,10 @@ $breakpoints: (
 }
 @mixin gap-bottom($i){
   & > * {
-    margin: 0px;
+    margin-bottom: 0px;
     margin-bottom: $i !important;
     &:last-child {
-      margin: 0px;
+      margin-bottom: 0px;
       margin-bottom: 0px !important;
     }
   }
