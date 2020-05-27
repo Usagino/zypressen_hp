@@ -55,12 +55,12 @@ export default {
   img {
     @include default-width;
     width: 100%;
-    height: 440px;
+    height: 40vh;
     object-fit: cover;
     margin: 0 auto;
     display: block;
+    box-sizing: border-box;
     @include mq(sm) {
-      box-sizing: border-box;
       padding: 0px;
       height: 240px;
     }
