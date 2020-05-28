@@ -6,7 +6,6 @@ import EventBus from "~/utils/event-bus"; // eslint-disable-line
 
 class Common {
   constructor() {
-    console.log('hi')
     this.scene = null
     this.camera = null
     this.light = null
@@ -103,8 +102,6 @@ class Common {
 
     this.tl.to(mesh.rotation, 10, { y: -2 * Math.PI, repeat: -1 })
     this.scene.add(mesh)
-    // console.log(this.scene)
-    console.log('this is cube')
   }
 
   dustAdd() {
@@ -126,9 +123,7 @@ class Common {
     const texture = new THREE.TextureLoader().load('/dust.png')
     // const material = new THREE.MeshBasicMaterial({ map: texture })
     let material = new THREE.PointsMaterial()
-    console.log(material.map)
     if (material.map) {
-      console.log('dispose')
       material.map.dispose() // これを必ず呼ぶこと！！！
       material.map = texture
     } else {

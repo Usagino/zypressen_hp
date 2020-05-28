@@ -6,7 +6,7 @@
       :height="18"
       :width="18"
       @animCreated="handleAnimation")
-  .menulist
+  .menulist(v-show="!lottieOptions.toggle")
     ul.menulist__box
       li(@click="menuToggle")
         nuxt-link(to="/") TOP
@@ -80,23 +80,25 @@ export default {
         TweenMax.set('html,body', { overflow: 'hidden' })
         this.anim.setDirection(1)
         this.anim.play()
-        TweenMax.set('.menulist', {
-          display: 'flex'
-        })
-        TweenMax.to('.menulist', 0.3, { opacity: 1 })
+        // TweenMax.set('.menulist', {
+        //   display: 'flex'
+        // })
+        // TweenMax.to('.menulist', 0.3, { opacity: 1 })
+        console.log(this.lottieOptions.toggle)
         this.lottieOptions.toggle = !this.lottieOptions.toggle
       } else {
         TweenMax.set('html,body', { overflow: 'scroll' })
         this.anim.setDirection(-1)
         this.anim.play()
-        TweenMax.to('.menulist', 0.3, {
-          opacity: 0,
-          onComplete: () => {
-            TweenMax.set('.menulist', {
-              display: 'none'
-            })
-          }
-        })
+        // TweenMax.to('.menulist', 0.3, {
+        //   opacity: 0,
+        //   onComplete: () => {
+        //     TweenMax.set('.menulist', {
+        //       display: 'none'
+        //     })
+        //   }
+        // })
+        console.log(this.lottieOptions.toggle)
         this.lottieOptions.toggle = !this.lottieOptions.toggle
       }
     }
@@ -126,8 +128,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  display: none;
-  opacity: 0;
   &__box {
     width: 100%;
     position: absolute;
