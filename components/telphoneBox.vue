@@ -165,7 +165,7 @@ export default {
       this.scene.add(this.dusts)
     },
     render() {
-      document.getElementById('WebGLarea').appendChild(this.renderer.domElement)
+      // document.getElementById('WebGLarea').appendChild(this.renderer.domElement)
       requestAnimationFrame(this.render)
       this.renderer.render(this.scene, this.camera)
     },
