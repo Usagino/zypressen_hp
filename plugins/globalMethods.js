@@ -11,22 +11,27 @@ Vue.mixin({
       }
     },
     changeWebpLocal(image) {
-      console.log(this.$ua.browser())
       if (this.$ua.browser() === 'Safari') {
         return image
       } else {
         return image + '.webp'
       }
     },
+    pageNoScroll() {
+      TweenMax.set('html,body', { overflow: 'hidden' })
+    },
     notScroll() {
-      console.log('not scroll')
-      const containerClass = document.getElementsByClassName('container')
-      const containerClassHeight = containerClass[0].clientHeight
-      const windowHeight = window.parent.screen.height
-      if (containerClassHeight < windowHeight) {
+      const windowHeight = window.innerHeight
+      const bodyElement = document.querySelector('body')
+      const bodyHeight = bodyElement.clientHeight
+      console.log(bodyHeight, windowHeight)
+      console.log(bodyHeight <= windowHeight)
+      if (bodyHeight <= windowHeight) {
         TweenMax.set('html,body', { overflow: 'hidden' })
+        console.log('hidden')
       } else {
-        TweenMax.set('html,body', { overflow: 'scroll' })
+        TweenMax.set('html,body', { overflow: '' })
+        console.log('scroll')
       }
       window.onresize = () => {
         this.notScroll()

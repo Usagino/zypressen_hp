@@ -144,7 +144,7 @@ export default {
         position: relative;
         z-index: 2000;
         @include font-title-first;
-        line-height: 100px;
+        line-height: 80px;
         @include mq(sm) {
           line-height: 100%;
         }
