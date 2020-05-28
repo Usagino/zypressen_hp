@@ -1,13 +1,13 @@
 <template lang="pug">
   div.page
+    nuxt-link.page__logo(to="/")
+      img.page__logo__image(src="/PageLogo.svg")
+    .page__copylight
+      p.page__copylight__text ©️2020ZYPRESSEN
     client-only
-      nuxt-link.page__logo(to="/")
-        img.page__logo__image(src="/PageLogo.svg")
-      .page__copylight
-        p.page__copylight__text ©️2020ZYPRESSEN
       PageMenuIcon
-      PageScroll
-      dimensionalModel
+    PageScroll
+    dimensionalModel
     nuxt
 </template>
 
