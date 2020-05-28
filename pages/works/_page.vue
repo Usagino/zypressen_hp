@@ -5,11 +5,9 @@
       .first-thumbnail--title
         span.first-thumbnail--textwrap
           h1 {{Work.TITLE}}
-        span.first-thumbnail--textwrap.first-thumbnail--title__date
-          p -{{this.$dayjs(this.Work.DATE).format('YYYY')}}
       .first-thumbnail--scroll
         p scroll
-      .first-thumbnail--navwrap
+      //.first-thumbnail--navwrap
         .first-thumbnail--next.first-thumbnail--nav(v-if="Pagination.next !== '/works/undefined'")
           nuxt-link(:to="Pagination.next")
             p NEXT
@@ -20,20 +18,37 @@
             span
     .cover-wrap
   .second-body
-    .second-body__text
-      p(v-html="Body")
-    .second-body__colors
-      .second-body__colors--color(
-        v-for="color in Colors"
-        :style="{backgroundColor:color.COLOR}")
+    .second-body--infomation
+      .second-body--infomation__createdtime
+        p.second-body--infomation__title Created
+        p {{this.$dayjs(Work.DATE).format('MMM , DD , YYYY')}}
+      .second-body--infomation__designer
+        p.second-body--infomation__title Designer
+        p {{Work.DESIGNER}}
+      .second-body--infomation__developer
+        p.second-body--infomation__title Developer
+        p {{Work.DESIGNER}}
+      .second-body--infomation__colors
+        span(v-for='(color,index) in Work.COLOR' :style="{backgroundColor:color.COLOR}")
+    .second-body--japansetext
+      p {{Work.BODY_JA}}
+    .second-body--englishtext
+      p {{Work.BODY_EN}}
+
   .third-images
+    span.third-images__wrap
+      .third-images--image.third-images--first(:style="{backgroundImage:BodyImage(Work.IMAGE[0].IMAGE.url),backgroundSize:'cover'}")
     span.third-images__wrap(v-for="(image,index) in Work.IMAGE" :key="image.index" )
-      .third-images--image(:class="'page-image-' + index" :style="{backgroundImage:BodyImage(image.IMAGE.url),backgroundSize:'150%',backgroundPosition:'center'}")
+      .third-images--image(v-if="index !== 0" :class="'page-image-' + index" :style="{backgroundImage:BodyImage(image.IMAGE.url),backgroundSize:'cover',backgroundPosition:'center'}")
+  .fourth-button(v-show="Pagination.back !== '/works/undefined'")
+    nuxt-link.fourth-button__link(:to="Pagination.back")
+      p NEXT
+      h2 PROJECT
 </template>
 
 <script>
 import axios from 'axios'
-import { TimelineMax, TweenMax } from 'gsap'
+import { TimelineMax, TweenMax, Expo } from 'gsap'
 import inView from 'in-view'
 export default {
   async asyncData({ params }) {
@@ -57,7 +72,7 @@ export default {
       Thumbnail: 'url("' + work.THUMBNAIL.url + '")',
       Colors: work.COLOR,
       Pagination: pagination,
-      Body: work.BODY,
+      BodyJa: work.BODY_JA,
       ThumbnailImage: work.THUMBNAIL.url
     }
   },
@@ -70,8 +85,12 @@ export default {
       Colors: [],
       IdArray: [],
       Pagination: {},
-      Body: ' ',
+      BodyJa: ' ',
+      offsetTop: 0,
+      windowHeight: 0,
+      windowWidth: 0,
       BackgroundSize: '150%',
+      thirdImagePadding: 0,
       firstThumbnail: {
         backgroundImage: this.changeWebp(this.Thumbnail),
         backgroundSize: this.BackgroundSize + '%'
@@ -79,13 +98,70 @@ export default {
     }
   },
   mounted() {
-    this.imageDisplay()
+    // this.imageDisplay()
+    this.windowHeight = window.innerHeight
+    this.windowWidth = window.innerWidth
+    this.notScroll()
     this.hideDisplay()
+    this.setThirdImage()
     window.onscroll = () => {
       this.hideDisplay()
+      this.animationThirdImage()
     }
   },
   methods: {
+    setThirdImage() {
+      console.log('🧰setThirdImage')
+      const tl = new TimelineMax()
+      const windowHeight = window.innerHeight
+      const windowWidth = window.innerWidth
+
+      const bodyRect = document.body.getBoundingClientRect()
+      const thirdImage = document
+        .querySelector('.third-images--first')
+        .getBoundingClientRect()
+      const offsetTop = thirdImage.top - bodyRect.top + windowHeight
+      this.offsetTop = offsetTop
+      tl.set('.works-page', { height: offsetTop + 'px', overflowY: 'hidden' })
+      const baseElWidth =
+        document.getElementsByClassName('second-body')[0].clientWidth - 140
+
+      tl.set('.third-images--first', {
+        padding: (windowWidth - baseElWidth) / 2 + 'px'
+      })
+      this.thirdImagePadding = (windowWidth - baseElWidth) / 2
+    },
+    animationThirdImage() {
+      console.log('🧰animationThirdImage')
+      const tl = new TimelineMax()
+      const y = document.documentElement.scrollTop // eslint-disable-line
+      if (this.offsetTop - this.windowHeight <= y) {
+        console.log('hi')
+        tl.to('.third-images--first', 1, {
+          padding: '0px',
+          ease: Expo.easeInOut
+        }).set('.works-page', {
+          height: 'fit-content',
+          overflowY: '',
+          delay: 0.3
+        })
+      }
+      // window.onscroll = () => {
+      //   console.log(y)
+      // }
+      // window.onmousewheel = (event) => {
+      //   if (this.offsetTop - this.windowHeight <= y) {
+      //     const wheelPower = 50
+      //     // console.log(event.wheelDelta)
+      //     if (
+      //       event.wheelDelta * -1 > wheelPower &&
+      //       this.thirdImagePadding >= -10
+      //     ) {
+      //       this.thirdImagePadding = this.thirdImagePadding - 1
+      //     }
+      //   }
+      // }
+    },
     hideDisplay() {
       const windowHeight = window.innerHeight
       const y = document.documentElement.scrollTop
@@ -99,11 +175,48 @@ export default {
         TweenMax.set('.cover-wrap', { width: transformValue + 'vw' })
       }
     },
+    thirdImageDisplay() {
+      const tl = new TimelineMax()
+      const baseElWidth =
+        document.getElementsByClassName('second-body')[0].clientWidth - 140
+
+      // const baseElWidth = 1080
+      const windowWidth = window.innerWidth
+      const imageWidthScale = baseElWidth / windowWidth
+      // const windowHeight = window.parent.screen.height
+      tl.set('.page-image-0', {
+        scale: imageWidthScale
+      })
+      const bodyRect = document.body.getBoundingClientRect()
+      const thirdImage = document
+        .querySelector('.third-images')
+        .getBoundingClientRect()
+      // 👇ブラウザーの高さ
+      const windowHeight = window.innerHeight
+      // 👇thirdImageのページの一番上からの距離から、ブラウザーの高さを引いたもの
+      const offsetTop = thirdImage.top - bodyRect.top - windowHeight
+      // 👇 スクロール量からoffsetTopを引いた
+      const offsetTopY = document.documentElement.scrollTop - offsetTop
+      const percentage = Math.round((offsetTopY / windowHeight) * 100) / 100
+
+      if (percentage < 1) {
+        tl.set('.page-image-0', {
+          backgroundSize: 'cover',
+          scale: imageWidthScale + (1 - imageWidthScale) * percentage
+        })
+      } else {
+        tl.set('.page-image-0', {
+          backgroundSize: 'cover',
+          scale: 1
+        })
+      }
+    },
     imageDisplay() {
       const tl = new TimelineMax()
-      const baseElWidth = document.getElementsByClassName(
-        'second-body__text'
-      )[0].clientWidth
+      const baseElWidth =
+        document.getElementsByClassName('second-body')[0].clientWidth - 280
+
+      // const baseElWidth = 1080
       const windowWidth = window.innerWidth
       // const windowHeight = window.parent.screen.height
       tl.set('.page-image-0', {
@@ -199,33 +312,33 @@ export default {
       }
     }
   }
-  &--next {
-    right: 0px;
-    -webkit-writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    @include mq(sm) {
-      transform: rotate(0deg);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: row;
-      &::after {
-        height: 8px;
-        width: 2px;
-        background: $color-white;
-        content: ' ';
-        display: block;
-        margin: 8px;
-      }
-    }
-  }
-  &--back {
-    left: 0px;
-    -webkit-writing-mode: vertical-rl;
-    @include mq(sm) {
-      transform: rotate(180deg);
-    }
-  }
+  // &--next {
+  //   right: 0px;
+  //   -webkit-writing-mode: vertical-rl;
+  //   transform: rotate(180deg);
+  //   @include mq(sm) {
+  //     transform: rotate(0deg);
+  //     display: flex;
+  //     justify-content: center;
+  //     align-items: center;
+  //     flex-direction: row;
+  //     &::after {
+  //       height: 8px;
+  //       width: 2px;
+  //       background: $color-white;
+  //       content: ' ';
+  //       display: block;
+  //       margin: 8px;
+  //     }
+  //   }
+  // }
+  // &--back {
+  //   left: 0px;
+  //   -webkit-writing-mode: vertical-rl;
+  //   @include mq(sm) {
+  //     transform: rotate(180deg);
+  //   }
+  // }
   &--scroll {
     position: absolute;
     bottom: $pri-value;
@@ -244,6 +357,7 @@ export default {
     display: block;
     width: fit-content;
     height: fit-content;
+    @include default-width;
   }
 }
 .cover-wrap {
@@ -260,29 +374,52 @@ export default {
 .second-body {
   padding: 140px 0px;
   @include default-width;
-  &__text {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 24px 24px;
+  grid-template-areas: 'infomation body_ja body_ja body_ja body_ja' 'infomation body_en body_en body_en body_en';
+  &--infomation {
+    grid-area: infomation;
+    @include gap-bottom(20px);
     p {
-      @include font-text-primary;
-      line-height: 150%;
+      @include font-text-secondary;
+    }
+    &__title {
+      color: $color-gray;
+      padding-bottom: 8px;
+    }
+    &__colors {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      span {
+        height: 22px;
+        width: 22px;
+        content: ' ';
+        display: block;
+      }
     }
   }
-  &__colors {
-    margin-top: 32px;
-    display: flex;
-    flex-direction: row;
-    &--color {
-      height: 24px;
-      width: 24px;
-      @include mq(sm) {
-        height: 18px;
-        width: 18px;
-      }
+  &--japansetext {
+    grid-area: body_ja;
+  }
+  &--englishtext {
+    grid-area: body_en;
+  }
+  &--japansetext,
+  &--englishtext {
+    p {
+      color: $color-white;
+      @include font-text-primary;
+      white-space: pre-line;
     }
   }
 }
 .third-images {
   padding-bottom: 160px;
   // @include default-width;
+  position: relative;
   @include gap-bottom(2px);
   @include mq(sm) {
     padding: 32px 0px 0px;
@@ -299,8 +436,28 @@ export default {
     height: calc(1000vw / 16);
     // background-size: cover;
     background-position: center;
-    background-size: 100%;
+    background-size: cover;
     background: $color-gray;
+  }
+  &--first {
+    padding: 74px;
+    box-sizing: border-box;
+    background-clip: content-box;
+  }
+}
+.fourth-button {
+  @include default-width;
+  margin-bottom: 160px;
+  &__link {
+    p {
+      @include font-title-secondary;
+      text-align: right;
+      @include textOutline;
+    }
+    h2 {
+      @include font-title-first;
+      text-align: right;
+    }
   }
 }
 </style>

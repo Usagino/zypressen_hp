@@ -29,6 +29,7 @@ export default {
     }
   },
   mounted() {
+    this.notScroll()
     console.log(this.changeWebp(this.WorksArray[0].THUMBNAIL.url))
   }
   // methods: {

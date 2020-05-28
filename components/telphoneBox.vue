@@ -7,14 +7,16 @@
         nuxt-link.s-lw-works(to="/works") WORKS
         nuxt-link.s-lw-about(to="/about") ABOUT
         nuxt-link.s-lw-contact(to="/contact") CONTACT
-    .switch_linked__scroll
-      p SCROLL
+  .switch_linked__scroll
+    p SCROLL
   #WebGLarea
 </template>
 
 <script>
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+
 import { TimelineMax, TweenMax } from 'gsap'
 
 export default {
@@ -28,6 +30,7 @@ export default {
       plane: null,
       cube: null,
       loarder: null,
+      dracoLoader: null,
       ground: null,
       dusts: null,
       model: null,
@@ -89,8 +92,14 @@ export default {
       this.scene.add(this.Light)
 
       // 3Dmodel
+      // Optional: Provide a DRACOLoader instance to decode compressed mesh data
+      this.dracoLoader = new DRACOLoader()
+      this.dracoLoader.setDecoderPath('/draco/')
       this.loader = new GLTFLoader()
-      this.loader.load('tel.gltf', (gltf) => {
+      this.loader.setDRACOLoader(this.dracoLoader)
+      // モデルのパス
+      const url = '/gltf/tel_min.gltf'
+      this.loader.load(url, (gltf) => {
         this.model = gltf.scene
         this.model.scale.set(10.0, 10.0, 10.0)
         this.model.castShadow = true
@@ -118,9 +127,9 @@ export default {
     dustAdd() {
       const geometry = new THREE.Geometry()
       // 表示する範囲を宣言して
-      const SIZE = 500
+      const SIZE = 200
       // 表示するパーティクルの数を決めて
-      const LENGTH = 1000000
+      const LENGTH = 5000
       // その数まで四方八方に表示させるループ処理をする
       for (let i = 0; i < LENGTH; i++) {
         geometry.vertices.push(
@@ -133,12 +142,20 @@ export default {
       }
       const texture = new THREE.TextureLoader().load('/dust.png')
       // const material = new THREE.MeshBasicMaterial({ map: texture })
-      const material = new THREE.PointsMaterial({
-        // color: '0xffffff',
-        size: 0.5,
-        map: texture,
-        transparent: true
-      })
+      let material = new THREE.PointsMaterial()
+      console.log(material.map)
+      if (material.map) {
+        console.log('dispose')
+        material.map.dispose() // これを必ず呼ぶこと！！！
+        material.map = texture
+      } else {
+        material = new THREE.PointsMaterial({
+          // color: '0xffffff',
+          size: 2,
+          map: texture,
+          transparent: true
+        })
+      }
 
       this.dusts = new THREE.Points(geometry, material)
       TweenMax.to(this.dusts.rotation, 600, {
@@ -148,7 +165,7 @@ export default {
       this.scene.add(this.dusts)
     },
     render() {
-      document.getElementById('WebGLarea').appendChild(this.renderer.domElement)
+      // document.getElementById('WebGLarea').appendChild(this.renderer.domElement)
       requestAnimationFrame(this.render)
       this.renderer.render(this.scene, this.camera)
     },
@@ -310,9 +327,11 @@ export default {
   @include full-screen;
   .switch_linked {
     position: absolute;
-    bottom: $pri-value;
-    left: 0;
-    right: 0;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+
     width: fit-content;
     height: fit-content;
     display: block;
@@ -340,6 +359,10 @@ export default {
       }
     }
     &__scroll {
+      position: absolute;
+      bottom: $pri-value;
+      left: 0px;
+      right: 0px;
       text-align: center;
       @include font-nav-primary;
       p {

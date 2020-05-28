@@ -2,9 +2,6 @@ import Vue from 'vue'
 import { TweenMax } from 'gsap'
 
 Vue.mixin({
-  mounted() {
-    this.notScroll()
-  },
   methods: {
     changeWebp(image) {
       if (this.$ua.browser() === 'Safari') {
@@ -13,14 +10,28 @@ Vue.mixin({
         return image + '?fm=webp'
       }
     },
-    notScroll() {
-      const containerClass = document.getElementsByClassName('container')
-      const containerClassHeight = containerClass[0].clientHeight
-      const windowHeight = window.parent.screen.height
-      if (containerClassHeight < windowHeight) {
-        TweenMax.set('html,body', { overflow: 'hidden' })
+    changeWebpLocal(image) {
+      if (this.$ua.browser() === 'Safari') {
+        return image
       } else {
-        TweenMax.set('html,body', { overflow: 'scroll' })
+        return image + '.webp'
+      }
+    },
+    pageNoScroll() {
+      TweenMax.set('html,body', { overflow: 'hidden' })
+    },
+    notScroll() {
+      const windowHeight = window.innerHeight
+      const bodyElement = document.querySelector('body')
+      const bodyHeight = bodyElement.clientHeight
+      console.log(bodyHeight, windowHeight)
+      console.log(bodyHeight <= windowHeight)
+      if (bodyHeight <= windowHeight) {
+        TweenMax.set('html,body', { overflow: 'hidden' })
+        console.log('hidden')
+      } else {
+        TweenMax.set('html,body', { overflow: '' })
+        console.log('scroll')
       }
       window.onresize = () => {
         this.notScroll()

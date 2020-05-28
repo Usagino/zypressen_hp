@@ -3,19 +3,22 @@
     nuxt-link.page__logo(to="/")
       img.page__logo__image(src="/PageLogo.svg")
     .page__copylight
-      p.page__copylight__text @2020ZYPRESSEN
-      a.page__copylight__image(href="/twitter.com")
-        img(src="/DEFAULT/twitter.svg")
-      a.page__copylight__image(href="/instagram.com")
-        img(src="/DEFAULT/instagram.svg")
-    PageMenuIcon
+      p.page__copylight__text ©️2020ZYPRESSEN
+    client-only
+      PageMenuIcon
     PageScroll
+    dimensionalModel
     nuxt
 </template>
 
 <script>
 import { TweenMax } from 'gsap'
+import dimensionalModel from '@/components/dimensionalModel'
+
 export default {
+  components: {
+    dimensionalModel
+  },
   mounted() {
     this.notScroll()
   },
@@ -23,9 +26,9 @@ export default {
     notScroll() {
       const containerClass = document.getElementsByClassName('container')
       const containerClassHeight = containerClass[0].clientHeight
-      console.log('container', containerClassHeight)
+      // console.log('container', containerClassHeight)
       const windowHeight = window.parent.screen.height
-      console.log('window', windowHeight)
+      // console.log('window', windowHeight)
       if (containerClassHeight < windowHeight) {
         TweenMax.set('html,body', { overflow: 'hidden' })
       } else {

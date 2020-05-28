@@ -6,20 +6,30 @@
       :height="18"
       :width="18"
       @animCreated="handleAnimation")
-  .menulist
+  .menulist(v-show="!lottieOptions.toggle")
     ul.menulist__box
       li(@click="menuToggle")
         nuxt-link(to="/") TOP
-        img.stokerImage(src="/menu/top.jpg")
+        img.stokerImage(:src="this.changeWebpLocal('/menu/top.jpg')")
       li(@click="menuToggle")
         nuxt-link(to="/works") WORKS
-        img.stokerImage(src="/menu/works.jpg")
+        img.stokerImage(:src="this.changeWebpLocal('/menu/works.jpg')")
       li(@click="menuToggle")
         nuxt-link(to="/about") ABOUT
-        img.stokerImage(src="/menu/about.jpg")
+        img.stokerImage(:src="this.changeWebpLocal('/menu/about.jpg')")
       li(@click="menuToggle")
         nuxt-link(to="/contact") CONTACT
-        img.stokerImage(src="/menu/contact.jpg")
+        img.stokerImage(:src="this.changeWebpLocal('/menu/contact.jpg')")
+      li.social-button__list(@click="menuToggle" v-if="this.$ua.deviceType() === 'smartphone'")
+        a.social-button--icon(href="https://twitter.com/home")
+          img(src="/DEFAULT/twitter.svg")
+        a.social-button--icon(href="https://www.instagram.com/?hl=ja")
+          img(src="/DEFAULT/instagram.svg")
+    .social-button
+        a.social-button--icon(href="https://twitter.com/home")
+          img(src="/DEFAULT/twitter.svg")
+        a.social-button--icon(href="https://www.instagram.com/?hl=ja")
+          img(src="/DEFAULT/instagram.svg")
 </template>
 
 <script>
@@ -41,21 +51,22 @@ export default {
         autoplay: false,
         speed: 1,
         toggle: true
-      }
+      },
+      scrollOffset: 0
     }
   },
   mounted() {
     if (this.$ua.deviceType() === 'pc') {
       window.onload = function() {
-        // マウス移動時のイベントをBODYタグに登録する
         document.body.addEventListener('mousemove', (e) => {
-          const mX = e.pageX
-          const mY = e.pageY
-          TweenMax.to('.stokerImage', 0.5, {
+          const mX = e.clientX
+          const mY = e.clientY
+          TweenMax.set('.stokerImage', {
             top: mY - 200,
             left: mX - 700
           })
         })
+        // マウス移動時のイベントをBODYタグに登録する
       }
     }
   },
@@ -66,24 +77,28 @@ export default {
     },
     menuToggle() {
       if (this.lottieOptions.toggle) {
+        TweenMax.set('html,body', { overflow: 'hidden' })
         this.anim.setDirection(1)
         this.anim.play()
-        TweenMax.set('.menulist', {
-          display: 'flex'
-        })
-        TweenMax.to('.menulist', 0.3, { opacity: 1 })
+        // TweenMax.set('.menulist', {
+        //   display: 'flex'
+        // })
+        // TweenMax.to('.menulist', 0.3, { opacity: 1 })
+        console.log(this.lottieOptions.toggle)
         this.lottieOptions.toggle = !this.lottieOptions.toggle
       } else {
+        TweenMax.set('html,body', { overflow: 'scroll' })
         this.anim.setDirection(-1)
         this.anim.play()
-        TweenMax.to('.menulist', 0.3, {
-          opacity: 0,
-          onComplete: () => {
-            TweenMax.set('.menulist', {
-              display: 'none'
-            })
-          }
-        })
+        // TweenMax.to('.menulist', 0.3, {
+        //   opacity: 0,
+        //   onComplete: () => {
+        //     TweenMax.set('.menulist', {
+        //       display: 'none'
+        //     })
+        //   }
+        // })
+        console.log(this.lottieOptions.toggle)
         this.lottieOptions.toggle = !this.lottieOptions.toggle
       }
     }
@@ -113,8 +128,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  display: none;
-  opacity: 0;
   &__box {
     width: 100%;
     position: absolute;
@@ -122,20 +135,22 @@ export default {
     @include secondary-margin;
     box-sizing: border-box;
     z-index: 2000;
-
+    @include mq(sm) {
+      @include gap-bottom(8px);
+    }
     li {
-      text-align: right;
+      text-align: center;
       a {
         position: relative;
         z-index: 2000;
         @include font-title-first;
-        line-height: 100px;
+        line-height: 80px;
+        @include mq(sm) {
+          line-height: 100%;
+        }
       }
       a:hover {
-        color: $color-black;
-        // -webkit-text-stroke: 0.1px $color-white;
-        text-shadow: $color-white 1px 1px 0px, $color-white -1px 1px 0px,
-          $color-white 1px -1px 0px, $color-white -1px -1px 0px;
+        @include textOutline;
         @include mq(sm) {
           color: $color-white;
           -webkit-text-stroke: unset;
@@ -144,6 +159,22 @@ export default {
       a:hover + .stokerImage {
         opacity: 1;
       }
+    }
+  }
+  .social-button {
+    position: absolute;
+    bottom: $pri-value;
+    left: $pri-value;
+    @include gap-right(28px);
+    @include mq(sm) {
+      display: none;
+      img {
+        height: 28px;
+        width: 28px;
+      }
+    }
+    &__list {
+      @include gap-right(28px);
     }
   }
 }
