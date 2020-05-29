@@ -39,7 +39,8 @@ export default {
     '@/plugins/components.js',
     '~plugins/day.js',
     '~plugins/globalMethods.js',
-    { src: '~/plugins/axios', ssr: false }
+    { src: '~/plugins/axios', ssr: false },
+    { src: '~/plugins/routerOption.js', ssr: false }
   ],
 
   buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/stylelint-module'],

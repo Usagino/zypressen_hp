@@ -18,11 +18,7 @@
 
 <script>
 import { TimelineMax } from 'gsap' // eslint-disable-line
-export default {
-  mounted() {
-    this.notScroll()
-  }
-}
+export default {}
 </script>
 
 <style lang="scss" scoped>

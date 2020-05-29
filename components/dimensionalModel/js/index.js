@@ -21,11 +21,7 @@ export default class WebglWrap {
   }
 
   loop() {
-    this.render()
-    requestAnimationFrame(this.loop.bind(this))
-  }
-
-  render() {
     Common.render()
+    requestAnimationFrame(this.loop.bind(this))
   }
 }

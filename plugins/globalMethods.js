@@ -17,9 +17,7 @@ Vue.mixin({
         return image + '.webp'
       }
     },
-    pageNoScroll() {
-      TweenMax.set('html,body', { overflow: 'hidden' })
-    },
+
     notScroll() {
       const windowHeight = window.innerHeight
       const bodyElement = document.querySelector('body')

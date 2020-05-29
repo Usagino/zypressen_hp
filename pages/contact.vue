@@ -3,11 +3,7 @@
 </template>
 
 <script>
-export default {
-  mounted() {
-    this.notScroll()
-  }
-}
+export default {}
 </script>
 
 <style lang="scss" scoped></style>

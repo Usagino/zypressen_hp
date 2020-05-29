@@ -101,7 +101,6 @@ export default {
     // this.imageDisplay()
     this.windowHeight = window.innerHeight
     this.windowWidth = window.innerWidth
-    this.notScroll()
     this.hideDisplay()
     this.setThirdImage()
     window.onscroll = () => {

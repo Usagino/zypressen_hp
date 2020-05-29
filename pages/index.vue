@@ -40,7 +40,6 @@ export default {
         delay: 2,
         rotate: '0deg'
       })
-    this.pageNoScroll()
     this.wheelAction()
     this.swipeAciton()
   },
@@ -150,7 +149,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .pageAyumukun {
   position: fixed;
   top: 0;
@@ -184,6 +183,7 @@ export default {
         p,
         a {
           display: none;
+          cursor: pointer;
           transform: translateY(120%) rotate(5deg);
           transform-origin: left;
         }

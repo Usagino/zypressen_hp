@@ -30,3 +30,6 @@ p::selection {
     background:$color-orange;
     color: $color-white;
 }
+.noscroll{
+  overflow: hidden;
+}

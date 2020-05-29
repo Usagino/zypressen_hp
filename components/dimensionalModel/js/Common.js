@@ -18,13 +18,14 @@ class Common {
     this.loader = null
     this.dracoLoader = null
     this.dusts = null
+    this.model = null
+    this.modelTernNum = 0
     EventBus.$on('MOVE_MODEL', this.onChange.bind(this))
   }
 
   init($canvas) {
     this.setSize()
     this.tl = new TimelineMax()
-
     // renderer
     this.renderer = new THREE.WebGLRenderer({
       canvas: $canvas
@@ -47,10 +48,11 @@ class Common {
       0.1,
       1000
     )
-    this.camera.position.set(0, 20, 150)
+    this.camera.position.set(0, 30, 150)
     this.camera.lookAt(this.scene.position)
     this.renderer.setSize(this.size.windowW, this.size.windowH)
     // this.cube()
+    this.Helpers()
     this.gltfModel()
     this.dustAdd()
   }
@@ -70,6 +72,7 @@ class Common {
   }
 
   render() {
+    this.rotateModel()
     this.renderer.render(this.scene, this.camera)
   }
 
@@ -86,22 +89,19 @@ class Common {
     this.loader.load(url, (gltf) => {
       this.model = gltf.scene
       this.model.scale.set(10.0, 10.0, 10.0)
-      // this.model.castShadow = true
+      this.model.castShadow = true
       this.scene.add(this.model)
-      // this.ternModel()
     })
   }
 
-  cube() {
-    const geometry = new THREE.BoxGeometry(10, 10, 10)
-    const material = new THREE.MeshBasicMaterial({
-      color: 0xff0000,
-      repeat: -1
-    })
-    const mesh = new THREE.Mesh(geometry, material)
-
-    this.tl.to(mesh.rotation, 10, { y: -2 * Math.PI, repeat: -1 })
-    this.scene.add(mesh)
+  rotateModel() {
+    if (this.model) {
+      this.modelTernNum += 0.01
+      this.model.rotation.y = this.modelTernNum
+      if (this.model.rotation.y >= 2 * Math.PI) {
+        this.modelTernNum = 0
+      }
+    }
   }
 
   dustAdd() {
@@ -141,6 +141,15 @@ class Common {
       repeat: -1
     })
     this.scene.add(this.dusts)
+  }
+
+  Helpers() {
+    const axes = new THREE.AxesHelper(250)
+    this.scene.add(axes)
+    const gridHelper = new THREE.GridHelper(200, 50) // 引数は サイズ、1つのグリッドの大きさ
+    this.scene.add(gridHelper)
+    const LightHelper = new THREE.DirectionalLightHelper(this.Light)
+    this.scene.add(LightHelper)
   }
 }
 export default new Common()

@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import { TweenMax } from 'gsap'
 import dimensionalModel from '@/components/dimensionalModel'
 
 export default {
@@ -20,26 +19,14 @@ export default {
     dimensionalModel
   },
   mounted() {
-    this.notScroll()
-  },
-  methods: {
-    notScroll() {
-      const containerClass = document.getElementsByClassName('container')
-      const containerClassHeight = containerClass[0].clientHeight
-      // console.log('container', containerClassHeight)
-      const windowHeight = window.parent.screen.height
-      // console.log('window', windowHeight)
-      if (containerClassHeight < windowHeight) {
-        TweenMax.set('html,body', { overflow: 'hidden' })
-      } else {
-        TweenMax.set('html,body', { overflow: 'scroll' })
-      }
-      window.onresize = () => {
-        this.notScroll()
-        console.log('hi')
-      }
+    const path = this.$route.path
+    if (path === '/') {
+      console.log('piyo')
+    } else {
+      console.log('hoge')
     }
-  }
+  },
+  methods: {}
 }
 </script>
 
