@@ -1,9 +1,6 @@
 <template lang="pug">
   .container
     .works
-      nuxt-link.works__item(v-for="works in WorksArray" :to="'/works/'+works.id" :key="works.id")
-        .works__imgbox
-          img(:src="changeWebp(works.THUMBNAIL.url)")
 </template>
 
 <script>

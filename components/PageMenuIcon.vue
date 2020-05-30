@@ -6,34 +6,31 @@
       :height="18"
       :width="18"
       @animCreated="handleAnimation")
-  .menulist(v-show="!lottieOptions.toggle")
-    ul.menulist__box
-      li(@click="menuToggle")
-        nuxt-link(to="/") TOP
-        img.stokerImage(:src="this.changeWebpLocal('/menu/top.jpg')")
-      li(@click="menuToggle")
-        nuxt-link(to="/works") WORKS
-        img.stokerImage(:src="this.changeWebpLocal('/menu/works.jpg')")
-      li(@click="menuToggle")
-        nuxt-link(to="/about") ABOUT
-        img.stokerImage(:src="this.changeWebpLocal('/menu/about.jpg')")
-      li(@click="menuToggle")
-        nuxt-link(to="/contact") CONTACT
-        img.stokerImage(:src="this.changeWebpLocal('/menu/contact.jpg')")
-      li.social-button__list(@click="menuToggle" v-if="this.$ua.deviceType() === 'smartphone'")
-        a.social-button--icon(href="https://twitter.com/home")
-          img(src="/DEFAULT/twitter.svg")
-        a.social-button--icon(href="https://www.instagram.com/?hl=ja")
-          img(src="/DEFAULT/instagram.svg")
-    .social-button
-        a.social-button--icon(href="https://twitter.com/home")
-          img(src="/DEFAULT/twitter.svg")
-        a.social-button--icon(href="https://www.instagram.com/?hl=ja")
-          img(src="/DEFAULT/instagram.svg")
+  transition
+    .menulist(v-show="!lottieOptions.toggle")
+      ul.menulist__box
+        li(@click="menuToggle").menulist__box--top
+          nuxt-link.menulist__box--link(to="/" :class="{'menulist__box--fadein':!lottieOptions.toggle}") TOP
+        li(@click="menuToggle").menulist__box--works
+          nuxt-link.menulist__box--link(to="/works" :class="{'menulist__box--fadein':!lottieOptions.toggle}") WORKS
+        li(@click="menuToggle").menulist__box--about
+          nuxt-link.menulist__box--link(to="/about" :class="{'menulist__box--fadein':!lottieOptions.toggle}") ABOUT
+        li(@click="menuToggle").menulist__box--contact
+          nuxt-link.menulist__box--link(to="/contact" :class="{'menulist__box--fadein':!lottieOptions.toggle}") CONTACT
+        li.social-button__list(@click="menuToggle" v-if="this.$ua.deviceType() === 'smartphone'")
+          a.social-button--icon(href="https://twitter.com/home")
+            img(src="/DEFAULT/twitter.svg")
+          a.social-button--icon(href="https://www.instagram.com/?hl=ja")
+            img(src="/DEFAULT/instagram.svg")
+      .social-button
+          a.social-button--icon(href="https://twitter.com/home")
+            img(src="/DEFAULT/twitter.svg")
+          a.social-button--icon(href="https://www.instagram.com/?hl=ja")
+            img(src="/DEFAULT/instagram.svg")
 </template>
 
 <script>
-import { TweenMax } from 'gsap'
+import { TweenMax, TimelineMax } from 'gsap'
 import * as menuIcon from '~/assets/animation/menu_icon.json'
 
 export default {
@@ -56,19 +53,22 @@ export default {
     }
   },
   mounted() {
-    if (this.$ua.deviceType() === 'pc') {
-      window.onload = function() {
-        document.body.addEventListener('mousemove', (e) => {
-          const mX = e.clientX
-          const mY = e.clientY
-          TweenMax.set('.stokerImage', {
-            top: mY - 200,
-            left: mX - 700
-          })
-        })
-        // マウス移動時のイベントをBODYタグに登録する
-      }
-    }
+    const tl = new TimelineMax() // eslint-disable-line
+    tl.set('.menulist__box--link', {
+      y: '150%',
+      z: '0',
+      rotateY: '-30deg',
+      scale: '1'
+    })
+    const linkelement = document.querySelectorAll('.menulist__box--link')
+    linkelement.forEach((el, i) => {
+      el.addEventListener('mouseover', () => {
+        TweenMax.to(el, 0.3, { rotateY: '-15deg' })
+      })
+      el.addEventListener('mouseout', () => {
+        TweenMax.to(el, 0.3, { rotateY: '-30deg' })
+      })
+    })
   },
   methods: {
     handleAnimation(anim) {
@@ -76,30 +76,44 @@ export default {
       this.anim.setSpeed(3)
     },
     menuToggle() {
+      const tl = new TimelineMax() // eslint-disable-line
       if (this.lottieOptions.toggle) {
         TweenMax.set('html,body', { overflow: 'hidden' })
         this.anim.setDirection(1)
         this.anim.play()
-        // TweenMax.set('.menulist', {
-        //   display: 'flex'
-        // })
-        // TweenMax.to('.menulist', 0.3, { opacity: 1 })
-        console.log(this.lottieOptions.toggle)
+        tl.to('.menulist__box--contact .menulist__box--link', 0.2, {
+          y: '0%',
+          delay: 0.5
+        })
+          .to('.menulist__box--about .menulist__box--link', 0.2, {
+            y: '0%'
+          })
+          .to('.menulist__box--works .menulist__box--link', 0.2, {
+            y: '0%'
+          })
+          .to('.menulist__box--top .menulist__box--link', 0.2, {
+            y: '0%'
+          })
         this.lottieOptions.toggle = !this.lottieOptions.toggle
       } else {
         TweenMax.set('html,body', { overflow: 'scroll' })
         this.anim.setDirection(-1)
         this.anim.play()
-        // TweenMax.to('.menulist', 0.3, {
-        //   opacity: 0,
-        //   onComplete: () => {
-        //     TweenMax.set('.menulist', {
-        //       display: 'none'
-        //     })
-        //   }
-        // })
-        console.log(this.lottieOptions.toggle)
-        this.lottieOptions.toggle = !this.lottieOptions.toggle
+        tl.to('.menulist__box--top .menulist__box--link', 0.2, {
+          y: '150%'
+        })
+          .to('.menulist__box--works .menulist__box--link', 0.2, {
+            y: '150%'
+          })
+          .to('.menulist__box--about .menulist__box--link', 0.2, {
+            y: '150%'
+          })
+          .to('.menulist__box--contact .menulist__box--link', 0.2, {
+            y: '150%',
+            onComplete: () => {
+              this.lottieOptions.toggle = !this.lottieOptions.toggle
+            }
+          })
       }
     }
   }
@@ -139,25 +153,44 @@ export default {
       @include gap-bottom(8px);
     }
     li {
-      text-align: center;
-      a {
-        position: relative;
-        z-index: 2000;
-        @include font-title-first;
-        line-height: 80px;
-        @include mq(sm) {
-          line-height: 100%;
-        }
+      perspective: 500;
+      overflow: hidden;
+      -webkit-perspective: 500;
+      -moz-perspective: 500;
+      transform-origin: right center;
+      will-change: transform;
+    }
+    &--top {
+      transform: rotate(-4deg);
+    }
+    &--works {
+      transform: rotate(-1.5deg);
+    }
+    &--about {
+      transform: rotate(1.5deg);
+    }
+    &--contact {
+      transform: rotate(4deg);
+    }
+    &--link {
+      text-align: right;
+      transform-origin: right center;
+      transform-style: preserve-3d;
+      will-change: transform;
+      @include font-title-first;
+      display: block;
+      line-height: 80px;
+      transition: all 300ms ease;
+
+      @include mq(sm) {
+        line-height: 100%;
       }
-      a:hover {
+      &:hover {
         @include textOutline;
         @include mq(sm) {
           color: $color-white;
           -webkit-text-stroke: unset;
         }
-      }
-      a:hover + .stokerImage {
-        opacity: 1;
       }
     }
   }
@@ -189,6 +222,15 @@ export default {
   width: 600px;
   height: 400px;
   object-fit: cover;
+  opacity: 0;
+}
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s;
+}
+
+.v-enter,
+.v-leave-to {
   opacity: 0;
 }
 </style>
