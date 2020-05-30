@@ -18,7 +18,7 @@ $color-glay: rgba(122,122,122,1);
 	font-weight:book;
 }
 @mixin font-title-first {
-	font-size:92px;
+	font-size:88px;
 	@include font-family;
 	font-weight:bold;
   @include mq(sm){
@@ -35,11 +35,7 @@ $color-glay: rgba(122,122,122,1);
   }
 }
 
-@mixin font-title-third {
-	font-size:16px;
-	@include font-family;
-	font-weight:bold;
-}
+// notosans
 @mixin font-nav-primary {
 	font-size:14px;
 	font-family:"Roboto";
@@ -48,7 +44,7 @@ $color-glay: rgba(122,122,122,1);
 @mixin font-nav-secondary {
 	font-size:16px;
 	font-family:"Roboto";
-	font-weight:bold;
+	font-weight:medium;
 }
 @mixin font-text-primary {
 	font-size:14px;
