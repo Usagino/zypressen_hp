@@ -451,7 +451,7 @@ export default {
     p {
       @include font-title-secondary;
       text-align: right;
-      @include textOutline;
+      @include text-outline;
     }
     h2 {
       @include font-title-first;

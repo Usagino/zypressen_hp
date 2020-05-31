@@ -82,7 +82,7 @@ export default {}
   padding: 140px;
   a {
     @include font-title-first;
-    @include textOutline;
+    @include text-outline;
   }
   @include mq(sm) {
     padding: $pri-value 0px;

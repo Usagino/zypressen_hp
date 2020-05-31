@@ -81,17 +81,17 @@ export default {
         TweenMax.set('html,body', { overflow: 'hidden' })
         this.anim.setDirection(1)
         this.anim.play()
-        tl.to('.menulist__box--contact .menulist__box--link', 0.2, {
+        tl.to('.menulist__box--contact .menulist__box--link', 0.1, {
           y: '0%',
           delay: 0.5
         })
-          .to('.menulist__box--about .menulist__box--link', 0.2, {
+          .to('.menulist__box--about .menulist__box--link', 0.1, {
             y: '0%'
           })
-          .to('.menulist__box--works .menulist__box--link', 0.2, {
+          .to('.menulist__box--works .menulist__box--link', 0.1, {
             y: '0%'
           })
-          .to('.menulist__box--top .menulist__box--link', 0.2, {
+          .to('.menulist__box--top .menulist__box--link', 0.1, {
             y: '0%'
           })
         this.lottieOptions.toggle = !this.lottieOptions.toggle
@@ -99,16 +99,16 @@ export default {
         TweenMax.set('html,body', { overflow: 'scroll' })
         this.anim.setDirection(-1)
         this.anim.play()
-        tl.to('.menulist__box--top .menulist__box--link', 0.2, {
+        tl.to('.menulist__box--top .menulist__box--link', 0.1, {
           y: '150%'
         })
-          .to('.menulist__box--works .menulist__box--link', 0.2, {
+          .to('.menulist__box--works .menulist__box--link', 0.1, {
             y: '150%'
           })
-          .to('.menulist__box--about .menulist__box--link', 0.2, {
+          .to('.menulist__box--about .menulist__box--link', 0.1, {
             y: '150%'
           })
-          .to('.menulist__box--contact .menulist__box--link', 0.2, {
+          .to('.menulist__box--contact .menulist__box--link', 0.1, {
             y: '150%',
             onComplete: () => {
               this.lottieOptions.toggle = !this.lottieOptions.toggle
@@ -186,7 +186,7 @@ export default {
         line-height: 100%;
       }
       &:hover {
-        @include textOutline;
+        @include text-outline;
         @include mq(sm) {
           color: $color-white;
           -webkit-text-stroke: unset;

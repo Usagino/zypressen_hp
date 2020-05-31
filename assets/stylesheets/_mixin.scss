@@ -34,6 +34,14 @@ $color-glay: rgba(122,122,122,1);
     font-size:24px;
   }
 }
+@mixin font-title-thirdry {
+	font-size:20px;
+	@include font-family;
+	font-weight:bold;
+  @include mq(sm){
+    font-size:20px;
+  }
+}
 
 // notosans
 @mixin font-nav-primary {
@@ -136,7 +144,7 @@ $breakpoints: (
     overflow: visible;
   }
 }
-@mixin textOutline{
+@mixin text-outline{
   -webkit-text-stroke: 2px $color-white;
   color: transparent;
 }
