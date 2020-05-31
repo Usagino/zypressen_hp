@@ -88,7 +88,6 @@ export default {
       })
     },
     textAnimationDown() {
-      console.log('textAnimationDown')
       if (this.wheelShow) {
         this.tl
           .to('.first-mail__wrap h1', 0.3, { y: 100 })
