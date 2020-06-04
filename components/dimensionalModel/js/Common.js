@@ -22,7 +22,6 @@ class Common {
     this.dusts = null
     this.model = null
     this.modelTernNum = 0
-    EventBus.$on('MOVE_MODEL', this.onChange.bind(this))
   }
 
   init($canvas) {
@@ -50,7 +49,7 @@ class Common {
       1000
     )
     this.camera.position.set(0, 10, 100)
-    this.camera.lookAt(this.scene.position)
+    this.camera.lookAt(new THREE.Vector3(0, 0, 0))
     this.renderer.setSize(this.size.windowW, this.size.windowH)
     // this.cube()
     // this.Helpers()
@@ -58,7 +57,7 @@ class Common {
     // this.cube()
     this.gltfModel()
     // this.dustAdd()
-    this.datGUI()
+    // this.datGUI()
   }
 
   setSize() {
@@ -76,7 +75,7 @@ class Common {
   }
 
   render() {
-    this.rotateModel()
+    // this.rotateModel()
     this.renderer.render(this.scene, this.camera)
   }
 
@@ -122,6 +121,13 @@ class Common {
       })
       this.model.position.y = -20
       this.scene.add(this.model)
+      EventBus.$on(
+        'moveDefaultPosition',
+        this.animateMoveDefaultPosition.bind(this)
+      )
+      EventBus.$on('moveModelFadeOut', this.animateMoveModelFadeOut.bind(this))
+      EventBus.$on('moveTargetHead', this.animateTargetModelHead.bind(this))
+      EventBus.$on('moveShowBack', this.animateMoveShowBack.bind(this))
     })
   }
 
@@ -132,6 +138,70 @@ class Common {
       if (this.model.rotation.y >= 2 * Math.PI) {
         this.modelTernNum = 0
       }
+    }
+  }
+
+  animateTargetModelHead() {
+    if (this.model) {
+      TweenMax.to(this.model.rotation, 2, {
+        y: 2 * Math.PI,
+        onComplete: () => {
+          this.model.rotation.y = 0
+        }
+      })
+      TweenMax.to(this.camera.position, 2, {
+        y: 12,
+        z: 15
+      })
+      TweenMax.to(this.model.position, 2, {
+        x: 0
+      })
+    }
+  }
+
+  animateMoveDefaultPosition() {
+    console.log('animateMoveDefaultPosition')
+    if (this.model) {
+      TweenMax.to(this.model.rotation, 2, {
+        y: -2 * Math.PI,
+        onComplete: () => {
+          this.model.rotation.y = 0
+        }
+      })
+      TweenMax.to(this.model.position, 2, {
+        x: 0
+      })
+      TweenMax.to(this.camera.position, 2, {
+        y: 10,
+        z: 100
+      })
+    }
+  }
+
+  animateMoveModelFadeOut() {
+    console.log('animateMoveModelFadeOut')
+    if (this.model) {
+      TweenMax.to(this.model.position, 2, {
+        x: -100
+      })
+      TweenMax.to(this.camera.position, 2, {
+        z: -100
+      })
+    }
+  }
+
+  animateMoveShowBack() {
+    if (this.model) {
+      TweenMax.to(this.model.rotation, 2, {
+        y: 1 * Math.PI
+      })
+      TweenMax.to(this.camera.position, 2, {
+        y: 10,
+        z: 33
+      })
+      TweenMax.to(this.model.position, 2, {
+        x: 0
+      })
     }
   }
 
@@ -222,24 +292,31 @@ class Common {
   datGUI() {
     const dat = require('dat.gui') // eslint-disable-line
     this.gui = new dat.GUI()
-    console.log(this.gui)
-    console.log(this.spotLight)
 
-    const light = this.gui.addFolder('Light')
-    light.add(this.spotLight, 'penumbra', 1, 2).listen()
-    light.add(this.spotLight, 'decay', 0, 10).listen()
-    light.add(this.spotLight, 'distance', 1, 1000).listen()
-    light.add(this.spotLight, 'angle', 0, Math.PI * 2).listen()
-    light.open()
-
-    const lightPos = this.gui.addFolder('Light Position')
-    lightPos.add(this.spotLight.position, 'x', -200, 200).listen()
-    lightPos.add(this.spotLight.position, 'y', 0, 200).listen()
-    lightPos.add(this.spotLight.position, 'z', -200, 200).listen()
-    lightPos.open()
+    // const light = this.gui.addFolder('Light')
+    // light.add(this.spotLight, 'penumbra', 1, 2).listen()
+    // light.add(this.spotLight, 'decay', 0, 10).listen()
+    // light.add(this.spotLight, 'distance', 1, 1000).listen()
+    // light.add(this.spotLight, 'angle', 0, Math.PI * 2).listen()
+    // light.open()
+    //
+    // const lightPos = this.gui.addFolder('Light Position')
+    // lightPos.add(this.spotLight.position, 'x', -200, 200).listen()
+    // lightPos.add(this.spotLight.position, 'y', 0, 200).listen()
+    // lightPos.add(this.spotLight.position, 'z', -200, 200).listen()
+    // lightPos.open()
+    if (this.model) {
+      const model = this.gui.addFolder('Model')
+      model.add(this.model.position, 'x', -200, 200).listen()
+      model.add(this.model.position, 'y', -200, 200).listen()
+      model.add(this.model.position, 'z', -200, 200).listen()
+      model.open()
+    }
 
     const camera = this.gui.addFolder('Camera')
-    camera.add(this.camera.position, 'z', 50, 200).listen()
+    camera.add(this.camera.position, 'x', -100, 100).listen()
+    camera.add(this.camera.position, 'y', -100, 100).listen()
+    camera.add(this.camera.position, 'z', -100, 100).listen()
     camera.open()
   }
 }

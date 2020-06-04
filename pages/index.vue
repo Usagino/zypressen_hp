@@ -51,7 +51,7 @@ export default {
       // Function of the wheel. Scrolling at a constant power will do the job.
       let wheelToggle = true
       window.onmousewheel = (event) => {
-        const wheelPower = 10
+        const wheelPower = 50
         if (event.wheelDelta > wheelPower && wheelToggle) {
           this.animaChangeCount -= 1
           if (this.animaChangeCount <= 0) {
@@ -104,31 +104,33 @@ export default {
       })
     },
     changeTitleText(number) {
-      switch (number) {
-        case 1:
-          console.log(number)
-          this.switchText('top')
-          EventBus.$emit('MOVE_MODEL', 'TOP')
-          this.PreviousClass = 'top'
-          break
-        case 2:
-          console.log(number)
-          this.switchText('works')
-          EventBus.$emit('MOVE_MODEL', 'WORKS')
-          this.PreviousClass = 'works'
-          break
-        case 3:
-          console.log(number)
-          this.switchText('about')
-          EventBus.$emit('MOVE_MODEL', 'ABOUT')
-          this.PreviousClass = 'about'
-          break
-        case 4:
-          console.log(number)
-          this.switchText('contact')
-          EventBus.$emit('MOVE_MODEL', 'CONTACT')
-          this.PreviousClass = 'contact'
-          break
+      if (this.$route.path === '/') {
+        switch (number) {
+          case 1:
+            console.log(number)
+            this.switchText('top')
+            EventBus.$emit('MOVE_MODEL', 'TOP')
+            this.PreviousClass = 'top'
+            break
+          case 2:
+            console.log(number)
+            this.switchText('works')
+            EventBus.$emit('MOVE_MODEL', 'WORKS')
+            this.PreviousClass = 'works'
+            break
+          case 3:
+            console.log(number)
+            this.switchText('about')
+            EventBus.$emit('MOVE_MODEL', 'ABOUT')
+            this.PreviousClass = 'about'
+            break
+          case 4:
+            console.log(number)
+            this.switchText('contact')
+            EventBus.$emit('MOVE_MODEL', 'CONTACT')
+            this.PreviousClass = 'contact'
+            break
+        }
       }
     },
     switchText(CurrentClass) {

@@ -81,10 +81,13 @@ export default {
         TweenMax.set('html,body', { overflow: 'hidden' })
         this.anim.setDirection(1)
         this.anim.play()
-        tl.to('.menulist__box--contact .menulist__box--link', 0.1, {
-          y: '0%',
-          delay: 0.5
+        tl.to('.menulist', 0.4, {
+          opacity: 1
         })
+          .to('.menulist__box--contact .menulist__box--link', 0.1, {
+            y: '0%',
+            delay: 0.5
+          })
           .to('.menulist__box--about .menulist__box--link', 0.1, {
             y: '0%'
           })
@@ -109,7 +112,11 @@ export default {
             y: '150%'
           })
           .to('.menulist__box--contact .menulist__box--link', 0.1, {
-            y: '150%',
+            y: '150%'
+          })
+          .to('.menulist', 0.4, {
+            opacity: 0,
+            delay: 0.3,
             onComplete: () => {
               this.lottieOptions.toggle = !this.lottieOptions.toggle
             }

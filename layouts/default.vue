@@ -7,25 +7,20 @@
     client-only
       PageMenuIcon
     PageScroll
-    dimensionalModel
+    dimensionalModel(v-show="this.$route.matched[0].path !== '/works/:page'")
+    //mouseStoker
     nuxt
 </template>
 
 <script>
 import dimensionalModel from '@/components/dimensionalModel'
+import EventBus from '~/utils/event-bus' // eslint-disable-line
 
 export default {
   components: {
     dimensionalModel
   },
-  mounted() {
-    const path = this.$route.path
-    if (path === '/') {
-      console.log('piyo')
-    } else {
-      console.log('hoge')
-    }
-  },
+  mounted() {},
   methods: {}
 }
 </script>
@@ -81,5 +76,12 @@ html {
       }
     }
   }
+}
+.testbuton {
+  cursor: pointer;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
 }
 </style>

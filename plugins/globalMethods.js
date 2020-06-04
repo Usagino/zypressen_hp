@@ -17,7 +17,6 @@ Vue.mixin({
         return image + '.webp'
       }
     },
-
     notScroll() {
       const windowHeight = window.innerHeight
       const bodyElement = document.querySelector('body')

@@ -1,11 +1,18 @@
 <template lang="pug">
   .container
-    .works
+    .works-scrollwrap
+      .works-title
+        h1 WORKS
+      .works-list
+        .works-list__single(v-for="(item,index) in WorksArray")
+          nuxt-link.works-list__single--wrap(:to="'/works/'+item.id")
+            img.works-list__single--thumbnail(:src="item.THUMBNAIL.url")
 </template>
 
 <script>
 // import Unsplash, { toJson } from 'unsplash-js'
 import axios from 'axios'
+import { TimelineMax, TweenMax } from 'gsap' // eslint-disable-line
 
 export default {
   async asyncData() {
@@ -15,79 +22,91 @@ export default {
         headers: { 'X-API-KEY': process.env.CMSKEY }
       }
     )
-
     return {
       WorksArray: data.contents
     }
   },
   data() {
     return {
-      WorksArray: []
+      WorksArray: [],
+      htmlElement: null
     }
   },
   mounted() {
-    console.log(this.changeWebp(this.WorksArray[0].THUMBNAIL.url))
+    console.log(this.WorksArray)
+    this.scrollLeft()
+    TweenMax.to('.works-list__single:first-child', 0.3, {
+      opacity: 1,
+      x: 0,
+      delay: 1
+    })
+  },
+  methods: {
+    scrollLeft() {
+      const element = document.querySelector('.container')
+      window.addEventListener(
+        'mousewheel',
+        (e) => {
+          if (e.deltaX === 0) {
+            e.stopPropagation()
+            e.preventDefault()
+            element.scrollBy(e.deltaY, 0)
+          }
+        },
+        { passive: false }
+      )
+    }
   }
-  // methods: {
-  //   changeWebp(image) {
-  //     if (this.$ua.browser() === 'Safari') {
-  //       return image
-  //     } else {
-  //       return image + '?fm=webp'
-  //     }
-  //   }
-  // }
 }
 </script>
 
-<style lang="scss">
-.works {
-  margin: 0 auto;
-  @include secondary-margin;
-  box-sizing: border-box;
-  padding-top: 180px;
-  width: 100%;
-  column-count: 3;
-  column-gap: 0;
-  @include mq(sm) {
-    column-count: 1;
-    padding: 0px;
-    padding-top: $pri-value;
-  }
-  &__item {
-    padding: 12px;
-    -webkit-column-break-inside: avoid;
-    page-break-inside: avoid;
-    break-inside: avoid;
-    display: block;
+<style lang="scss" scoped>
+.container {
+  overflow-x: scroll;
+  overflow-y: hidden;
 
-    @include mq(sm) {
-      padding: 12px 0px;
-    }
+  &::-webkit-scrollbar {
+    display: none;
   }
-  &__imgbox {
-    overflow: hidden;
-    box-sizing: border-box;
-    &:hover {
-      cursor: pointer;
-      img {
-        transform: scale(1.1);
-        -webkit-filter: grayscale(0%);
-        -moz-filter: grayscale(0%);
-        -ms-filter: grayscale(0%);
-        -o-filter: grayscale(0%);
-        filter: grayscale(0%);
-      }
+}
+.works-scrollwrap {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+  width: fit-content;
+}
+.works-title {
+  height: 100vh;
+  min-width: 80vw;
+  padding-left: calc(10vw);
+  @include flex-middle;
+  h1 {
+    @include font-title-first;
+  }
+}
+.works-list {
+  height: 100vh;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+  margin-right: calc(10vw);
+  @include gap-right(200px);
+  &__single {
+    &:first-child {
+      opacity: 0;
+      transform: translateX(10vw);
     }
-    img {
-      transition: all 0.3s cubic-bezier(0.45, 0.05, 0.66, 0.32);
+    &--wrap {
+      width: 750px;
+      height: 500px;
+      display: block;
+    }
+    &--thumbnail {
       width: 100%;
-      height: auto;
-      -webkit-filter: grayscale(100%);
-      -moz-filter: grayscale(100%);
-      -ms-filter: grayscale(100%);
-      -o-filter: grayscale(100%);
-      filter: grayscale(100%);
+      height: 100%;
+      object-fit: cover;
     }
   }
 }

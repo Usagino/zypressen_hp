@@ -49,7 +49,7 @@ export default {
       // Function of the wheel. Scrolling at a constant power will do the job.
       let wheelToggle = true
       window.onmousewheel = (event) => {
-        const wheelPower = 10
+        const wheelPower = 50
         if (event.wheelDelta > wheelPower && wheelToggle) {
           console.log(this.animaChangeCount)
           wheelToggle = false
@@ -90,17 +90,17 @@ export default {
     textAnimationDown() {
       if (this.wheelShow) {
         this.tl
-          .to('.first-mail__wrap h1', 0.3, { y: 100 })
+          .to('.first-mail__wrap h1', 0.3, { y: 200 })
           .set('.second-text--text__box p', {
-            y: -100
+            y: -200
           })
           .to('.second-text--text__box p', 0.4, { y: 0, delay: 0.3 })
         this.wheelShow = !this.wheelShow
       } else {
         this.tl
-          .to('.second-text--text__box p', 0.4, { y: 100 })
+          .to('.second-text--text__box p', 0.4, { y: 200 })
           .set('.first-mail__wrap h1', {
-            y: -100
+            y: -200
           })
           .to('.first-mail__wrap h1', 0.5, { y: 0, delay: 0.3 })
         this.wheelShow = !this.wheelShow
@@ -110,17 +110,17 @@ export default {
       if (this.wheelShow) {
         this.wheelShow = !this.wheelShow
         this.tl
-          .to('.first-mail__wrap h1', 0.3, { y: -100 })
+          .to('.first-mail__wrap h1', 0.3, { y: -200 })
           .set('.second-text--text__box p', {
-            y: 100
+            y: 200
           })
           .to('.second-text--text__box p', 0.4, { y: 0, delay: 0.3 })
       } else {
         this.wheelShow = !this.wheelShow
         this.tl
-          .to('.second-text--text__box p', 0.4, { y: -100 })
+          .to('.second-text--text__box p', 0.4, { y: -200 })
           .set('.first-mail__wrap h1', {
-            y: 100
+            y: 200
           })
           .to('.first-mail__wrap h1', 0.5, { y: 0 })
       }
@@ -138,10 +138,12 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
+  overflow: hidden;
   @include full-screen;
   @include flex-middle;
   &__wrap {
     overflow: hidden;
+    padding: 6px;
     h1 {
       @include font-title-secondary;
       @include text-outline;
@@ -157,6 +159,7 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
+  overflow: hidden;
   @include full-screen;
   @include flex-middle;
   &__wrap {
@@ -170,7 +173,7 @@ export default {
       p {
         @include font-title-secondary;
         line-height: 120%;
-        transform: translateY(-100%);
+        transform: translateY(-200%);
       }
     }
   }
