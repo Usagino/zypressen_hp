@@ -109,7 +109,7 @@ class Common {
     this.dracoLoader.setDecoderPath('/draco/')
     this.loader = new GLTFLoader()
     this.loader.setDRACOLoader(this.dracoLoader)
-    const url = '/gltf/body/zypbody.glb'
+    const url = '/model-experience.glb'
     this.loader.load(url, (gltf) => {
       this.model = gltf.scene
       this.model.scale.set(20, 20, 20)
