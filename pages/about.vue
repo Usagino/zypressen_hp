@@ -44,14 +44,16 @@ export default {}
   }
 }
 .about-body {
+  @include default-width;
   @include gap-bottom(100px);
   @include mq(sm) {
     @include gap-bottom(60px);
+    max-width: 100vw;
+    padding: 0px;
   }
   img {
-    @include default-width;
     width: 100%;
-    height: 40vh;
+    height: 580px;
     object-fit: cover;
     margin: 0 auto;
     display: block;
@@ -63,16 +65,18 @@ export default {}
   }
   p {
     @include font-text-primary;
-    padding: 0 $pri-value;
     @include mq(sm) {
       padding: 0px 0px;
     }
   }
   &__textwrap {
-    @include default-width;
+    padding: 0 $pri-value;
     @include gap-bottom(40px);
     margin: 0 auto;
     display: block;
+    @include mq(sm) {
+      @include default-width;
+    }
   }
 }
 .contact-link {
