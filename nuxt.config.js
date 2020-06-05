@@ -63,7 +63,7 @@ export default {
   },
   webfontloader: {
     google: {
-      families: ['Teko:700', 'Roboto:400,700']
+      families: ['Noto+Sans+JP:wght@400;500', 'Roboto:400,700']
     }
   },
   optimizedImages: {
