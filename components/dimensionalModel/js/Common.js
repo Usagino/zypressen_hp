@@ -52,12 +52,12 @@ class Common {
     this.camera.lookAt(new THREE.Vector3(0, 0, 0))
     this.renderer.setSize(this.size.windowW, this.size.windowH)
     // this.cube()
-    // this.Helpers()
+    this.Helpers()
     // this.groundAdd()
     // this.cube()
     this.gltfModel()
     // this.dustAdd()
-    // this.datGUI()
+    this.datGUI()
   }
 
   setSize() {
@@ -293,18 +293,18 @@ class Common {
     const dat = require('dat.gui') // eslint-disable-line
     this.gui = new dat.GUI()
 
-    // const light = this.gui.addFolder('Light')
-    // light.add(this.spotLight, 'penumbra', 1, 2).listen()
-    // light.add(this.spotLight, 'decay', 0, 10).listen()
-    // light.add(this.spotLight, 'distance', 1, 1000).listen()
-    // light.add(this.spotLight, 'angle', 0, Math.PI * 2).listen()
-    // light.open()
-    //
-    // const lightPos = this.gui.addFolder('Light Position')
-    // lightPos.add(this.spotLight.position, 'x', -200, 200).listen()
-    // lightPos.add(this.spotLight.position, 'y', 0, 200).listen()
-    // lightPos.add(this.spotLight.position, 'z', -200, 200).listen()
-    // lightPos.open()
+    const light = this.gui.addFolder('Light')
+    light.add(this.spotLight, 'penumbra', 1, 2).listen()
+    light.add(this.spotLight, 'decay', 0, 10).listen()
+    light.add(this.spotLight, 'distance', 1, 1000).listen()
+    light.add(this.spotLight, 'angle', 0, Math.PI * 2).listen()
+    light.open()
+
+    const lightPos = this.gui.addFolder('Light Position')
+    lightPos.add(this.spotLight.position, 'x', -200, 200).listen()
+    lightPos.add(this.spotLight.position, 'y', 0, 200).listen()
+    lightPos.add(this.spotLight.position, 'z', -200, 200).listen()
+    lightPos.open()
     if (this.model) {
       const model = this.gui.addFolder('Model')
       model.add(this.model.position, 'x', -200, 200).listen()
