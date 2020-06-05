@@ -47,11 +47,9 @@ export default {
       window.addEventListener(
         'mousewheel',
         (e) => {
-          if (e.deltaX === 0) {
-            e.stopPropagation()
-            e.preventDefault()
-            element.scrollBy(e.deltaY, 0)
-          }
+          e.stopPropagation()
+          e.preventDefault()
+          element.scrollBy(e.deltaY, 0)
         },
         { passive: false }
       )
