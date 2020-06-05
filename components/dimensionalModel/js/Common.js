@@ -38,7 +38,8 @@ class Common {
     // scene
     this.scene = new THREE.Scene()
     this.scene.fog = new THREE.Fog(0x000000, -10, 300)
-
+    const dat = require('dat.gui') // eslint-disable-line
+    this.gui = new dat.GUI()
     this.spotLightAdd()
     this.ambientLightAdd()
     // camera
@@ -290,9 +291,6 @@ class Common {
   }
 
   datGUI() {
-    const dat = require('dat.gui') // eslint-disable-line
-    this.gui = new dat.GUI()
-
     const light = this.gui.addFolder('Light')
     light.add(this.spotLight, 'penumbra', 1, 2).listen()
     light.add(this.spotLight, 'decay', 0, 10).listen()
