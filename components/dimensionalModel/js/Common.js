@@ -53,7 +53,7 @@ class Common {
     this.renderer.setSize(this.size.windowW, this.size.windowH)
     // this.cube()
     // this.Helpers()
-    this.groundAdd()
+    // this.groundAdd()
     // this.cube()
     this.gltfModel()
     // this.dustAdd()
@@ -112,7 +112,7 @@ class Common {
     const url = '/model-experience.glb'
     this.loader.load(url, (gltf) => {
       this.model = gltf.scene
-      this.model.scale.set(20, 20, 20)
+      this.model.scale.set(50, 50, 50)
       this.model.castShadow = true
       gltf.scene.traverse(function(node) {
         if (node.isMesh) {
