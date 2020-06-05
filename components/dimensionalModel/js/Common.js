@@ -313,10 +313,10 @@ class Common {
       model.open()
     }
 
-    const camera = this.gui.addFolder('Camera')
-    camera.add(this.camera.position, 'x', -100, 100).listen()
-    camera.add(this.camera.position, 'y', -100, 100).listen()
-    camera.add(this.camera.position, 'z', -100, 100).listen()
+    const camera = this.gui.addFolder('Camera position')
+    camera.add(this.camera.position, 'x', -200, 200).listen()
+    camera.add(this.camera.position, 'y', -200, 200).listen()
+    camera.add(this.camera.position, 'z', -200, 200).listen()
     camera.open()
   }
 }
