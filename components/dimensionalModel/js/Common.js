@@ -32,14 +32,13 @@ class Common {
       canvas: $canvas,
       antialias: true
     })
-    this.renderer.setClearColor(new THREE.Color(0x000000))
+    // this.renderer.setClearColor(new THREE.Color(0x000000))
     this.renderer.shadowMap.enabled = true
     this.renderer.gammaOutput = true
     // scene
     this.scene = new THREE.Scene()
-    this.scene.fog = new THREE.Fog(0x000000, -10, 300)
-    const dat = require('dat.gui') // eslint-disable-line
-    this.gui = new dat.GUI()
+    // this.scene.fog = new THREE.Fog(0x000000, -10, 300)
+
     this.spotLightAdd()
     this.ambientLightAdd()
     // camera
@@ -55,7 +54,6 @@ class Common {
     // this.cube()
     this.Helpers()
     // this.groundAdd()
-    // this.cube()
     this.gltfModel()
     // this.dustAdd()
     this.datGUI()
@@ -110,10 +108,10 @@ class Common {
     this.dracoLoader.setDecoderPath('/draco/')
     this.loader = new GLTFLoader()
     this.loader.setDRACOLoader(this.dracoLoader)
-    const url = '/model-experience.glb'
+    const url = '/ayumu.glb'
     this.loader.load(url, (gltf) => {
       this.model = gltf.scene
-      this.model.scale.set(50, 50, 50)
+      this.model.scale.set(20, 20, 20)
       this.model.castShadow = true
       gltf.scene.traverse(function(node) {
         if (node.isMesh) {
@@ -291,6 +289,8 @@ class Common {
   }
 
   datGUI() {
+    const dat = require('dat.gui') // eslint-disable-line
+    this.gui = new dat.GUI()
     const light = this.gui.addFolder('Light')
     light.add(this.spotLight, 'penumbra', 1, 2).listen()
     light.add(this.spotLight, 'decay', 0, 10).listen()
