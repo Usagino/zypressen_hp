@@ -34,7 +34,10 @@ export default {
   },
   mounted() {
     console.log(this.WorksArray)
-    this.scrollLeft()
+    if (this.$ua.deviceType() !== 'smartphone') {
+      this.scrollLeft()
+    }
+
     TweenMax.to('.works-list__single:first-child', 0.3, {
       opacity: 1,
       x: 0,
@@ -62,7 +65,10 @@ export default {
 .container {
   overflow-x: scroll;
   overflow-y: hidden;
-
+  @include mq(sm) {
+    overflow-y: scroll;
+    overflow-x: none;
+  }
   &::-webkit-scrollbar {
     display: none;
   }
@@ -73,6 +79,11 @@ export default {
   align-items: center;
   flex-direction: row;
   width: fit-content;
+  @include mq(sm) {
+    flex-direction: column;
+    padding: 100px 0px;
+    width: 100vw;
+  }
 }
 .works-title {
   height: 100vh;
@@ -81,6 +92,12 @@ export default {
   @include flex-middle;
   h1 {
     @include font-title-first;
+  }
+  @include mq(sm) {
+    height: auto;
+    width: fit-content;
+    padding: 0px;
+    padding-bottom: 60px;
   }
 }
 .works-list {
@@ -91,6 +108,11 @@ export default {
   flex-direction: row;
   margin-right: calc(10vw);
   @include gap-right(200px);
+  @include mq(sm) {
+    flex-direction: column;
+    margin-right: 0px;
+    @include gap-right(0px);
+  }
   &__single {
     &:first-child {
       opacity: 0;
@@ -100,6 +122,10 @@ export default {
       width: 750px;
       height: 500px;
       display: block;
+      @include mq(sm) {
+        width: 100vw;
+        height: 100vw;
+      }
     }
     &--thumbnail {
       width: 100%;

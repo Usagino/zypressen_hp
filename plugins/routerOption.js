@@ -6,10 +6,14 @@ export default async ({ app }) => {
     // ページ遷移ごとに行いたい処理
     const htmlElement = document.querySelector('html')
     const bodyElement = document.querySelector('body')
-
+    console.log(app.$ua)
     if (to.path === '/' || to.path === '/contact' || to.path === '/works') {
       htmlElement.classList.add('noscroll')
       bodyElement.classList.add('noscroll')
+      if (app.$ua.deviceType() === 'smartphone' && to.path === '/works') {
+        htmlElement.classList.remove('noscroll')
+        bodyElement.classList.remove('noscroll')
+      }
     } else {
       htmlElement.classList.remove('noscroll')
       bodyElement.classList.remove('noscroll')
