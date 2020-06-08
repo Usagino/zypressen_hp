@@ -32,7 +32,7 @@ html {
 .page {
   min-height: 100vh;
   width: 100vw;
-  overflow: hidden;
+  //overflow: hidden;
   &__logo {
     position: fixed;
     top: $pri-value;

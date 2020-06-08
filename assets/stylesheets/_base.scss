@@ -1,8 +1,7 @@
 html{
   scrollbar-width: none;
-  overflow-x: hidden;
-  -ms-scroll-chaining: none;
-  overscroll-behavior: none;
+  // overflow-x: hidden;
+  overscroll-behavior-y: none;
   max-width: 100vw;
   &::-webkit-scrollbar {
     display:none;
@@ -31,4 +30,9 @@ h1,h2{
 p::selection {
     background:$color-orange;
     color: $color-white;
+}
+.noscroll{
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden !important;
 }

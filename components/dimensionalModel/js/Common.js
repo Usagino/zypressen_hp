@@ -52,11 +52,11 @@ class Common {
     this.camera.lookAt(new THREE.Vector3(0, 0, 0))
     this.renderer.setSize(this.size.windowW, this.size.windowH)
     // this.cube()
-    this.Helpers()
-    // this.groundAdd()
+    // this.Helpers()
+    this.groundAdd()
     this.gltfModel()
     // this.dustAdd()
-    this.datGUI()
+    // this.datGUI()
   }
 
   setSize() {
@@ -83,7 +83,7 @@ class Common {
   }
 
   spotLightAdd() {
-    this.spotLight = new THREE.SpotLight(0xffffff)
+    this.spotLight = new THREE.SpotLight(0x9f9f9f)
     this.spotLight.position.set(100, 60, 30)
     this.spotLight.angle = Math.PI / 8
     console.log(this.spotLight.angle)
@@ -263,7 +263,7 @@ class Common {
     // })
     // const ground = new THREE.Mesh(groundGeometry, groundMaterial)
     const material = new THREE.MeshPhongMaterial({
-      color: 0xf1f1f1,
+      color: 0x000000,
       dithering: true
     })
     const geometry = new THREE.PlaneBufferGeometry(1000000, 1000000)
