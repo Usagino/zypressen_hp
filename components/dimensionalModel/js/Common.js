@@ -83,10 +83,9 @@ class Common {
   }
 
   spotLightAdd() {
-    this.spotLight = new THREE.SpotLight(0x9f9f9f)
+    this.spotLight = new THREE.SpotLight(0x5c5c5c)
     this.spotLight.position.set(100, 60, 30)
     this.spotLight.angle = Math.PI / 8
-    console.log(this.spotLight.angle)
     this.spotLight.penumbra = 0.5
     this.spotLight.decay = 2
     this.spotLight.distance = 300
@@ -159,7 +158,6 @@ class Common {
   }
 
   animateMoveDefaultPosition() {
-    console.log('animateMoveDefaultPosition')
     if (this.model) {
       TweenMax.to(this.model.rotation, 2, {
         y: -2 * Math.PI,
@@ -178,7 +176,6 @@ class Common {
   }
 
   animateMoveModelFadeOut() {
-    console.log('animateMoveModelFadeOut')
     if (this.model) {
       TweenMax.to(this.model.position, 2, {
         x: -100

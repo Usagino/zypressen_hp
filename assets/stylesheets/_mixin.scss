@@ -9,11 +9,8 @@
   font-family:'Titling Gothic FB Extd Bd',YakuHanJP,"Roboto";
 }
 
-$color-black: rgba(0,0,0,1);
-$color-white: rgba(255,255,255,1);
-$color-glay: rgba(122,122,122,1);
 @mixin font-logo {
-	font-size:16px;
+	font-size:18px;
 	font-family:"Eagle";
 	font-weight:book;
 }
@@ -45,7 +42,7 @@ $color-glay: rgba(122,122,122,1);
 
 // notosans
 @mixin font-nav-primary {
-	font-size:14px;
+	font-size:15px;
   font-family: 'Roboto', sans-serif;
 	font-weight:medium;
 }
@@ -55,11 +52,16 @@ $color-glay: rgba(122,122,122,1);
 	font-weight:medium;
   letter-spacing: 4px;
 }
+
+// texts
 @mixin font-text-primary {
-	font-size:14px;
+	font-size:15px;
   font-family: 'Roboto', sans-serif;
 	font-weight:medium;
-	line-height:180%;
+	line-height:28px;
+  @include mq(sm){
+    font-size:16px;
+  }
 }
 @mixin font-text-secondary {
 	font-size:16px;
@@ -67,6 +69,12 @@ $color-glay: rgba(122,122,122,1);
 	font-weight:black;
 }
 
+@mixin font-text-secondary {
+	font-size:28px;
+  font-family: 'Roboto', sans-serif;
+	font-weight:black;
+  line-height:44px;
+}
 
 $breakpoints: (
   'sm': 'screen and (max-width: 450px)',

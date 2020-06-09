@@ -2,11 +2,11 @@
   div.page
     nuxt-link.page__logo(to="/")
       img.page__logo__image(src="/PageLogo.svg")
-    .page__copylight
-      p.page__copylight__text ©️2020ZYPRESSEN
+    //- .page__copylight
+    //-   p.page__copylight__text ©️2020ZYPRESSEN
     client-only
       PageMenuIcon
-    PageScroll
+    //PageScroll
     dimensionalModel(v-show="this.$route.matched[0].path !== '/works/:page'")
     //mouseStoker
     nuxt
@@ -20,7 +20,35 @@ export default {
   components: {
     dimensionalModel
   },
-  mounted() {},
+  mounted() {
+    const babseStyle = [
+      'padding:4px 12px',
+      'font-size: 8px',
+      'border:1px solid #020202'
+    ]
+    const textStyle = [
+      ...babseStyle,
+      'background-color: #020202',
+      'color: white',
+      'border-right: none'
+    ].join(';')
+    const iconStyle = [
+      ...babseStyle,
+      'text-decoration: none;',
+      'background-color: #5e5e5e',
+      'border-right: none',
+      'border-left: none',
+      'padding:4px 2px'
+    ].join(';')
+    const linkStyle = [...babseStyle, 'border-left: none'].join(';')
+
+    console.log(
+      '%cMADE WITH BY ZYPRESSEN%c🌲%chttps://zypressen.org',
+      textStyle,
+      iconStyle,
+      linkStyle
+    )
+  },
   methods: {}
 }
 </script>
@@ -31,6 +59,7 @@ html {
 }
 .page {
   min-height: 100vh;
+
   width: 100vw;
   //overflow: hidden;
   &__logo {

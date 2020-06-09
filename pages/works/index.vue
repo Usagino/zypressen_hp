@@ -7,12 +7,14 @@
         .works-list__single(v-for="(item,index) in WorksArray")
           nuxt-link.works-list__single--wrap(:to="'/works/'+item.id")
             img.works-list__single--thumbnail(:src="item.THUMBNAIL.url")
+            .works-list__single--title
+              h2.works-list__single--title__text {{item.TITLE}}
 </template>
 
 <script>
-// import Unsplash, { toJson } from 'unsplash-js'
 import axios from 'axios'
 import { TimelineMax, TweenMax } from 'gsap' // eslint-disable-line
+import inView from 'in-view' // eslint-disable-line
 
 export default {
   async asyncData() {
@@ -33,16 +35,15 @@ export default {
     }
   },
   mounted() {
-    console.log(this.WorksArray)
     if (this.$ua.deviceType() !== 'smartphone') {
       this.scrollLeft()
     }
-
     TweenMax.to('.works-list__single:first-child', 0.3, {
       opacity: 1,
       x: 0,
       delay: 1
     })
+    // inView.threshold(0.8)
   },
   methods: {
     scrollLeft() {
@@ -122,6 +123,7 @@ export default {
       width: 750px;
       height: 500px;
       display: block;
+      position: relative;
       @include mq(sm) {
         width: 100vw;
         height: 100vw;
@@ -131,6 +133,24 @@ export default {
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+    &--title {
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      display: block;
+      padding: 24px;
+      height: fit-content;
+      width: 100%;
+      margin: auto;
+      box-sizing: border-box;
+      &__text {
+        @include font-title-secondary;
+        text-align: center;
+      }
     }
   }
 }
