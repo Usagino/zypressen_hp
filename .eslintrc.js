@@ -21,6 +21,14 @@ module.exports = {
   rules: {
     'nuxt/no-cjs-in-config': 'off',
     "no-console": 0,
-    "unicorn/number-literal-case": "off"
+    "unicorn/number-literal-case": "off",
+    'prettier/prettier': [
+      'error',
+      {
+        htmlWhitespaceSensitivity: 'ignore',
+        semi: false,
+        singleQuote: true
+      }
+    ],
   }
 }

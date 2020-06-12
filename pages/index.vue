@@ -137,7 +137,7 @@ export default {
       this.tl
         .to(`.s-lw-${this.PreviousClass}`, 0.3, {
           y: '120%',
-          rotate: '10deg'
+          rotate: '45deg'
         })
         .set(`.s-lw-${this.PreviousClass}`, { display: 'none' })
         .set(`.s-lw-${CurrentClass}`, { display: 'block' })
@@ -188,6 +188,7 @@ export default {
           cursor: pointer;
           transform: translateY(120%) rotate(5deg);
           transform-origin: left;
+          @include font-title-first;
         }
       }
     }
@@ -197,6 +198,9 @@ export default {
       left: 0px;
       right: 0px;
       text-align: center;
+      @include mq(sm) {
+        bottom: 32px;
+      }
       @include font-nav-primary;
       p {
         color: $color-gray;

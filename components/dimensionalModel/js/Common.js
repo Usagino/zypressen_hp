@@ -1,6 +1,6 @@
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'// eslint-disable-line
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'// eslint-disable-line
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js' // eslint-disable-line
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js' // eslint-disable-line
 import { TimelineMax, TweenMax } from 'gsap' // eslint-disable-line
 import EventBus from "~/utils/event-bus"; // eslint-disable-line
 // import dat from 'dat.gui';// eslint-disable-line
@@ -22,6 +22,10 @@ class Common {
     this.dusts = null
     this.model = null
     this.modelTernNum = 0
+    this.currentPath = null
+
+    // event bus
+    EventBus.$on('passingThePath', this.appliedPath.bind(this))
   }
 
   init($canvas) {
@@ -40,7 +44,7 @@ class Common {
     // this.scene.fog = new THREE.Fog(0x000000, -10, 300)
 
     this.spotLightAdd()
-    this.ambientLightAdd()
+    // this.ambientLightAdd()
     // camera
     this.camera = new THREE.PerspectiveCamera(
       45,
@@ -48,15 +52,16 @@ class Common {
       0.1,
       1000
     )
-    this.camera.position.set(0, 10, 100)
+    this.camera.position.set(0, 0, 100)
     this.camera.lookAt(new THREE.Vector3(0, 0, 0))
     this.renderer.setSize(this.size.windowW, this.size.windowH)
-    // this.cube()
-    // this.Helpers()
+
     this.groundAdd()
     this.gltfModel()
     // this.dustAdd()
+    // this.Helpers()
     // this.datGUI()
+    this.tweakpane()
   }
 
   setSize() {
@@ -82,6 +87,28 @@ class Common {
     console.log(direction)
   }
 
+  appliedPath(name) {
+    this.currentPath = name
+    this.switchAnime()
+  }
+
+  switchAnime() {
+    switch (this.currentPath) {
+      case 'index':
+        this.animateMoveDefaultPosition()
+        break
+      case 'works':
+        this.animateMoveModelFadeOut()
+        break
+      case 'about':
+        this.animateAboutPage()
+        break
+      case 'contact':
+        this.animateMoveShowBack()
+        break
+    }
+  }
+
   spotLightAdd() {
     this.spotLight = new THREE.SpotLight(0x5c5c5c)
     this.spotLight.position.set(100, 60, 30)
@@ -96,6 +123,8 @@ class Common {
     this.spotLight.shadow.camera.far = 200
     this.scene.add(this.spotLight)
   }
+
+  cameraAdd() {}
 
   ambientLightAdd() {
     this.AmbientLight = new THREE.AmbientLight(0xe4e2c9, 0.2)
@@ -119,13 +148,11 @@ class Common {
       })
       this.model.position.y = -20
       this.scene.add(this.model)
-      EventBus.$on(
-        'moveDefaultPosition',
-        this.animateMoveDefaultPosition.bind(this)
-      )
-      EventBus.$on('moveModelFadeOut', this.animateMoveModelFadeOut.bind(this))
-      EventBus.$on('moveTargetHead', this.animateTargetModelHead.bind(this))
-      EventBus.$on('moveShowBack', this.animateMoveShowBack.bind(this))
+      this.switchAnime()
+      EventBus.$on('moveDefaultPosition', this.animateMoveDefaultPosition)
+      EventBus.$on('moveModelFadeOut', this.animateMoveModelFadeOut)
+      EventBus.$on('animateAboutPage', this.animateAboutPage)
+      EventBus.$on('moveShowBack', this.animateMoveShowBack)
     })
   }
 
@@ -136,24 +163,6 @@ class Common {
       if (this.model.rotation.y >= 2 * Math.PI) {
         this.modelTernNum = 0
       }
-    }
-  }
-
-  animateTargetModelHead() {
-    if (this.model) {
-      TweenMax.to(this.model.rotation, 2, {
-        y: 2 * Math.PI,
-        onComplete: () => {
-          this.model.rotation.y = 0
-        }
-      })
-      TweenMax.to(this.camera.position, 2, {
-        y: 12,
-        z: 15
-      })
-      TweenMax.to(this.model.position, 2, {
-        x: 0
-      })
     }
   }
 
@@ -169,8 +178,8 @@ class Common {
         x: 0
       })
       TweenMax.to(this.camera.position, 2, {
-        y: 10,
-        z: 100
+        z: 100,
+        x: 0
       })
     }
   }
@@ -192,11 +201,25 @@ class Common {
         y: 1 * Math.PI
       })
       TweenMax.to(this.camera.position, 2, {
-        y: 10,
-        z: 33
+        z: 33,
+        x: 0
       })
       TweenMax.to(this.model.position, 2, {
         x: 0
+      })
+    }
+  }
+
+  animateAboutPage() {
+    if (this.model) {
+      TweenMax.to(this.model.rotation, 2, {
+        y: -2 * Math.PI,
+        onComplete: () => {
+          this.model.rotation.y = 0
+        }
+      })
+      TweenMax.to(this.camera.position, 2, {
+        x: -30
       })
     }
   }
@@ -241,34 +264,35 @@ class Common {
     this.scene.add(this.dusts)
   }
 
-  cube() {
-    const material = new THREE.MeshPhongMaterial({
-      color: 0x4080ff,
-      dithering: true
-    })
-    const geometry = new THREE.BoxBufferGeometry(10, 60, 10)
-    const mesh = new THREE.Mesh(geometry, material)
-    mesh.castShadow = true
-    mesh.rotation.y = 0.5 * Math.PI
-    this.scene.add(mesh)
-  }
-
   groundAdd() {
     // const groundGeometry = new THREE.BoxGeometry(1000000, 0, 1000000)
     // const groundMaterial = new THREE.MeshBasicMaterial({
     //   color: 0xffffff
     // })
     // const ground = new THREE.Mesh(groundGeometry, groundMaterial)
+    const geometry = new THREE.PlaneBufferGeometry(1000000, 1000000)
     const material = new THREE.MeshPhongMaterial({
       color: 0x000000,
       dithering: true
     })
-    const geometry = new THREE.PlaneBufferGeometry(1000000, 1000000)
-    const ground = new THREE.Mesh(geometry, material)
-    ground.position.y = -22
-    ground.rotation.x = -Math.PI * 0.5
-    ground.receiveShadow = true
-    this.scene.add(ground)
+
+    const ground = new THREE.Mesh(geometry, material) // eslint-disable-line
+
+    const plane = new THREE.Mesh(
+      new THREE.PlaneGeometry(1000, 1000, 1, 1),
+      new THREE.MeshLambertMaterial({
+        side: THREE.DoubleSide,
+        color: 0xcd5c5c
+      })
+    )
+    plane.position.y = -22
+    plane.receiveShadow = true
+    this.scene.add(plane)
+
+    // ground.position.y = -22
+    // ground.rotation.x = -Math.PI * 0.5
+    // ground.receiveShadow = true
+    // this.scene.add(ground)
   }
 
   Helpers() {
@@ -283,6 +307,23 @@ class Common {
       this.spotLight.shadow.camera
     )
     this.scene.add(spotLightShadowHelper)
+  }
+
+  tweakpane() {
+    const Tweakpane = require('tweakpane') // eslint-disable-line
+    const pane = new Tweakpane()
+    const cameraFl = pane.addFolder({
+      title: 'CAMERA'
+    })
+    const CAMERA = {
+      X: this.camera.position.x,
+      Y: this.camera.position.y,
+      Z: this.camera.position.z
+    }
+    cameraFl.addInput(CAMERA, 'X', {
+      min: -200,
+      max: 200
+    })
   }
 
   datGUI() {

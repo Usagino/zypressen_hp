@@ -28,6 +28,7 @@
     "nuxt-webfontloader": "^1.1.0",
     "rgbaster": "^2.1.1",
     "three": "^0.116.1",
+    "tweakpane": "^1.4.0",
     "unsplash-js": "^6.0.0",
     "vue-lottie": "^0.2.1"
   },

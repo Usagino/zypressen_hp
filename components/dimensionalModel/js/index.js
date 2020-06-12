@@ -9,6 +9,7 @@ export default class WebglWrap {
   constructor(props) {
     this.props = props
     this.init()
+    window.addEventListener('resize', this.resize.bind(this))
   }
 
   init() {

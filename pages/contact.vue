@@ -1,27 +1,14 @@
 <template lang="pug">
-  .container
-    .first-mail
-      .first-mail__wrap
-        h1 info@zypressen.org
-    .second-text
-      .second-text__wrap
-        p.second-text--text
-          span.second-text--text__box
-            p We are a creative
-          span.second-text--text__box
-            p team with a small
-          span.second-text--text__box
-            p group of people.
-          span.second-text--text__box
-            p Please feel free to
-          span.second-text--text__box
-            p contact us anytime.
-          span.second-text--text__box
-            p Your Friendly
-          span.second-text--text__box
-            p Neighbor
-          span.second-text--text__box
-            p ZYPRESSEN.
+  .container.contact-page
+    .message
+      h2.message--text
+        span.message--text__wrap(v-for="text in this.messageText.split(' ')")
+          span.message--text__item {{text}}
+          .message--text__cover
+      h2.message--text.message--mail
+        span.message--text__wrap
+          span.message--text__item info@zypressen.org
+          .message--text__cover
 </template>
 
 <script>
@@ -31,99 +18,43 @@ export default {
   data() {
     const tl = new TimelineMax()
     return {
-      wheelShow: true,
-      animaChangeCount: 0,
-      wheelToggleCount: 0,
       tl,
-      swipeStart: 0,
-      swipeEnd: 0
+      messageText:
+        'Please feel free to contact us anytime. Your Friendly Neighbor ZYPRESSEN.'
     }
   },
   mounted() {
-    this.wheelAction()
-    this.swipeAciton()
-    // this.newWheelAction()
+    const textarrayLength = this.messageText.split(' ').length
+    const minitues = [...Array(textarrayLength).keys()].map(i => ++i)// eslint-disable-line
+    this.displayTextAnimate(minitues.slice(-1)[0])
+    this.displayText()
   },
   methods: {
-    wheelAction() {
-      // Function of the wheel. Scrolling at a constant power will do the job.
-      let wheelToggle = true
-      window.onmousewheel = (event) => {
-        const wheelPower = 50
-        if (event.wheelDelta > wheelPower && wheelToggle) {
-          console.log(this.animaChangeCount)
-          wheelToggle = false
-          // animation
-          this.textAnimationDown()
-          setTimeout(() => {
-            wheelToggle = true
-          }, 1000)
-        } else if (event.wheelDelta < wheelPower * -1 && wheelToggle) {
-          console.log(this.animaChangeCount)
-          wheelToggle = false
-          // animation
-          this.textAnimationTop()
-          setTimeout(() => {
-            wheelToggle = true
-          }, 1000)
-        }
+    shuffle([...array]) {
+      for (let i = array.length - 1; i >= 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1))
+        ;[array[i], array[j]] = [array[j], array[i]]
       }
+      return array
     },
-    swipeAciton() {
-      window.addEventListener('touchstart', (event) => {
-        this.swipeStart = event.changedTouches[0].pageY
-      })
-      window.addEventListener('touchend', (event) => {
-        this.swipeEnd = event.changedTouches[0].pageY
-        const absValue = Math.abs(this.swipeStart - this.swipeEnd)
-        if (absValue > 100) {
-          if (this.swipeStart > this.swipeEnd) {
-            console.log('👇', absValue)
-            this.textAnimationDown()
-          } else {
-            console.log('☝️', absValue)
-            this.textAnimationTop()
-          }
-        }
+    displayText() {
+      const textarrayLength = this.messageText.split(' ').length
+      const minitues = [...Array(textarrayLength).keys()].map(i => ++i)// eslint-disable-line
+      minitues.pop()
+      this.shuffle(minitues).forEach((item, i) => {
+        this.displayTextAnimate(item)
       })
     },
-    textAnimationDown() {
-      if (this.wheelShow) {
-        this.tl
-          .to('.first-mail__wrap h1', 0.3, { y: 200 })
-          .set('.second-text--text__box p', {
-            y: -200
-          })
-          .to('.second-text--text__box p', 0.4, { y: 0, delay: 0.3 })
-        this.wheelShow = !this.wheelShow
-      } else {
-        this.tl
-          .to('.second-text--text__box p', 0.4, { y: 200 })
-          .set('.first-mail__wrap h1', {
-            y: -200
-          })
-          .to('.first-mail__wrap h1', 0.5, { y: 0, delay: 0.3 })
-        this.wheelShow = !this.wheelShow
-      }
-    },
-    textAnimationTop() {
-      if (this.wheelShow) {
-        this.wheelShow = !this.wheelShow
-        this.tl
-          .to('.first-mail__wrap h1', 0.3, { y: -200 })
-          .set('.second-text--text__box p', {
-            y: 200
-          })
-          .to('.second-text--text__box p', 0.4, { y: 0, delay: 0.3 })
-      } else {
-        this.wheelShow = !this.wheelShow
-        this.tl
-          .to('.second-text--text__box p', 0.4, { y: -200 })
-          .set('.first-mail__wrap h1', {
-            y: 200
-          })
-          .to('.first-mail__wrap h1', 0.5, { y: 0 })
-      }
+    displayTextAnimate(item) {
+      const el = `.message--text__wrap:nth-child(${item}) `
+      this.tl
+        .to(el + '.message--text__cover', 0.4, {
+          x: '0%'
+        })
+        .set(el + '.message--text__item', { opacity: 1 })
+        .to(el + '.message--text__cover', 0.2, {
+          x: '110%'
+        })
     }
   }
 }
@@ -134,46 +65,48 @@ export default {
   @include full-screen;
   position: relative;
 }
-.first-mail {
-  position: absolute;
-  top: 0;
-  left: 0;
-  overflow: hidden;
+.contact-page {
   @include full-screen;
   @include flex-middle;
-  &__wrap {
-    overflow: hidden;
-    padding: 6px;
-    h1 {
-      @include font-title-secondary;
+  @include default-width;
+  box-sizing: border-box;
+}
+.message {
+  height: fit-content;
+  width: 100%;
+  &--text {
+    @include font-title-secondary;
+    @include gap-right(0.5em);
+    // line-height: 1.2em;
+    span {
+      display: inline-block;
+    }
+    &__wrap {
+      overflow: hidden;
+      width: fit-content;
+      height: fit-content;
+      position: relative;
+    }
+    &__item {
+      vertical-align: middle;
+      opacity: 0;
+      padding: 6px 0px;
+    }
+    &__cover {
+      height: 100%;
+      width: 100%;
+      background: $color-white;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translateX(-110%);
+    }
+  }
+  &--mail {
+    span {
       @include text-outline;
       @include mq(sm) {
         @include font-title-thirdry;
-        -webkit-text-stroke: 0px $color-white;
-        color: $color-white;
-      }
-    }
-  }
-}
-.second-text {
-  position: absolute;
-  top: 0;
-  left: 0;
-  overflow: hidden;
-  @include full-screen;
-  @include flex-middle;
-  &__wrap {
-    @include default-width;
-  }
-  &--text {
-    &__box {
-      overflow: hidden;
-      height: fit-content;
-      display: block;
-      p {
-        @include font-title-secondary;
-        line-height: 120%;
-        transform: translateY(-200%);
       }
     }
   }

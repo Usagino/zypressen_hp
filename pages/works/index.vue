@@ -5,7 +5,7 @@
         h1 WORKS
       .works-list
         .works-list__single(v-for="(item,index) in WorksArray")
-          nuxt-link.works-list__single--wrap(:to="'/works/'+item.id")
+          a.works-list__single--wrap(:href="'/works/'+item.id")
             img.works-list__single--thumbnail(:src="item.THUMBNAIL.url")
             .works-list__single--title
               h2.works-list__single--title__text {{item.TITLE}}
