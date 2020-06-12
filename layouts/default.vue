@@ -59,14 +59,13 @@ html {
 }
 .page {
   min-height: 100vh;
-
   width: 100vw;
   //overflow: hidden;
   &__logo {
     position: fixed;
     top: $pri-value;
     left: $pri-value;
-    height: 18px;
+    height: 16px;
     font-size: medium;
     z-index: 1000;
     @include mq(sm) {

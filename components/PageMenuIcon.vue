@@ -3,8 +3,8 @@
   .menuicon(@click="menuToggle")
     lottie(
       :options="lottieOptions"
-      :height="18"
-      :width="18"
+      :height="16"
+      :width="16"
       @animCreated="handleAnimation")
   transition
     .menulist(v-show="!lottieOptions.toggle")

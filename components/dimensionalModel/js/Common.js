@@ -61,7 +61,7 @@ class Common {
     // this.dustAdd()
     // this.Helpers()
     // this.datGUI()
-    this.tweakpane()
+    // this.tweakpane()
   }
 
   setSize() {
