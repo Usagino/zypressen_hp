@@ -76,7 +76,7 @@ html {
       top: 32px;
     }
     img {
-      height: 18px;
+      height: 16px;
       width: auto;
     }
   }
