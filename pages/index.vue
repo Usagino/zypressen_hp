@@ -3,7 +3,7 @@
   .switch_linked
     .switch_linked__wrap
       .switch_linked__wrap__text
-        p.s-lw-top(@click="modelFunction('hoge')") ZYPRESSEN
+        p.s-lw-top(@click="modelFunction('hoge')") HELLO
         nuxt-link.s-lw-works(to="/works") WORKS
         nuxt-link.s-lw-about(to="/about") ABOUT
         nuxt-link.s-lw-contact(to="/contact") CONTACT

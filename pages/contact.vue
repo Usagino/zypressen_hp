@@ -26,8 +26,26 @@ export default {
   mounted() {
     const textarrayLength = this.messageText.split(' ').length
     const minitues = [...Array(textarrayLength).keys()].map(i => ++i)// eslint-disable-line
-    this.displayTextAnimate(minitues.slice(-1)[0])
-    this.displayText()
+    // this.displayTextAnimate(minitues.slice(-1)[0])
+    // this.displayText()
+    this.tl
+      .staggerTo(
+        '.message--text__cover',
+        0.5,
+        {
+          x: '0%'
+        },
+        0.1
+      )
+      .set('.message--text__item', { opacity: 1 })
+      .staggerTo(
+        '.message--text__cover',
+        0.3,
+        {
+          x: '110%'
+        },
+        0.1
+      )
   },
   methods: {
     shuffle([...array]) {
