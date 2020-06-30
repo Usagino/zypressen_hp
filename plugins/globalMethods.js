@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { TweenMax } from 'gsap'
+// import { TweenMax } from 'gsap'
 
 Vue.mixin({
   methods: {
@@ -16,23 +16,23 @@ Vue.mixin({
       } else {
         return image + '.webp'
       }
-    },
-    notScroll() {
-      const windowHeight = window.innerHeight
-      const bodyElement = document.querySelector('body')
-      const bodyHeight = bodyElement.clientHeight
-      console.log(bodyHeight, windowHeight)
-      console.log(bodyHeight <= windowHeight)
-      if (bodyHeight <= windowHeight) {
-        TweenMax.set('html,body', { overflow: 'hidden' })
-        console.log('hidden')
-      } else {
-        TweenMax.set('html,body', { overflow: '' })
-        console.log('scroll')
-      }
-      window.onresize = () => {
-        this.notScroll()
-      }
     }
+    // notScroll() {
+    //   const windowHeight = window.innerHeight
+    //   const bodyElement = document.querySelector('body')
+    //   const bodyHeight = bodyElement.clientHeight
+    //   console.log(bodyHeight, windowHeight)
+    //   console.log(bodyHeight <= windowHeight)
+    //   if (bodyHeight <= windowHeight) {
+    //     TweenMax.set('html,body', { overflow: 'hidden' })
+    //     console.log('hidden')
+    //   } else {
+    //     TweenMax.set('html,body', { overflow: '' })
+    //     console.log('scroll')
+    //   }
+    //   window.onresize = () => {
+    //     this.notScroll()
+    //   }
+    // }
   }
 })

@@ -1,0 +1,76 @@
+//font
+@font-face {
+  font-family: "Titling Gothic FB Extd Bd";
+   font-display: swap;
+   font-style: normal;
+   font-weight: normal;
+}
+@mixin font-family{
+  font-family:'Titling Gothic FB Extd Bd',YakuHanJP,"Roboto";
+}
+
+@mixin font-logo {
+	font-size:18px;
+	font-family:"Eagle";
+	font-weight:book;
+}
+@mixin font-title-first {
+	font-size:88px;
+	@include font-family;
+	font-weight:bold;
+  @include mq(sm){
+    font-size:30px;
+  }
+}
+@mixin font-title-secondary {
+	font-size:56px;
+	@include font-family;
+	font-weight:bold;
+  @include mq(sm){
+    font-size:22px;
+  }
+}
+@mixin font-title-thirdry {
+	font-size:20px;
+	@include font-family;
+	font-weight:bold;
+  @include mq(sm){
+    font-size:16px;
+  }
+}
+
+// notosans
+@mixin font-nav-primary {
+	font-size:15px;
+  font-family: 'Roboto', sans-serif;
+	font-weight:medium;
+}
+@mixin font-nav-secondary {
+	font-size:16px;
+  font-family: 'Roboto', sans-serif;
+	font-weight:medium;
+  letter-spacing: 4px;
+}
+
+// texts
+@mixin font-text-primary {
+	font-size:15px;
+  font-family: 'Roboto', sans-serif;
+	font-weight:medium;
+	line-height:28px;
+  @include mq(sm){
+    font-size:16px;
+  }
+}
+@mixin font-text-secondary {
+	font-size:16px;
+  font-family: 'Roboto', sans-serif;
+	font-weight:black;
+}
+
+@mixin font-text-secondary {
+	font-size:28px;
+  font-family: 'Roboto', sans-serif;
+	font-weight:black;
+  line-height:44px;
+}

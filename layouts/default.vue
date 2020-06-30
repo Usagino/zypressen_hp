@@ -7,7 +7,7 @@
     client-only
       PageMenuIcon
     //PageScroll
-    dimensionalModel(v-show="this.$route.matched[0].path !== '/works/:page'")
+    // dimensionalModel(v-show="this.$route.matched[0].path !== '/works/:page'")
     //mouseStoker
     nuxt
 </template>

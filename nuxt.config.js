@@ -82,7 +82,7 @@ export default {
         })
       }
     },
-    transpile: ['three']
+    transpile: ['three', 'gsap']
   },
   generate: {
     routes() {

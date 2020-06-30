@@ -1,10 +1,9 @@
 <template lang="pug">
   .container.works-page
-    .works--thumbnail
-      button.button.button--top(@click="countTop()") あげて
-      button.button.button--bottom(@click="countBottom()") さげて
-      .works--thumbnail__wrap(v-for="(item,index) in WORKS" :key="item.id" v-show="index === currentNum")
-        img.works--thumbnail__wrap--img(:src="item.THUMBNAIL.url")
+    .works-item(v-for="(item,index) in WORKS" :key="item.id")
+      .works-item__image-wrap
+        img.works-item--thumbnail(:src="item.THUMBNAIL.url")
+      p aaa
 </template>
 
 <script>
@@ -29,78 +28,22 @@ export default {
       currentNum: 0
     }
   },
-  mounted() {
-    console.log(this.WORKS)
-  },
-  methods: {
-    countToggleTop() {
-      return this.currentNum >= this.WORKS.length - 1
-    },
-    countToggleBottom() {
-      return this.currentNum === 0
-    },
-    countTop() {
-      if (this.countToggleTop()) {
-        this.currentNum = 0
-      } else {
-        this.currentNum += 1
-      }
-    },
-    countBottom() {
-      if (this.countToggleBottom()) {
-        this.currentNum = this.WORKS.length - 1
-      } else {
-        this.currentNum -= 1
-      }
-    }
-  }
+
+  methods: {}
 }
 </script>
 
 <style lang="scss" scoped>
-.button {
-  position: fixed;
-  right: $pri-value;
-  color: $color-orange;
-  &--top {
-    bottom: $pri-value * 2;
-  }
-  &--bottom {
-    bottom: $pri-value;
-  }
-}
-.works-page {
+.works-item {
   @include full-screen;
-  position: relative;
-  top: 0;
-  left: 0;
-  overflow: hidden;
-}
-.works {
-  &--thumbnail {
+  &__image-wrap {
     width: 50vw;
-    height: 100vh;
-    &__wrap {
-      width: 50vw;
-      height: 100vh;
-      &--img {
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-      }
-    }
+    height: 100%;
+    height: 100%;
   }
-}
-
-.slide-fade-enter-active {
-  transition: all 0.3s ease;
-}
-.slide-fade-leave-active {
-  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
-}
-.slide-fade-enter, .slide-fade-leave-to
-/* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: translateX(10px);
-  opacity: 0;
+  &--thumbnail {
+    @include full-size;
+    object-fit: cover;
+  }
 }
 </style>
