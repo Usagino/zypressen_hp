@@ -108,4 +108,47 @@ export default {
     transform: translateX(-100%);
   }
 }
+.navigation {
+  mix-blend-mode: difference;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  z-index: 2;
+  right: $pri-value;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  @include gap-bottom(20px);
+  &__wrap {
+    overflow: hidden;
+    position: relative;
+    height: 1em;
+    width: 100%;
+  }
+  &--num {
+    @include font-family;
+    font-size: 16px;
+    text-align: center;
+  }
+  &--current {
+    transform: translateY(100%);
+    position: absolute;
+    top: 0px;
+    background: $color-black;
+    &:first-child {
+      transform: translateY(0);
+    }
+  }
+  &--bar {
+    content: '';
+    height: 1px;
+    width: 28px;
+    display: block;
+    background: $color-white;
+  }
+}
 </style>

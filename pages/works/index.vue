@@ -1,42 +1,49 @@
 <template lang="pug">
   .container.works-page
-    .works-item.works-first
-      .works-item__image-wrap
-        img.works-item--thumbnail(:src="WORKS[0].THUMBNAIL.url")
-      .works-item__body
-        .works-item__body__title.works-item__body__contents
-          h2.works-item--title-text(style="opacity:1") {{WORKS[0].TITLE}}
-        .works-item__body__category.works-item__body__contents
-          p.works-item--category-text(style="opacity:1") {{WORKS[0].CATEGORY}}
-          .works-item--bar
-        .works-item__body__time.works-item__body__contents
-          p.works-item--time-text(style="opacity:1") Created  - <span>{{ $dayjs(WORKS[0].DATE).format('MMM , DD , YYYY') }}</span>
-          .works-item--bar
-    .works-item(v-for="(item,index) in WORKS" :key="item.id" v-show="index !== 0")
-      .works-item__image-wrap
-        img.works-item--thumbnail(:src="item.THUMBNAIL.url")
-      .works-item__body
-        .works-item__body__title.works-item__body__contents
-          h2.works-item--title-text
-            .item-text(v-for="text in item.TITLE.split(' ')")
-              .item-text--text {{text}}
-              .item-text--bar
-        .works-item__body__category.works-item__body__contents
-          p.works-item--category-text {{item.CATEGORY}}
-          .works-item--bar
-        .works-item__body__time.works-item__body__contents
-          p.works-item--time-text Created  - <span>{{ $dayjs(item.DATE).format('MMM , DD , YYYY') }}</span>
-          .works-item--bar
-    .works-end.works-item
-      .works-end__wrap
-        h2.works-end--text Comming<br>soon...
-        nuxt-link.works-end--link(to="/about") ABOUT
+    .works-page__wrap
+      .works-item.works-first
+        .works-item__image-wrap
+          img.works-item--thumbnail(:src="WORKS[0].THUMBNAIL.url")
+        .works-item__body
+          .works-item__body__title.works-item__body__contents
+            h2.works-item--title-text(style="opacity:1") {{WORKS[0].TITLE}}
+          .works-item__body__category.works-item__body__contents
+            p.works-item--category-text(style="opacity:1") {{WORKS[0].CATEGORY}}
+            .works-item--bar
+          .works-item__body__time.works-item__body__contents
+            p.works-item--time-text(style="opacity:1") Created  - <span>{{ $dayjs(WORKS[0].DATE).format('MMM , DD , YYYY') }}</span>
+            .works-item--bar
+      .works-item(v-for="(item,index) in WORKS" :key="item.id" v-show="index !== 0")
+        .works-item__image-wrap
+          img.works-item--thumbnail(:src="item.THUMBNAIL.url")
+        .works-item__body
+          .works-item__body__title.works-item__body__contents
+            h2.works-item--title-text
+              .item-text(v-for="text in item.TITLE.split(' ')")
+                .item-text--text {{text}}
+                .item-text--bar
+          .works-item__body__category.works-item__body__contents
+            p.works-item--category-text {{item.CATEGORY}}
+            .works-item--bar
+          .works-item__body__time.works-item__body__contents
+            p.works-item--time-text Created  - <span>{{ $dayjs(item.DATE).format('MMM , DD , YYYY') }}</span>
+            .works-item--bar
+      .works-item.works-end
+        .works-end__wrap
+          h2.works-end--text Comming<br>soon...
+          nuxt-link.works-end--link(to="/about") ABOUT
     .navigation
       .navigation__wrap
-        p.navigation--current.navigation--num(v-for="i of WORKS.length + 1") {{'0'+i}}
+        p.navigation--current.navigation--num(v-for="i of WORKS.length + 1") {{zeroPadding(i)}}
       .navigation--bar
-      p.navigation--maxnum.navigation--num(v-if="2 <= String(WORKS.length + 1).length") {{WORKS.length + 1}}
-      p.navigation--maxnum.navigation--num(v-else) 0{{WORKS.length + 1}}
+      p.navigation--maxnum.navigation--num {{zeroPadding(WORKS.length + 1)}}
+    .scroll-wire
+      .scroll-wire__text
+        p.scroll-wire--item SCROLL
+        .scroll-wire--bar
+      .scroll-wire__arrow
+        img.scroll-wire--item(src="/arrow.svg")
+        .scroll-wire--bar
 </template>
 
 <script>
@@ -57,10 +64,31 @@ export default {
     }
   },
   mounted() {
-    gsap.registerPlugin(ScrollTrigger)
-    const elementLength = gsap.utils.toArray('.works-item').length // eslint-disable-line
-    gsap.utils.toArray('.works-item').forEach((section, index) => {
-      if (index !== 0 && index !== elementLength - 1) {
+    this.changeLinkText()
+    this.hideArrowWire()
+  },
+
+  methods: {
+    hideArrowWire() {
+      gsap.registerPlugin(ScrollTrigger)
+      const tl = gsap.timeline({ // eslint-disable-line
+        scrollTrigger: {
+          trigger: '.works-end',
+          start: 'bottom bottom',
+          end: 'bottom center',
+          scrub: 0.4
+        }
+      })
+      tl.to('.scroll-wire--bar', { x: 0 })
+        .set('.scroll-wire--item', {
+          opacity: 0
+        })
+        .to('.scroll-wire--bar', { xPercent: 100 })
+    },
+    changeLinkText() {
+      gsap.registerPlugin(ScrollTrigger)
+      const elementLength = gsap.utils.toArray('.works-item').length // eslint-disable-line
+      gsap.utils.toArray('.works-item').forEach((section, index) => {
         const tl = gsap.timeline({ // eslint-disable-line
           scrollTrigger: {
             trigger: section,
@@ -69,52 +97,45 @@ export default {
             pin: section
           }
         })
-        const titleBarEl = section.querySelectorAll(
-          '.works-item__body__title .item-text--bar'
-        )
-        const titleTextEl = section.querySelectorAll('.item-text--text')
-        const worksItemBar = section.querySelectorAll('.works-item--bar')
-        const categoryText = section.querySelector('.works-item--category-text')
-        const timeText = section.querySelector('.works-item--time-text')
-        tl.to(titleBarEl, {
-          x: 0
-        })
-          .set(titleTextEl, {
-            opacity: 1
-          })
-          .to(titleBarEl, {
-            x: '100%'
-          })
-          .to(worksItemBar, {
+
+        if (index !== 0) {
+          tl.to(`.navigation--current:nth-child(${index})`, { y: 0 })
+        }
+
+        if (index !== 0 && index !== elementLength - 1) {
+          const titleBarEl = section.querySelectorAll(
+            '.works-item__body__title .item-text--bar'
+          )
+          const titleTextEl = section.querySelectorAll('.item-text--text')
+          const worksItemBar = section.querySelectorAll('.works-item--bar')
+          const categoryText = section.querySelector(
+            '.works-item--category-text'
+          )
+          const timeText = section.querySelector('.works-item--time-text')
+
+          // Code to display a title
+          tl.to(titleBarEl, {
             x: 0
           })
-          .set(categoryText, { opacity: 1 })
-          .set(timeText, { opacity: 1 })
-          .to(worksItemBar, {
-            x: '100%'
-          })
-          .to(section, { delay: 2 })
-      }
-
-      if (index !== 0) {
-        console.log(index + 1, section.className)
-        gsap.to(`.navigation--current:nth-child(${index})`, {
-          scrollTrigger: {
-            trigger: section,
-            scrub: 0.5,
-            start: 'center center',
-            end: 'bottom bottom',
-            onEnter: () => {
-              console.log(index)
-            }
-          },
-          y: 0
-        })
-      }
-    })
-  },
-
-  methods: {}
+            .set(titleTextEl, {
+              opacity: 1
+            })
+            .to(titleBarEl, {
+              x: '100%'
+            })
+            .to(worksItemBar, {
+              x: 0
+            })
+            .set(categoryText, { opacity: 1 })
+            .set(timeText, { opacity: 1 })
+            .to(worksItemBar, {
+              x: '100%'
+            })
+            .to(section, { delay: 2 })
+        }
+      })
+    }
+  }
 }
 </script>
 
@@ -202,12 +223,32 @@ export default {
     opacity: 0;
   }
   &--bar {
+    @include hide-bar;
+  }
+}
+.scroll-wire {
+  position: fixed;
+  width: 50vw;
+  right: 0;
+  bottom: $pri-value;
+  @include flex-middle;
+  &__text {
+    margin: auto;
+    @include hide-bar-parent;
+    p {
+      @include font-family;
+      color: $color-gray;
+      @include font-nav-secondary;
+    }
+  }
+  &__arrow {
+    bottom: 0;
+    right: $pri-value;
+    @include hide-bar-parent;
     position: absolute;
-    top: 0;
-    left: 0;
-    @include full-size;
-    background: $color-gray;
-    transform: translateX(-100%);
+  }
+  &--bar {
+    @include hide-bar;
   }
 }
 </style>

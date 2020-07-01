@@ -16,6 +16,9 @@ Vue.mixin({
       } else {
         return image + '.webp'
       }
+    },
+    zeroPadding(number) {
+      return ('0' + number).slice(-2)
     }
     // notScroll() {
     //   const windowHeight = window.innerHeight
