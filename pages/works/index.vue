@@ -83,7 +83,7 @@ export default {
         .set('.scroll-wire--item', {
           opacity: 0
         })
-        .to('.scroll-wire--bar', { xPercent: 100 })
+        .to('.scroll-wire--bar', { xPercent: 101 })
     },
     changeLinkText() {
       gsap.registerPlugin(ScrollTrigger)
