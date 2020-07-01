@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { TweenMax, TimelineMax } from 'gsap'
+import { gsap } from 'gsap'
 import * as menuIcon from '~/assets/animation/menu_icon.json'
 
 export default {
@@ -53,32 +53,35 @@ export default {
     }
   },
   mounted() {
-    const tl = new TimelineMax() // eslint-disable-line
+    const tl = gsap.timeline()
     tl.set('.menulist__box--link', {
       y: '150%',
       z: '0',
       rotateY: '-30deg',
       scale: '1'
     })
-    const linkelement = document.querySelectorAll('.menulist__box--link')
-    linkelement.forEach((el, i) => {
-      el.addEventListener('mouseover', () => {
-        TweenMax.to(el, 0.3, { rotateY: '-15deg' })
-      })
-      el.addEventListener('mouseout', () => {
-        TweenMax.to(el, 0.3, { rotateY: '-30deg' })
-      })
-    })
+    this.hoverText()
   },
   methods: {
+    hoverText() {
+      const linkelement = document.querySelectorAll('.menulist__box--link')
+      linkelement.forEach((el, i) => {
+        el.addEventListener('mouseover', () => {
+          gsap.to(el, 0.3, { rotateY: '-15deg' })
+        })
+        el.addEventListener('mouseout', () => {
+          gsap.to(el, 0.3, { rotateY: '-30deg' })
+        })
+      })
+    },
     handleAnimation(anim) {
       this.anim = anim
       this.anim.setSpeed(3)
     },
     menuToggle() {
-      const tl = new TimelineMax() // eslint-disable-line
+      const tl = gsap.timeline()
       if (this.lottieOptions.toggle) {
-        TweenMax.set('html,body', { overflow: 'hidden' })
+        gsap.set('html,body', { overflow: 'hidden' })
         this.anim.setDirection(1)
         this.anim.play()
         tl.to('.menulist', 0.4, {
@@ -97,14 +100,16 @@ export default {
           .to('.menulist__box--top .menulist__box--link', 0.1, {
             y: '0%'
           })
+          .set('.menulist__box--link', { pointerEvents: 'auto' })
         this.lottieOptions.toggle = !this.lottieOptions.toggle
       } else {
-        TweenMax.set('html,body', { overflow: 'scroll' })
+        gsap.set('html,body', { overflow: 'scroll' })
         this.anim.setDirection(-1)
         this.anim.play()
-        tl.to('.menulist__box--top .menulist__box--link', 0.1, {
-          y: '150%'
-        })
+        tl.set('.menulist__box--link', { pointerEvents: 'none' })
+          .to('.menulist__box--top .menulist__box--link', 0.1, {
+            y: '150%'
+          })
           .to('.menulist__box--works .menulist__box--link', 0.1, {
             y: '150%'
           })
@@ -188,6 +193,7 @@ export default {
       display: block;
       line-height: 80px;
       transition: all 300ms ease;
+      pointer-events: none;
 
       @include mq(sm) {
         line-height: 100%;
