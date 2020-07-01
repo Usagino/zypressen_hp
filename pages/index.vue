@@ -1,26 +1,37 @@
 <template lang="pug">
   .container
-    .link-window
-      .link-window__wrap
-        p.link-window--text(style="opacity:1") HELLO!!
-    .link-window(v-for="data in linkData" :class="'item-'+data.name.toLowerCase()")
-      .link-window__wrap
-        nuxt-link.link-window--text(:to="data.link") {{ data.name }}
-        .link-window--bar
-        .link-window--bar-hide
+    .top-page
+      .link-window
+        .link-window__wrap
+          p.link-window--text(style="opacity:1") HELLO!!
+      .link-window(v-for="data in linkData" :class="'item-'+data.name.toLowerCase()")
+        .link-window__wrap
+          nuxt-link.link-window--text(:to="data.link") {{ data.name }}
+          .link-window--bar
+          .link-window--bar-hide
     .navigation
       .navigation__wrap
         p.navigation--current.navigation--num(v-for="i of 4") {{'0'+i}}
       .navigation--bar
       p.navigation--maxnum.navigation--num 04
+    .scroll-wire
+      .scroll-wire__text
+        p.scroll-wire--item SCROLL
+        .scroll-wire--bar
+      .scroll-wire__arrow
+        img.scroll-wire--item(src="/arrow.svg" @click="scrollToNext()")
+        .scroll-wire--bar
 </template>
 
 <script>
 import { gsap } from 'gsap' // eslint-disable-line
 import { ScrollTrigger } from "gsap/ScrollTrigger";  // eslint-disable-line
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";  // eslint-disable-line
+
 export default {
   data() {
     return {
+      screenHeight: 0,
       linkData: [
         {
           name: 'WORKS',
@@ -38,9 +49,30 @@ export default {
     }
   },
   mounted() {
+    console.log(document.body.clientHeight)
+    // this.scrollToNext()
     this.changeLinkText()
   },
   methods: {
+    scrollToNext() {
+      gsap.registerPlugin(ScrollToPlugin)
+      gsap.registerPlugin(ScrollTrigger)
+      let displayEl = 0
+      const linkWindowArray = document.querySelectorAll('.link-window')
+      // console.log(linkWindowArray)
+      linkWindowArray.forEach((section, index) => {
+        ScrollTrigger.create({
+          trigger: section,
+          onEnter: () => {
+            displayEl = linkWindowArray[index + 1]
+          }
+        })
+      })
+      const wh = window.innerHeight * -1
+      console.log(wh)
+      gsap.to(window, { duration: 1, scrollTo: { y: displayEl, offsetY: wh } })
+    },
+
     changeLinkText() {
       gsap.registerPlugin(ScrollTrigger)
       gsap.utils.toArray('.link-window').forEach((section, index) => {
@@ -149,6 +181,22 @@ export default {
     width: 28px;
     display: block;
     background: $color-white;
+  }
+}
+.scroll-wire {
+  bottom: $pri-value;
+  width: 100vw;
+  position: fixed;
+  @include flex-middle;
+  &__arrow {
+    position: absolute;
+    right: $pri-value;
+    bottom: 0;
+    cursor: pointer;
+  }
+  &--item {
+    @include font-nav-secondary;
+    color: $color-gray;
   }
 }
 </style>

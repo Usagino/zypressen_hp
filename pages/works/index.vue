@@ -42,7 +42,7 @@
         p.scroll-wire--item SCROLL
         .scroll-wire--bar
       .scroll-wire__arrow
-        img.scroll-wire--item(src="/arrow.svg")
+        img.scroll-wire--item(src="/arrow.svg" @click="scrollToNext()")
         .scroll-wire--bar
 </template>
 
@@ -50,6 +50,7 @@
 import axios from 'axios' // eslint-disable-line
 import { gsap } from 'gsap' // eslint-disable-line
 import { ScrollTrigger } from "gsap/ScrollTrigger";  // eslint-disable-line
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";  // eslint-disable-line
 
 export default {
   async asyncData() {
@@ -69,6 +70,24 @@ export default {
   },
 
   methods: {
+    scrollToNext() {
+      gsap.registerPlugin(ScrollToPlugin)
+      gsap.registerPlugin(ScrollTrigger)
+      let displayEl = 0
+      const linkWindowArray = document.querySelectorAll('.works-item')
+      // console.log(linkWindowArray)
+      linkWindowArray.forEach((section, index) => {
+        ScrollTrigger.create({
+          trigger: section,
+          onEnter: () => {
+            displayEl = linkWindowArray[index + 1]
+          }
+        })
+      })
+      const wh = window.innerHeight * -1
+      console.log(wh)
+      gsap.to(window, { duration: 1, scrollTo: { y: displayEl, offsetY: wh } })
+    },
     hideArrowWire() {
       gsap.registerPlugin(ScrollTrigger)
       const tl = gsap.timeline({ // eslint-disable-line
@@ -242,6 +261,7 @@ export default {
     }
   }
   &__arrow {
+    cursor: pointer;
     bottom: 0;
     right: $pri-value;
     @include hide-bar-parent;
