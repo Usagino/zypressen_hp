@@ -50,8 +50,8 @@ export default {
   },
   mounted() {
     console.log(document.body.clientHeight)
-    // this.scrollToNext()
     this.changeLinkText()
+    this.keyDown(this.scrollToNext)
   },
   methods: {
     scrollToNext() {

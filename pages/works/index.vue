@@ -67,6 +67,7 @@ export default {
   mounted() {
     this.changeLinkText()
     this.hideArrowWire()
+    this.keyDown(this.scrollToNext)
   },
 
   methods: {

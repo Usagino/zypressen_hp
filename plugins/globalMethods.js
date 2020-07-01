@@ -3,6 +3,13 @@ import Vue from 'vue'
 
 Vue.mixin({
   methods: {
+    keyDown(callback) {
+      addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowDown') {
+          callback()
+        }
+      })
+    },
     changeWebp(image) {
       if (this.$ua.browser() === 'Safari') {
         return image
