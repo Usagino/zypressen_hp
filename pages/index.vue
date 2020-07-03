@@ -49,28 +49,51 @@ export default {
     }
   },
   mounted() {
-    console.log(document.body.clientHeight)
     this.changeLinkText()
     this.keyDown(this.scrollToNext)
+    this.keyUp(this.scrollToPrev)
   },
   methods: {
-    scrollToNext() {
+    scrollToPrev() {
       gsap.registerPlugin(ScrollToPlugin)
       gsap.registerPlugin(ScrollTrigger)
-      let displayEl = 0
+      let displayEl = 0 // eslint-disable-line
       const linkWindowArray = document.querySelectorAll('.link-window')
-      // console.log(linkWindowArray)
       linkWindowArray.forEach((section, index) => {
         ScrollTrigger.create({
           trigger: section,
           onEnter: () => {
+            displayEl = linkWindowArray[index - 1]
+          }
+        })
+      })
+      gsap.to(window, { duration: 0.7, scrollTo: { y: displayEl } })
+    },
+    scrollToNext() {
+      gsap.registerPlugin(ScrollToPlugin)
+      gsap.registerPlugin(ScrollTrigger)
+      let displayEl = 0
+      let nowPosY = 0
+      const linkWindowArray = document.querySelectorAll('.link-window')
+      linkWindowArray.forEach((section, index) => {
+        ScrollTrigger.create({
+          trigger: section,
+          onEnter: (el) => {
             displayEl = linkWindowArray[index + 1]
+            nowPosY = el.end
           }
         })
       })
       const wh = window.innerHeight * -1
-      console.log(wh)
-      gsap.to(window, { duration: 1, scrollTo: { y: displayEl, offsetY: wh } })
+
+      if (document.body.clientHeight !== nowPosY) {
+        gsap.to(window, {
+          duration: 1,
+          scrollTo: { y: displayEl, offsetY: wh }
+        })
+      } else {
+        gsap.to(window, { duration: 1, scrollTo: { y: 0 } })
+      }
     },
 
     changeLinkText() {

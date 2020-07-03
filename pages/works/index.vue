@@ -68,9 +68,31 @@ export default {
     this.changeLinkText()
     this.hideArrowWire()
     this.keyDown(this.scrollToNext)
+    this.keyUp(this.scrollToPrev)
   },
 
   methods: {
+    scrollToPrev() {
+      gsap.registerPlugin(ScrollToPlugin)
+      gsap.registerPlugin(ScrollTrigger)
+      let displayEl = 0 // eslint-disable-line
+      const linkWindowArray = document.querySelectorAll('.works-page__wrap > *')
+      console.log(linkWindowArray)
+      linkWindowArray.forEach((section, index) => {
+        ScrollTrigger.create({
+          trigger: section,
+          onEnter: (el) => {
+            displayEl = linkWindowArray[index - 1]
+            console.log(el)
+          }
+        })
+      })
+      const wh = window.innerHeight * -1
+      gsap.to(window, {
+        duration: 0.7,
+        scrollTo: { y: displayEl, offsetY: wh }
+      })
+    },
     scrollToNext() {
       gsap.registerPlugin(ScrollToPlugin)
       gsap.registerPlugin(ScrollTrigger)

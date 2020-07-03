@@ -1,12 +1,12 @@
 html{
-  // scrollbar-width: none;
-  // overflow-x: hidden;
+  scrollbar-width: none;
+  overflow-x: hidden;
   overscroll-behavior-y: none;
   overflow: scroll;
   max-width: 100vw;
-  // &::-webkit-scrollbar {
-  //   display:none;
-  // }
+  &::-webkit-scrollbar {
+    display:none;
+  }
 }
 html
 *{

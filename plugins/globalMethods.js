@@ -3,6 +3,13 @@ import Vue from 'vue'
 
 Vue.mixin({
   methods: {
+    keyUp(callback) {
+      addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowUp') {
+          callback()
+        }
+      })
+    },
     keyDown(callback) {
       addEventListener('keydown', (event) => {
         if (event.key === 'ArrowDown') {

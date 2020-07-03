@@ -100,16 +100,16 @@ export default {
           .to('.menulist__box--top .menulist__box--link', 0.1, {
             y: '0%'
           })
-          .set('.menulist__box--link', { pointerEvents: 'auto' })
+          .set('.menulist__box--link', { pointerEvents: 'auto', delay: 1 })
         this.lottieOptions.toggle = !this.lottieOptions.toggle
       } else {
         gsap.set('html,body', { overflow: 'scroll' })
         this.anim.setDirection(-1)
         this.anim.play()
         tl.set('.menulist__box--link', { pointerEvents: 'none' })
-          .to('.menulist__box--top .menulist__box--link', 0.1, {
-            y: '150%'
-          })
+        tl.to('.menulist__box--top .menulist__box--link', 0.1, {
+          y: '150%'
+        })
           .to('.menulist__box--works .menulist__box--link', 0.1, {
             y: '150%'
           })
