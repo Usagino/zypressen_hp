@@ -95,7 +95,7 @@ $breakpoints: (
 }
 
 @mixin full-screen{
-  height: 100vh;
+  height: var(--wh, 100vh);
   width: 100vw;
 }
 @mixin full-size{

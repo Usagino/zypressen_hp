@@ -238,7 +238,7 @@ export default {
   position: absolute;
   bottom: 0px;
   right: 0px;
-  height: 100vh;
+  height: var(--wh, 100vh);
   width: 100vw;
   transform-origin: right bottom;
   will-change: transform;

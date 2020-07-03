@@ -14,12 +14,14 @@
 
 <script>
 import dimensionalModel from '@/components/dimensionalModel'
-import EventBus from '~/utils/event-bus' // eslint-disable-line
+import deviceMixin from '@/assets/js/device'
+import EventBus from '@/utils/event-bus' // eslint-disable-line
 
 export default {
   components: {
     dimensionalModel
   },
+  mixins: [deviceMixin],
   mounted() {
     const babseStyle = [
       'padding:4px 12px',
@@ -58,7 +60,7 @@ html {
   background: $color-black;
 }
 .page {
-  min-height: 100vh;
+  min-height: var(--wh, 100vh);
   width: 100vw;
   //overflow: hidden;
   &__logo {

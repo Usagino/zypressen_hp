@@ -136,7 +136,7 @@ export default {
 
 <style lang="scss" scoped>
 .link-window {
-  height: 100vh;
+  height: var(--wh, 100vh);
   width: 100vw;
   // top: 0px !important;
   @include flex-middle;

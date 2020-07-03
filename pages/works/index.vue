@@ -210,7 +210,7 @@ export default {
     justify-content: center;
     flex-direction: column;
     align-items: flex-start;
-    max-height: 100vh;
+    max-height: var(--wh, 100vh);
     span {
       color: $color-gray;
     }

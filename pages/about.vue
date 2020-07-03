@@ -47,7 +47,7 @@ export default {
 }
 .page-title {
   box-sizing: border-box;
-  height: calc(100vh - #{$sec-value} * 2);
+  height: calc(var(--wh, 100vh) - #{$sec-value} * 2);
   @include flex-middle;
   h1 {
     @include font-title-secondary;
