@@ -1,5 +1,6 @@
 <template lang="pug">
   .container.about-page
+    scrollBar
     .about-page__wrap
       .page-title
         h1
@@ -8,8 +9,8 @@
       .about-body
         img(:src="this.changeWebpLocal('/about/about_one.jpg')")
         .about-body__textwrap
-          p Zypressenはデジタルプロダクトデザインをつくるクリエイティブチームです。固定概念に囚われずチームの一人一人が常に最先端のフィロソフィーを持って活動しています。私たちのデザインは常に他とは違う新しいものを作るために、今まで先人たちが築き上げてきたものを観察し吸収して今までにない新たな価値を見出しています。<br>そして私たちはこれを「Different from Others」と呼んでいます。
-          p Zypressen is a creative team that creates digital product design. Each member of the team is free from stereotypes and always at the forefront of philosophy. Our designs are based on the philosophy that our predecessors have built to create something new and different. By observing and absorbing things, we are finding new values that have never been seen before.<br>And we call it "Different from Others".
+          p Zypressenはデジタルプロダクトデザインをつくるクリエイティブチームです。固定概念に囚われずチームの一人一人が常に最先端のフィロソフィーを持って活動しています。一人一人がそれぞれ動画やグラフィック、webデザインやモーションを専攻に吸収し、それぞれのデザインを複合して新た「デザインコンプレックス」に価値を見出しています。<br>私たちのデザインは常に他とは違う新しいものを作るために、今まで先人たちが築き上げてきたものを観察し吸収して今までにない新たな価値を見出しています。<br>そして私たちはこれを「Different from the Others」と呼んでいます。
+          p Zypressen is a creative team that creates digital product design. Each member of the team is not confined to stereotypes, but always works with a cutting-edge philosophy. Each one of us has absorbed video, graphics, web design and motion in our major. We find value in the new "design complex" by combining each design.<br>Our designs are always trying to create something new and different, something that our predecessors have built up over the years We observe and absorb things and find new values that have never been seen before. <br>And we call this "Different from the Others". It is.
       .contact-link
         nuxt-link(to='/contact') CONTACT
 </template>

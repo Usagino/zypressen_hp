@@ -1,5 +1,6 @@
 <template lang="pug">
 .container.works-page
+  scrollBar
   .first-thumbnail(:style="{backgroundImage:BodyImage(ThumbnailImage),backgroundSize:BackgroundSize+'%'}")
     .first-thumbnail--screen
       .first-thumbnail--title

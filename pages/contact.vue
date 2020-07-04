@@ -1,5 +1,6 @@
 <template lang="pug">
   .container.contact-page
+    scrollBar
     .message
       h2.message--text
         span.message--text__wrap(v-for="text in this.messageText.split(' ')")

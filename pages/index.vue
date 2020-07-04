@@ -1,14 +1,14 @@
 <template lang="pug">
   .container
+    scrollBar
     .top-page
-      .link-window
+      .link-window.fisrt
         .link-window__wrap
           p.link-window--text(style="opacity:1") HELLO!!
-      .link-window(v-for="data in linkData" :class="'item-'+data.name.toLowerCase()")
+      .link-window(v-for="data in linkData")
         .link-window__wrap
           nuxt-link.link-window--text(:to="data.link") {{ data.name }}
           .link-window--bar
-          .link-window--bar-hide
     .navigation
       .navigation__wrap
         p.navigation--current.navigation--num(v-for="i of 4") {{'0'+i}}
@@ -50,8 +50,9 @@ export default {
   },
   mounted() {
     this.changeLinkText()
-    this.keyDown(this.scrollToNext)
-    this.keyUp(this.scrollToPrev)
+    // this.keyDown(this.scrollToNext)
+    // this.keyUp(this.scrollToPrev)
+    // this.autoScroll()
   },
   methods: {
     scrollToPrev() {
@@ -84,46 +85,57 @@ export default {
           }
         })
       })
-      const wh = window.innerHeight * -1
+      const wh = window.innerHeight * -1 // eslint-disable-line
 
       if (document.body.clientHeight !== nowPosY) {
         gsap.to(window, {
           duration: 1,
-          scrollTo: { y: displayEl, offsetY: wh }
+          scrollTo: { y: displayEl }
         })
       } else {
         gsap.to(window, { duration: 1, scrollTo: { y: 0 } })
       }
     },
-
-    changeLinkText() {
+    autoScroll() {
+      gsap.registerPlugin(ScrollToPlugin)
       gsap.registerPlugin(ScrollTrigger)
       gsap.utils.toArray('.link-window').forEach((section, index) => {
-        if (section.className.includes('item')) {
+        console.log(section)
+        gsap.timeline({// eslint-disable-line
+          scrollTrigger: {
+            trigger: section,
+            onEnter: () => {
+              gsap.to(window, { duration: 0.6, scrollTo: section, delay: 0.6 })
+            }
+          }
+        })
+      })
+    },
+    changeLinkText() {
+      gsap.registerPlugin(ScrollToPlugin)
+      gsap.registerPlugin(ScrollTrigger)
+      gsap.utils.toArray('.link-window').forEach((section, index) => {
+        if (!section.className.includes('fisrt')) {
           const tl = gsap.timeline({// eslint-disable-line
             scrollTrigger: {
-              trigger: section,
-              start: 'bottom bottom',
-              scrub: 0.5,
-              // markers: true,
-              pin: section
+              trigger: section.querySelector('.link-window--text'),
+              toggleActions: 'play none play reset'
             }
           })
-          tl.to(section.querySelector(`.link-window--bar`), {
-            x: 0
+          tl.to(section.querySelector(`.link-window--bar`), 0.3, {
+            x: 0,
+            delay: 0.7
           })
             .set(section.querySelector(`.link-window--text`), { opacity: 1 })
-            .to(section.querySelector(`.link-window--bar`), {
-              x: '100%'
+            .to(section.querySelector(`.link-window--bar`), 0.3, {
+              x: '101%'
             })
             .to(section, { delay: 1 })
 
-          gsap.to(`.navigation--current:nth-child(${index + 1})`, {
+          gsap.to(`.navigation--current:nth-child(${index + 1})`, 0.3, {
             scrollTrigger: {
-              trigger: section,
-              scrub: 0.5,
-              start: 'bottom bottom'
-              // markers: true
+              trigger: section.querySelector(`.link-window--text`),
+              toggleActions: 'play reverse resume reverse'
             },
             y: 0
           })
@@ -160,7 +172,7 @@ export default {
     left: 0;
     z-index: 2;
     background: $color-gray;
-    transform: translateX(-100%);
+    transform: translateX(-101%);
   }
 }
 .navigation {
@@ -190,7 +202,7 @@ export default {
     text-align: center;
   }
   &--current {
-    transform: translateY(100%);
+    transform: translateY(101%);
     position: absolute;
     top: 0px;
     background: $color-black;

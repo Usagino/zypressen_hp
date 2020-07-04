@@ -6,6 +6,7 @@
     //-   p.page__copylight__text ©️2020ZYPRESSEN
     client-only
       PageMenuIcon
+
     //PageScroll
     // dimensionalModel(v-show="this.$route.matched[0].path !== '/works/:page'")
     //mouseStoker
