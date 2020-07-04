@@ -6,27 +6,26 @@
       :height="16"
       :width="16"
       @animCreated="handleAnimation")
-  transition
-    .menulist(v-show="!lottieOptions.toggle")
-      ul.menulist__box
-        li(@click="menuToggle").menulist__box--top
-          nuxt-link.menulist__box--link(to="/" :class="{'menulist__box--fadein':!lottieOptions.toggle}") TOP
-        li(@click="menuToggle").menulist__box--works
-          nuxt-link.menulist__box--link(to="/works" :class="{'menulist__box--fadein':!lottieOptions.toggle}") WORKS
-        li(@click="menuToggle").menulist__box--about
-          nuxt-link.menulist__box--link(to="/about" :class="{'menulist__box--fadein':!lottieOptions.toggle}") ABOUT
-        li(@click="menuToggle").menulist__box--contact
-          nuxt-link.menulist__box--link(to="/contact" :class="{'menulist__box--fadein':!lottieOptions.toggle}") CONTACT
-        li.social-button__list(@click="menuToggle" v-if="this.$ua.deviceType() === 'smartphone'")
-          a.social-button--icon(href="https://twitter.com/home")
-            img(src="/DEFAULT/twitter.svg")
-          a.social-button--icon(href="https://www.instagram.com/?hl=ja")
-            img(src="/DEFAULT/instagram.svg")
-      .social-button
-          a.social-button--icon(href="https://twitter.com/home")
-            img(src="/DEFAULT/twitter.svg")
-          a.social-button--icon(href="https://www.instagram.com/?hl=ja")
-            img(src="/DEFAULT/instagram.svg")
+  .menulist(v-show="!lottieOptions.toggle")
+    ul.menulist__box
+      li(@click="menuToggle").menulist__box--top
+        nuxt-link.menulist__box--link(to="/" :class="{'menulist__box--fadein':!lottieOptions.toggle}") TOP
+      li(@click="menuToggle").menulist__box--works
+        nuxt-link.menulist__box--link(to="/works" :class="{'menulist__box--fadein':!lottieOptions.toggle}") WORKS
+      li(@click="menuToggle").menulist__box--about
+        nuxt-link.menulist__box--link(to="/about" :class="{'menulist__box--fadein':!lottieOptions.toggle}") ABOUT
+      li(@click="menuToggle").menulist__box--contact
+        nuxt-link.menulist__box--link(to="/contact" :class="{'menulist__box--fadein':!lottieOptions.toggle}") CONTACT
+      li.social-button__list(@click="menuToggle" v-if="this.$ua.deviceType() === 'smartphone'")
+        a.social-button__icon(href="https://twitter.com/home")
+          img(src="/DEFAULT/twitter.svg")
+        a.social-button__icon(href="https://www.instagram.com/?hl=ja")
+          img(src="/DEFAULT/instagram.svg")
+    .social-button
+      a.social-button__icon(href="https://twitter.com/home")
+        img(src="/DEFAULT/twitter.svg")
+      a.social-button__icon(href="https://www.instagram.com/?hl=ja")
+        img(src="/DEFAULT/instagram.svg")
 </template>
 
 <script>
@@ -36,12 +35,6 @@ import * as menuIcon from '~/assets/animation/menu_icon.json'
 export default {
   data() {
     return {
-      imagePath: [
-        '/menu/top.jpg',
-        '/menu/works.jpg',
-        '/menu/about.jpg',
-        '/menu/contact.jpg'
-      ],
       lottieOptions: {
         animationData: menuIcon,
         loop: false,
@@ -60,7 +53,7 @@ export default {
       rotateY: '-30deg',
       scale: '1'
     })
-    this.hoverText()
+    // this.hoverText()
   },
   methods: {
     hoverText() {
@@ -80,12 +73,14 @@ export default {
     },
     menuToggle() {
       const tl = gsap.timeline()
+
       if (this.lottieOptions.toggle) {
+        console.log(this.lottieOptions.toggle)
         gsap.set('html,body', { overflow: 'hidden' })
         this.anim.setDirection(1)
         this.anim.play()
-        tl.to('.menulist', 0.4, {
-          opacity: 1
+        tl.to('.menulist', 0.2, {
+          y: 0
         })
           .to('.menulist__box--contact .menulist__box--link', 0.1, {
             y: '0%',
@@ -100,31 +95,45 @@ export default {
           .to('.menulist__box--top .menulist__box--link', 0.1, {
             y: '0%'
           })
+          .to('.social-button__icon', 0.1, {
+            y: '0%'
+          })
           .set('.menulist__box--link', { pointerEvents: 'auto', delay: 1 })
         this.lottieOptions.toggle = !this.lottieOptions.toggle
       } else {
+        console.log(this.lottieOptions.toggle)
         gsap.set('html,body', { overflow: 'scroll' })
         this.anim.setDirection(-1)
         this.anim.play()
+
         tl.set('.menulist__box--link', { pointerEvents: 'none' })
         tl.to('.menulist__box--top .menulist__box--link', 0.1, {
-          y: '150%'
+          y: '-150%'
         })
           .to('.menulist__box--works .menulist__box--link', 0.1, {
-            y: '150%'
+            y: '-150%'
           })
           .to('.menulist__box--about .menulist__box--link', 0.1, {
-            y: '150%'
+            y: '-150%'
           })
           .to('.menulist__box--contact .menulist__box--link', 0.1, {
-            y: '150%'
+            y: '-150%'
+          })
+          .to('.social-button__icon', 0.1, {
+            y: '-100%'
           })
           .to('.menulist', 0.4, {
-            opacity: 0,
+            y: '-100%',
             delay: 0.3,
             onComplete: () => {
               this.lottieOptions.toggle = !this.lottieOptions.toggle
             }
+          })
+          .set('.menulist,.social-button__icon', {
+            y: '100%'
+          })
+          .set('.menulist__box--link', {
+            y: '150%'
           })
       }
     }
@@ -146,7 +155,7 @@ export default {
 }
 .menulist {
   @include full-screen;
-  background: $color-black;
+  background: $color-gray;
   position: fixed;
   top: 0;
   left: 0;
@@ -154,6 +163,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  transform: translateY(100%);
   &__box {
     width: 100%;
     position: absolute;
@@ -211,7 +221,14 @@ export default {
     position: absolute;
     bottom: $pri-value;
     left: $pri-value;
+    overflow: hidden;
     @include gap-right(28px);
+    display: flex;
+    &__icon {
+      height: fit-content;
+      display: block;
+      transform: translateY(100%);
+    }
     @include mq(sm) {
       display: none;
       img {
@@ -223,27 +240,5 @@ export default {
       @include gap-right(28px);
     }
   }
-}
-.stokerImage {
-  @include mq(sm) {
-    display: none;
-  }
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1001;
-  width: 600px;
-  height: 400px;
-  object-fit: cover;
-  opacity: 0;
-}
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0.5s;
-}
-
-.v-enter,
-.v-leave-to {
-  opacity: 0;
 }
 </style>
