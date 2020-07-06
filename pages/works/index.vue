@@ -1,12 +1,13 @@
 <template lang="pug">
   .container.works-page
     scrollBar
+    mouseStoker
     .works-page__wrap
       .works-item.works-first
         .works-item__image-wrap
-          img.works-item--thumbnail(:src="WORKS[0].THUMBNAIL.url")
+          img.works-item--thumbnail(:src="WORKS[0].THUMBNAIL.url+'?auto=compress'")
         .works-item__body
-          .works-item__body__title.works-item__body__contents
+          nuxt-link.works-item__body__title.works-item__body__contents(:to="'/works/'+WORKS[0].id")
             h2.works-item--title-text(style="opacity:1") {{WORKS[0].TITLE}}
           .works-item__body__category.works-item__body__contents
             p.works-item--category-text(style="opacity:1") {{WORKS[0].CATEGORY}}
@@ -14,11 +15,12 @@
           .works-item__body__time.works-item__body__contents
             p.works-item--time-text(style="opacity:1") Created  - <span>{{ $dayjs(WORKS[0].DATE).format('MMM , DD , YYYY') }}</span>
             .works-item--bar
+
       .works-item(v-for="(item,index) in WORKS" :key="item.id" v-show="index !== 0")
         .works-item__image-wrap
-          img.works-item--thumbnail(:src="item.THUMBNAIL.url")
+          img.works-item--thumbnail(:src="item.THUMBNAIL.url+'?auto=compress'")
         .works-item__body
-          .works-item__body__title.works-item__body__contents
+          nuxt-link.works-item__body__title.works-item__body__contents(:to="'/works/'+item.id")
             h2.works-item--title-text
               .item-text(v-for="text in item.TITLE.split(' ')")
                 .item-text--text {{text}}
@@ -29,10 +31,12 @@
           .works-item__body__time.works-item__body__contents
             p.works-item--time-text Created  - <span>{{ $dayjs(item.DATE).format('MMM , DD , YYYY') }}</span>
             .works-item--bar
+
       .works-item.works-end
         .works-end__wrap
           h2.works-end--text Comming<br>soon...
           nuxt-link.works-end--link(to="/about") ABOUT
+
     .navigation
       .navigation__wrap
         p.navigation--current.navigation--num(v-for="i of WORKS.length + 1") {{zeroPadding(i)}}
@@ -41,9 +45,6 @@
     .scroll-wire
       .scroll-wire__text
         p.scroll-wire--item SCROLL
-        .scroll-wire--bar
-      .scroll-wire__arrow
-        img.scroll-wire--item(src="/arrow.svg" @click="scrollToNext()")
         .scroll-wire--bar
 </template>
 
@@ -68,8 +69,8 @@ export default {
   mounted() {
     this.changeLinkText()
     this.hideArrowWire()
-    this.keyDown(this.scrollToNext)
-    this.keyUp(this.scrollToPrev)
+    // this.keyDown(this.scrollToNext)
+    // this.keyUp(this.scrollToPrev)
   },
 
   methods: {
@@ -134,10 +135,9 @@ export default {
       gsap.utils.toArray('.works-item').forEach((section, index) => {
         const tl = gsap.timeline({ // eslint-disable-line
           scrollTrigger: {
-            trigger: section,
+            trigger: section.querySelector('.works-item__body__title'),
             start: 'bottom bottom',
-            scrub: 0.4,
-            pin: section
+            toggleActions: 'play none play reset'
           }
         })
 
@@ -157,24 +157,23 @@ export default {
           const timeText = section.querySelector('.works-item--time-text')
 
           // Code to display a title
-          tl.to(titleBarEl, {
+          tl.to(titleBarEl, 0.2, {
             x: 0
           })
             .set(titleTextEl, {
               opacity: 1
             })
-            .to(titleBarEl, {
+            .to(titleBarEl, 0.3, {
               x: '100%'
             })
-            .to(worksItemBar, {
-              x: 0
-            })
+          tl.to(worksItemBar, 0.2, {
+            x: 0
+          })
             .set(categoryText, { opacity: 1 })
             .set(timeText, { opacity: 1 })
-            .to(worksItemBar, {
+            .to(worksItemBar, 0.2, {
               x: '100%'
             })
-            .to(section, { delay: 2 })
         }
       })
     }
@@ -188,6 +187,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(2, 50%);
   grid-template-rows: 1fr;
+
   &__image-wrap {
     width: 50vw;
     height: 100%;
@@ -254,7 +254,7 @@ export default {
   }
   &--link {
     @include text-outline;
-    @include font-family;
+    font-family: $en;
     font-size: 56px;
   }
 }
@@ -279,7 +279,7 @@ export default {
     margin: auto;
     @include hide-bar-parent;
     p {
-      @include font-family;
+      font-family: $en;
       color: $color-gray;
       @include font-nav-secondary;
     }

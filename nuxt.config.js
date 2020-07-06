@@ -38,10 +38,10 @@ export default {
 
   plugins: [
     '@/plugins/components.js',
-    '~plugins/day.js',
-    '~plugins/globalMethods.js',
-    { src: '~/plugins/axios', ssr: false },
-    { src: '~/plugins/routerOption.js', ssr: false }
+    '@/plugins/day.js',
+    '@/plugins/globalMethods.js',
+    { src: '@/plugins/axios', ssr: false },
+    { src: '@/plugins/routerOption.js', ssr: false }
   ],
 
   buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/stylelint-module'],
@@ -64,7 +64,7 @@ export default {
   },
   webfontloader: {
     google: {
-      families: ['Noto+Sans+JP:wght@400;500', 'Roboto:400,700']
+      families: ['Noto+Sans+JP:400;500', 'Roboto:400,700']
     }
   },
   optimizedImages: {

@@ -1,6 +1,10 @@
 <template lang="pug">
 .pagemenuicon
-  .menuicon(@click="menuToggle")
+  .menuicon(
+    @click="menuToggle"
+    @mouseover="globalIconMoseOver('hover-menu')"
+    @mouseleave="iconMouseLeave('hover-menu')"
+    )
     lottie(
       :options="lottieOptions"
       :height="16"

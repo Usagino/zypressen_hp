@@ -1,6 +1,7 @@
 <template lang="pug">
   .container
     scrollBar
+    mouseStoker
     .top-page
       .link-window.fisrt
         .link-window__wrap
@@ -17,9 +18,6 @@
     .scroll-wire
       .scroll-wire__text
         p.scroll-wire--item SCROLL
-        .scroll-wire--bar
-      .scroll-wire__arrow
-        img.scroll-wire--item(src="/arrow.svg" @click="scrollToNext()")
         .scroll-wire--bar
 </template>
 
@@ -197,7 +195,7 @@ export default {
     width: 100%;
   }
   &--num {
-    @include font-family;
+    font-family: $en;
     font-size: 16px;
     text-align: center;
   }

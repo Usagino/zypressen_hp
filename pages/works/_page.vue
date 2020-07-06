@@ -1,7 +1,8 @@
 <template lang="pug">
 .container.works-page
   scrollBar
-  .first-thumbnail(:style="{backgroundImage:BodyImage(ThumbnailImage),backgroundSize:BackgroundSize+'%'}")
+  mouseStoker
+  .first-thumbnail(:style="{backgroundImage:BodyImage(ThumbnailImage+'?auto=compress'),backgroundSize:BackgroundSize+'%'}")
     .first-thumbnail--screen
       .first-thumbnail--title
         span.first-thumbnail--textwrap
@@ -29,7 +30,7 @@
         span(v-for='(color,index) in Work.COLOR' :style="{backgroundColor:color.COLOR}")
   .third-images
     span.third-images__wrap(v-for="(image,index) in Work.IMAGE" :key="image.index")
-      img.third-images--image(:src="image.IMAGE.url")
+      img.third-images--image(:src="image.IMAGE.url+'?auto=compress'")
       span.third-images--cover
   .fourth-button(v-show="Pagination.back !== '/works/undefined'")
     nuxt-link.fourth-button__link(:to="Pagination.back")
@@ -39,7 +40,9 @@
 
 <script>
 import axios from 'axios'
-import { TimelineMax, TweenMax, Power2 } from 'gsap' // eslint-disable-line
+import { TimelineMax, TweenMax, Power2,gsap } from 'gsap' // eslint-disable-line
+import { ScrollTrigger } from "gsap/ScrollTrigger";  // eslint-disable-line
+
 import inView from 'in-view' // eslint-disable-line
 export default {
   async asyncData({ params }) {
@@ -89,41 +92,34 @@ export default {
     }
   },
   mounted() {
-    this.windowHeight = window.innerHeight
-    this.windowWidth = window.innerWidth
-    if (this.$ua.deviceType() !== 'smartphone') {
-    }
     this.hideDisplay()
-    window.onscroll = () => {
-      this.hideDisplay()
-    }
-    inView.threshold(0.8)
-    inView('.third-images--cover').on('enter', (el) => {
-      TweenMax.to(el, 1.4, {
-        scaleY: 0,
-        ease: Power2.easeOut
-      })
-      TweenMax.to(el.previousElementSibling, 1.4, {
-        scale: 1.2,
+
+    gsap.registerPlugin(ScrollTrigger)
+    gsap.utils.toArray('.third-images__wrap').forEach((section) => {
+      gsap.to(section.querySelector('.third-images--cover'), {
+        scrollTrigger: {
+          trigger: section,
+          scrub: true,
+          end: 'center center'
+          // markers: true
+        },
+        scaleX: 0,
         ease: Power2.easeOut
       })
     })
   },
   methods: {
     hideDisplay() {
-      const windowHeight = window.innerHeight
-      const y = document.documentElement.scrollTop
-
-      if (this.windowHeight >= this.windowWidth) {
-        TweenMax.set('.first-thumbnail', { backgroundSize: 'cover' })
-      } else if (y < windowHeight && this.$ua.deviceType() !== 'smartphone') {
-        const size = y * 0.06 + 100
-        this.BackgroundSize = size
-      }
-      const transformValue = (y / windowHeight) * 100
-      if (transformValue <= 120) {
-        TweenMax.set('.cover-wrap', { scale: transformValue * 0.01 })
-      }
+      gsap.registerPlugin(ScrollTrigger)
+      gsap.set('.cover-wrap', { x: '100%' })
+      gsap.to('.cover-wrap', {
+        scrollTrigger: {
+          trigger: '.cover-wrap',
+          scrub: true,
+          end: 'bottom bottom'
+        },
+        x: '0%'
+      })
     },
     BodyImage(image) {
       const picture = this.changeWebp(image)
@@ -220,7 +216,7 @@ export default {
     width: fit-content;
     p {
       display: inline-block;
-      @include font-nav-primary;
+      font-family: $en;
     }
   }
   &--textwrap {
@@ -328,7 +324,7 @@ export default {
     height: 100%;
     transform: scaleY(1.1);
     background-color: $color-black;
-    transform-origin: bottom;
+    transform-origin: right bottom;
     will-change: transform;
   }
 }

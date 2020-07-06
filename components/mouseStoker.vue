@@ -1,16 +1,57 @@
 <template lang="pug">
-.mouse-stoker
+.mouse-stoker(:class="{ 'hover-link':linkClassToggle}")
   span
+  transition(name="fade")
+    .hover-link__text(v-show="linkClassToggle")
+      p CLICK HERE
 </template>
 
 <script>
-import { TweenMax } from 'gsap'// eslint-disable-line
+import { TweenMax,TweenLite ,gsap} from 'gsap'// eslint-disable-line
 export default {
+  data() {
+    return {
+      linkClassToggle: false,
+      menuClassToggle: false
+    }
+  },
   mounted() {
-    console.log('こんんちわ')
     window.onmousemove = (e) => {
-      console.log(e.pageX, e.pageY)
-      TweenMax.set('.mouse-stoker', { x: e.pageX, y: e.pageY })
+      this.moveCircle(e)
+    }
+    this.linkHover()
+  },
+  methods: {
+    linkHover() {
+      gsap.utils.toArray('a').forEach((section) => {
+        section.addEventListener(
+          'mouseover',
+          () => {
+            this.linkClassToggle = true
+          },
+          false
+        )
+
+        section.addEventListener(
+          'mouseleave',
+          () => {
+            this.linkClassToggle = false
+          },
+          false
+        )
+      })
+      window.onmousewheel = () => {
+        this.linkClassToggle = false
+      }
+    },
+    moveCircle(e) {
+      TweenLite.set('.mouse-stoker', {
+        css: {
+          opacity: 1,
+          x: e.clientX,
+          y: e.clientY
+        }
+      })
     }
   }
 }
@@ -19,14 +60,48 @@ export default {
 <style lang="scss" scoped>
 .mouse-stoker {
   will-change: transform;
+  mix-blend-mode: difference;
   position: fixed;
   top: 0;
   left: 0;
+  opacity: 0;
   z-index: 1000;
-  height: 12px;
-  width: 12px;
-  border-radius: 100%;
-  background: $color-orange;
+  height: 36px;
+  width: 36px;
+  transform: translate(-50%, -50%);
+  border-radius: 18px;
+  background: $color-gray;
   pointer-events: none;
+  transition: height 0.3s, width 0.3s, background 0.3s;
+}
+.hover-link {
+  mix-blend-mode: normal;
+  width: 200px;
+  background: $color-gray;
+  border-radius: 0px;
+  overflow: hidden;
+  &__text {
+    font-family: $en;
+    white-space: nowrap;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+  }
+}
+.hover-menu {
+  height: 56px;
+  width: 56px;
+  background: transparent;
+  border: 2px solid $color-gray;
+  border-radius: 0px;
+  overflow: hidden;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

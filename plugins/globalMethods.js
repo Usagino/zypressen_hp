@@ -33,7 +33,16 @@ Vue.mixin({
     },
     zeroPadding(number) {
       return ('0' + number).slice(-2)
+    },
+    globalIconMoseOver(el) {
+      const target = document.querySelector('.mouse-stoker')
+      target.classList.add(el)
+    },
+    iconMouseLeave(el) {
+      const target = document.querySelector('.mouse-stoker')
+      target.classList.remove(el)
     }
+
     // notScroll() {
     //   const windowHeight = window.innerHeight
     //   const bodyElement = document.querySelector('body')

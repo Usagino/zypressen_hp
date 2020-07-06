@@ -5,7 +5,6 @@
     client-only
       pageMenuIcon
     // dimensionalModel(v-show="this.$route.matched[0].path !== '/works/:page'")
-    //mouseStoker
     nuxt
 </template>
 
@@ -20,6 +19,9 @@ export default {
   },
   mixins: [deviceMixin],
   mounted() {
+    addEventListener('keydown', (event) => {
+      console.log(event.code)
+    })
     const babseStyle = [
       'padding:4px 12px',
       'font-size: 8px',
@@ -48,6 +50,7 @@ export default {
       linkStyle
     )
   },
+
   methods: {}
 }
 </script>
@@ -61,6 +64,7 @@ html {
   width: 100vw;
   //overflow: hidden;
   &__logo {
+    mix-blend-mode: difference;
     position: fixed;
     top: $pri-value;
     left: $pri-value;

@@ -1,6 +1,7 @@
 <template lang="pug">
   .container.about-page
     scrollBar
+    mouseStoker
     .about-page__wrap
       .page-title
         h1
@@ -28,12 +29,21 @@ export default {
     tl.to('.page-title__wrap--text', 0.3, {
       y: '0%',
       delay: 2
-    }).to('.about-body img', 0.3, { y: '0%' })
+    })
+      .to('.about-body img', 0.3, { y: '0%' })
+      .set('.about-page', {
+        overflow: 'scroll',
+        height: 'auto'
+      })
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.about-page {
+  height: 100vh;
+  overflow: hidden;
+}
 .about-page {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
