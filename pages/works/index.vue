@@ -69,8 +69,6 @@ export default {
   mounted() {
     this.changeLinkText()
     this.hideArrowWire()
-    // this.keyDown(this.scrollToNext)
-    // this.keyUp(this.scrollToPrev)
   },
 
   methods: {
@@ -187,11 +185,25 @@ export default {
   display: grid;
   grid-template-columns: repeat(2, 50%);
   grid-template-rows: 1fr;
+  @include mq(sm) {
+    width: 100vw !important;
+    height: 100vw !important;
+    display: block;
+    position: relative;
+  }
 
   &__image-wrap {
     width: 50vw;
     height: 100%;
     height: 100%;
+    @include mq(sm) {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+    }
   }
   &--thumbnail {
     @include full-size;
@@ -212,6 +224,16 @@ export default {
     flex-direction: column;
     align-items: flex-start;
     max-height: var(--wh, 100vh);
+    @include mq(sm) {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      padding: 0px;
+      display: grid;
+      place-items: center;
+    }
     span {
       color: $color-gray;
     }
@@ -228,6 +250,9 @@ export default {
     &__category,
     &__time {
       position: relative;
+      @include mq(sm) {
+        display: none;
+      }
     }
   }
   &--category-text,
@@ -247,15 +272,26 @@ export default {
     position: absolute;
     bottom: 60px;
     right: 140px;
+    @include mq(sm) {
+      @include absolute-middle;
+    }
   }
   &--text {
     margin-bottom: 12px;
     @include font-title-secondary;
+    @include mq(sm) {
+      display: none;
+    }
   }
   &--link {
-    @include text-outline;
     font-family: $en;
     font-size: 56px;
+    @include mq(lg) {
+      @include text-outline;
+    }
+    @include mq(sm) {
+      @include font-title-first;
+    }
   }
 }
 .item-text {
@@ -293,6 +329,12 @@ export default {
   }
   &--bar {
     @include hide-bar;
+  }
+}
+.navigation,
+.scroll-wire {
+  @include mq(sm) {
+    display: none;
   }
 }
 </style>

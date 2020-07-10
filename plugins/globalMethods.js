@@ -35,12 +35,16 @@ Vue.mixin({
       return ('0' + number).slice(-2)
     },
     globalIconMoseOver(el) {
-      const target = document.querySelector('.mouse-stoker')
-      target.classList.add(el)
+      if (this.$ua.deviceType() !== 'smartphone') {
+        const target = document.querySelector('.mouse-stoker')
+        target.classList.add(el)
+      }
     },
     iconMouseLeave(el) {
-      const target = document.querySelector('.mouse-stoker')
-      target.classList.remove(el)
+      if (this.$ua.deviceType() !== 'smartphone') {
+        const target = document.querySelector('.mouse-stoker')
+        target.classList.remove(el)
+      }
     }
 
     // notScroll() {

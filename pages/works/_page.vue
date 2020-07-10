@@ -8,7 +8,7 @@
         span.first-thumbnail--textwrap
           h1 {{Work.TITLE}}
       .first-thumbnail--scroll
-        p scroll
+        p SCROLL
     .cover-wrap
   .second-body
 
@@ -214,8 +214,13 @@ export default {
     margin: auto;
     display: block;
     width: fit-content;
+    @include mq(sm) {
+      bottom: 32px;
+    }
     p {
       display: inline-block;
+      color: $color-gray;
+      font-size: 10px;
       font-family: $en;
     }
   }
@@ -261,6 +266,10 @@ export default {
     p {
       @include font-text-secondary;
       color: $color-gray;
+      @include mq(sm) {
+        font-size: 16px;
+        line-height: normal;
+      }
     }
     &__title {
       color: $color-white !important;

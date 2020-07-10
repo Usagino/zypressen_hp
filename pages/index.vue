@@ -188,6 +188,9 @@ export default {
   flex-direction: column;
   align-items: center;
   @include gap-bottom(20px);
+  @include mq(sm) {
+    display: none;
+  }
   &__wrap {
     overflow: hidden;
     position: relative;
@@ -221,6 +224,9 @@ export default {
   width: 100vw;
   position: fixed;
   @include flex-middle;
+  @include mq(sm) {
+    bottom: 32px;
+  }
   &__arrow {
     position: absolute;
     right: $pri-value;
@@ -230,6 +236,10 @@ export default {
   &--item {
     @include font-nav-secondary;
     color: $color-gray;
+    @include mq(sm) {
+      font-size: 10px;
+      letter-spacing: normal;
+    }
   }
 }
 </style>

@@ -16,10 +16,12 @@ export default {
     }
   },
   mounted() {
-    window.onmousemove = (e) => {
-      this.moveCircle(e)
+    if (this.$ua.deviceType() !== 'smartphone') {
+      window.onmousemove = (e) => {
+        this.moveCircle(e)
+      }
+      this.linkHover()
     }
-    this.linkHover()
   },
   methods: {
     linkHover() {

@@ -100,6 +100,9 @@ export default {
     // line-height: 1.2em;
     span {
       display: inline-block;
+      @include mq(sm) {
+        @include font-title-thirdry;
+      }
     }
     &__wrap {
       overflow: hidden;
@@ -111,6 +114,9 @@ export default {
       vertical-align: middle;
       opacity: 0;
       padding: 6px 0px;
+      @include mq(sm) {
+        padding: 0px;
+      }
     }
     &__cover {
       height: 100%;
