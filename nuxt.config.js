@@ -1,8 +1,8 @@
 const axios = require('axios')
 require('dotenv').config()
-const { CMSKEY } = process.env
 export default {
   mode: 'universal',
+  target: 'static',
   head: {
     title: 'ZYPRESSEN',
     meta: [
@@ -69,9 +69,8 @@ export default {
   optimizedImages: {
     optimizeImages: true
   },
-  env: {
-    CMSKEY
-  },
+
+  env: { CMSKEY: process.env.CMSKEY },
   axios: {},
   build: {
     extend(config, ctx) {
