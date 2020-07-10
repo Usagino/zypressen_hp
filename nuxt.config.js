@@ -3,7 +3,6 @@ require('dotenv').config()
 const { CMSKEY } = process.env
 export default {
   mode: 'universal',
-  target: 'static',
   head: {
     title: 'ZYPRESSEN',
     meta: [
