@@ -1,0 +1,46 @@
+[
+    {
+        "name": "keywords",
+        "content": "zypressen"
+    },
+    {
+        "name": "description",
+        "content": "We are a design-complex."
+    },
+    {
+        "property": "og:type",
+        "content": "website"
+    },
+    {
+        "property": "og:url",
+        "content": "https://zypressen.org/"
+    },
+    {
+        "property": "og:title",
+        "content": "Zypressen"
+    },
+    {
+        "property": "og:description",
+        "content": "We are a design-complex."
+    },
+    {
+        "property": "og:image",
+        "content": "/og-image.png"
+    },
+    {
+        "name": "twitter:card",
+        "content": "summary_large_image"
+    },
+    {
+        "name": "twitter:title",
+        "content": "Zypressen"
+    },
+    {
+        "name": "twitter:description",
+        "content": "We are a design-complex."
+    },
+    {
+        "name": "twitter:image:src",
+        "content": "/og-image.png"
+    }
+]
