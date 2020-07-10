@@ -67,6 +67,7 @@ export default {
       families: ['Noto+Sans+JP:400;500', 'Roboto:400,700']
     }
   },
+  axios: {},
   optimizedImages: {
     optimizeImages: true
   },
@@ -84,22 +85,25 @@ export default {
   },
   components: ['~/components'],
   generate: {
-    routes() {
-      const posts = axios
-        .get('https://zypressen.microcms.io/api/v1/works', {
-          headers: { 'X-API-KEY': process.env.CMSKEY }
-        })
-        .then((res) => {
-          return res.data.contents.map((post) => {
-            console.log('/works/' + post.id)
-            return '/works/' + post.id
-          })
-        })
-
-      console.log('🏁Generate Finish')
-      return Promise.all([posts]).then((values) => {
-        return values.join().split(',')
-      })
-    }
+    exclude: ['/works/undefined']
   }
+  // generate: {
+  //   routes() {
+  //     const posts = axios
+  //       .get('https://zypressen.microcms.io/api/v1/works', {
+  //         headers: { 'X-API-KEY': process.env.CMSKEY }
+  //       })
+  //       .then((res) => {
+  //         return res.data.contents.map((post) => {
+  //           console.log('/works/' + post.id)
+  //           return '/works/' + post.id
+  //         })
+  //       })
+  //
+  //     console.log('🏁Generate Finish')
+  //     return Promise.all([posts]).then((values) => {
+  //       return values.join().split(',')
+  //     })
+  //   }
+  // }
 }
