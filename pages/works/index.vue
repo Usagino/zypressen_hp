@@ -1,7 +1,7 @@
 <template lang="pug">
   .container.works-page
-    scrollBar
-    mouseStoker
+    ScrollBar
+    MouseStoker
     .works-page__wrap
       .works-item.works-first
         .works-item__image-wrap

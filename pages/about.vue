@@ -1,7 +1,7 @@
 <template lang="pug">
   .container.about-page
-    scrollBar
-    mouseStoker
+    ScrollBar
+    MouseStoker
     .about-page__wrap
       .page-title
         h1

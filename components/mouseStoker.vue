@@ -1,9 +1,9 @@
 <template lang="pug">
-.mouse-stoker(:class="{ 'hover-link':linkClassToggle}")
-  span
-  transition(name="fade")
-    .hover-link__text(v-show="linkClassToggle")
-      p CLICK HERE
+  .mouse-stoker(:class="{ 'hover-link':linkClassToggle}")
+    span
+    transition(name="fade")
+      .hover-link__text(v-show="linkClassToggle")
+        p CLICK HERE
 </template>
 
 <script>

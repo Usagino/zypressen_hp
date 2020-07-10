@@ -29,22 +29,23 @@ export default {
     ]
   },
   loading: { color: '#fff' },
-
   css: [
     { src: '~/assets/stylesheets/reset.css', lang: 'css' },
     { src: '@/assets/stylesheets/style.scss', lang: 'scss' }
   ],
-
   plugins: [
-    '@/plugins/components.js',
+    // '@/plugins/components.js',
     '@/plugins/day.js',
     '@/plugins/globalMethods.js',
+    { src: '@/plugins/components', ssr: false },
     { src: '@/plugins/axios', ssr: false },
     { src: '@/plugins/routerOption.js', ssr: false }
   ],
-
-  buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/stylelint-module'],
-
+  buildModules: [
+    '@nuxt/components',
+    '@nuxtjs/eslint-module',
+    '@nuxtjs/stylelint-module'
+  ],
   modules: [
     '@nuxtjs/pwa',
     '@nuxtjs/axios',
@@ -69,9 +70,7 @@ export default {
   optimizedImages: {
     optimizeImages: true
   },
-
   env: { CMSKEY: process.env.CMSKEY },
-  axios: {},
   build: {
     extend(config, ctx) {
       if (config.module) {
@@ -83,11 +82,9 @@ export default {
     },
     transpile: ['three', 'gsap']
   },
+  components: ['~/components'],
   generate: {
     routes() {
-      console.log('Generate start')
-      console.log('🔑', process.env.CMSKEY)
-
       const posts = axios
         .get('https://zypressen.microcms.io/api/v1/works', {
           headers: { 'X-API-KEY': process.env.CMSKEY }

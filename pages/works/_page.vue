@@ -1,7 +1,7 @@
 <template lang="pug">
 .container.works-page
-  scrollBar
-  mouseStoker
+  ScrollBar
+  MouseStoker
   .first-thumbnail(:style="{backgroundImage:BodyImage(ThumbnailImage+'?auto=compress'),backgroundSize:BackgroundSize+'%'}")
     .first-thumbnail--screen
       .first-thumbnail--title

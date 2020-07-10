@@ -1,24 +1,19 @@
 <template lang="pug">
-  div.page
+  .page
     nuxt-link.page__logo(to="/")
       img.page__logo__image(src="/PageLogo.svg")
-    client-only
-      pageMenuIcon
-    // dimensionalModel(v-show="this.$route.matched[0].path !== '/works/:page'")
+    PageMenu
     nuxt
 </template>
 
 <script>
-import dimensionalModel from '@/components/dimensionalModel'
 import deviceMixin from '@/assets/js/device'
 import EventBus from '@/utils/event-bus' // eslint-disable-line
 
 export default {
-  components: {
-    dimensionalModel
-  },
   mixins: [deviceMixin],
   mounted() {
+    // dimensionalModel(v-show="this.$route.matched[0].path !== '/works/:page'")
     addEventListener('keydown', (event) => {
       console.log(event.code)
     })

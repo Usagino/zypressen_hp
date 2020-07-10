@@ -1,7 +1,7 @@
 <template lang="pug">
   .container.contact-page
-    scrollBar
-    mouseStoker
+    ScrollBar
+    MouseStoker
     .message
       h2.message--text
         span.message--text__wrap(v-for="text in this.messageText.split(' ')")

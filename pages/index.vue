@@ -1,7 +1,7 @@
 <template lang="pug">
   .container
-    scrollBar
-    mouseStoker
+    ScrollBar
+    MouseStoker
     .top-page
       .link-window.fisrt
         .link-window__wrap
