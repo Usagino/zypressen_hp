@@ -60,6 +60,7 @@ export default {
       next: '/works/' + idArray[idArray.indexOf(params.page) - 1],
       back: '/works/' + idArray[idArray.indexOf(params.page) + 1]
     }
+    console.log(work.THUMBNAIL)
     return {
       Data: data.contents,
       Work: work,
