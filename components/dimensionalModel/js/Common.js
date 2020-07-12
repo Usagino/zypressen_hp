@@ -66,8 +66,8 @@ class Common {
       this.spotLightAdd()
       this.modelAdd(gltf)
       this.groundAdd()
-      this.Helpers()
-      this.datGUI()
+      // this.Helpers()
+      // this.datGUI()
       // this.tweakpane()
     })
   }
