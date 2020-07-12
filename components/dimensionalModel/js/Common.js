@@ -1,5 +1,4 @@
-import Animate from "./Animate";// eslint-disable-line
-
+import { gsap } from 'gsap' // eslint-disable-line
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js' // eslint-disable-line
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js' // eslint-disable-line
@@ -39,10 +38,8 @@ class Common {
     this.renderer.shadowMap.enabled = true
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap
     this.renderer.outputEncoding = THREE.sRGBEncoding
-    // this.renderer.gammaInput = true
-    // this.renderer.gammaOutput = true
 
-    // this.scene.fog = new THREE.Fog(0x000000, -10, 300)
+    this.scene.fog = new THREE.Fog(0x000000, -10, 300)
 
     // camera
     this.camera = new THREE.PerspectiveCamera(
@@ -72,6 +69,101 @@ class Common {
     })
   }
 
+  onChange(direction) {
+    console.log(direction)
+  }
+
+  appliedPath(name) {
+    this.currentPath = name
+    this.switchAnime()
+  }
+
+  switchAnime() {
+    switch (this.currentPath) {
+      case 'index':
+        this.topPageAnimate(this.model, this.camera)
+        break
+      case 'works':
+        this.animateMoveModelFadeOut(this.model, this.camera)
+        break
+      case 'about':
+        this.animateAboutPage(this.model, this.camera)
+        break
+      case 'contact':
+        this.animateMoveShowBack(this.model, this.camera)
+        break
+    }
+  }
+
+  topPageAnimate() {
+    if (this.model) {
+      gsap.to(this.model.rotation, 2, {
+        y: -2 * Math.PI,
+        onComplete: () => {
+          this.model.rotation.y = 0
+        }
+      })
+      gsap.to(this.model.position, 2, {
+        x: 0
+      })
+      gsap.to(this.camera.position, 2, {
+        z: 100,
+        x: 0
+      })
+      // scroll
+      gsap.utils.toArray('.link-window').forEach((section, index) => {
+        gsap.to(this.model.rotation, {
+          scrollTrigger: {
+            trigger: section,
+            start: 'top top',
+            scrub: true
+          },
+          y: Math.PI * 2
+        })
+      })
+    }
+  }
+
+  animateMoveModelFadeOut() {
+    if (this.model) {
+      gsap.to(this.model.position, 2, {
+        x: -100
+      })
+      gsap.to(this.camera.position, 2, {
+        z: -100
+      })
+    }
+  }
+
+  animateMoveShowBack() {
+    if (this.model) {
+      gsap.to(this.model.rotation, 2, {
+        y: 1 * Math.PI
+      })
+      gsap.to(this.camera.position, 2, {
+        z: 33,
+        x: 0
+      })
+      gsap.to(this.model.position, 2, {
+        x: 0
+      })
+    }
+  }
+
+  animateAboutPage() {
+    if (this.model) {
+      gsap.to(this.model.rotation, 2, {
+        y: -2 * Math.PI,
+        onComplete: () => {
+          this.model.rotation.y = 0
+        }
+      })
+      gsap.to(this.camera.position, 2, {
+        x: -30
+      })
+    }
+  }
+
   setSize() {
     this.size = {
       windowW: window.innerWidth,
@@ -89,32 +181,6 @@ class Common {
 
   render() {
     this.renderer.render(this.scene, this.camera)
-  }
-
-  onChange(direction) {
-    console.log(direction)
-  }
-
-  appliedPath(name) {
-    this.currentPath = name
-    this.switchAnime()
-  }
-
-  switchAnime() {
-    switch (this.currentPath) {
-      case 'index':
-        Animate.animateMoveDefaultPosition(this.model, this.camera)
-        break
-      case 'works':
-        Animate.animateMoveModelFadeOut(this.model, this.camera)
-        break
-      case 'about':
-        Animate.animateAboutPage(this.model, this.camera)
-        break
-      case 'contact':
-        Animate.animateMoveShowBack(this.model, this.camera)
-        break
-    }
   }
 
   spotLightAdd() {
@@ -141,7 +207,7 @@ class Common {
     this.model.castShadow = true
     this.scene.add(this.model)
     this.switchAnime()
-    EventBus.$on('moveDefaultPosition', this.animateMoveDefaultPosition)
+    EventBus.$on('moveDefaultPosition', this.topPageAnimate)
     EventBus.$on('moveModelFadeOut', this.animateMoveModelFadeOut)
     EventBus.$on('animateAboutPage', this.animateAboutPage)
     EventBus.$on('moveShowBack', this.animateMoveShowBack)
