@@ -46,10 +46,10 @@ export default {
 }
 .about-page {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
   gap: 1px 1px;
-  grid-template-areas: 'main main main . .';
+  grid-template-areas: 'main .';
   @include default-width;
   &__wrap {
     grid-area: main;

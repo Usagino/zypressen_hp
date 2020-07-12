@@ -121,7 +121,7 @@ export default {
     &__cover {
       height: 100%;
       width: 100%;
-      background: $color-white;
+      background: $color-gray;
       position: absolute;
       top: 0;
       left: 0;

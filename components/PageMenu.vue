@@ -159,7 +159,7 @@ export default {
 }
 .menulist {
   @include full-screen;
-  background: $color-gray;
+  background: $color-black;
   position: fixed;
   top: 0;
   left: 0;

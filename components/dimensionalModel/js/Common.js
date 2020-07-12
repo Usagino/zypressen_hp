@@ -65,7 +65,7 @@ class Common {
       this.groundAdd()
       // this.Helpers()
       // this.datGUI()
-      // this.tweakpane()
+      this.tweakpane()
     })
   }
 
@@ -81,21 +81,21 @@ class Common {
   switchAnime() {
     switch (this.currentPath) {
       case 'index':
-        this.topPageAnimate(this.model, this.camera)
+        this.AnimateTopPage(this.model, this.camera)
         break
       case 'works':
-        this.animateMoveModelFadeOut(this.model, this.camera)
+        this.AnimateWorksPage(this.model, this.camera)
         break
       case 'about':
-        this.animateAboutPage(this.model, this.camera)
+        this.AnimateAboutPage(this.model, this.camera)
         break
       case 'contact':
-        this.animateMoveShowBack(this.model, this.camera)
+        this.AnimateContactPage(this.model, this.camera)
         break
     }
   }
 
-  topPageAnimate() {
+  AnimateTopPage() {
     if (this.model) {
       gsap.to(this.model.rotation, 2, {
         y: -2 * Math.PI,
@@ -108,15 +108,16 @@ class Common {
       })
       gsap.to(this.camera.position, 2, {
         z: 100,
+        y: 22,
         x: 0
       })
       // scroll
       gsap.utils.toArray('.link-window').forEach((section, index) => {
-        gsap.to(this.model.rotation, {
+        gsap.to(this.model.rotation, 0.3, {
           scrollTrigger: {
             trigger: section,
             start: 'top top',
-            scrub: true
+            scrub: 0.4
           },
           y: Math.PI * 2
         })
@@ -124,7 +125,7 @@ class Common {
     }
   }
 
-  animateMoveModelFadeOut() {
+  AnimateWorksPage() {
     if (this.model) {
       gsap.to(this.model.position, 2, {
         x: -100
@@ -135,22 +136,7 @@ class Common {
     }
   }
 
-  animateMoveShowBack() {
-    if (this.model) {
-      gsap.to(this.model.rotation, 2, {
-        y: 1 * Math.PI
-      })
-      gsap.to(this.camera.position, 2, {
-        z: 33,
-        x: 0
-      })
-      gsap.to(this.model.position, 2, {
-        x: 0
-      })
-    }
-  }
-
-  animateAboutPage() {
+  AnimateAboutPage() {
     if (this.model) {
       gsap.to(this.model.rotation, 2, {
         y: -2 * Math.PI,
@@ -160,6 +146,22 @@ class Common {
       })
       gsap.to(this.camera.position, 2, {
         x: -30
+      })
+    }
+  }
+
+  AnimateContactPage() {
+    if (this.model) {
+      gsap.to(this.model.rotation, 3, {
+        y: 0
+      })
+      gsap.to(this.model.position, 2, {
+        x: 0
+      })
+      gsap.to(this.camera.position, 2, {
+        z: 33,
+        x: 0,
+        y: 36
       })
     }
   }
@@ -207,10 +209,10 @@ class Common {
     this.model.castShadow = true
     this.scene.add(this.model)
     this.switchAnime()
-    EventBus.$on('moveDefaultPosition', this.topPageAnimate)
-    EventBus.$on('moveModelFadeOut', this.animateMoveModelFadeOut)
-    EventBus.$on('animateAboutPage', this.animateAboutPage)
-    EventBus.$on('moveShowBack', this.animateMoveShowBack)
+    EventBus.$on('moveDefaultPosition', this.AnimateTopPage)
+    EventBus.$on('moveModelFadeOut', this.AnimateWorksPage)
+    EventBus.$on('animateAboutPage', this.AnimateAboutPage)
+    EventBus.$on('moveShowBack', this.AnimateContactPage)
   }
 
   groundAdd() {
@@ -254,63 +256,65 @@ class Common {
       Y: this.camera.position.y,
       Z: this.camera.position.z
     }
-    cameraFl.addInput(CAMERA, 'X', {
-      min: -200,
-      max: 200
-    })
-
-    const planeFl = pane.addFolder({
-      title: 'Ground'
-    })
-    const ground = this.groundAdd()
-    const GROUND = {
-      X: ground.rotation.x,
-      Y: ground.rotation.y,
-      Z: ground.rotation.z
-    }
-    planeFl.addInput(GROUND, 'X', {
-      min: -200,
-      max: 200
-    })
+    cameraFl
+      .addInput(CAMERA, 'X', {
+        min: -200,
+        max: 200
+      })
+      .on('change', (val) => {
+        this.camera.position.x = val
+      })
+    cameraFl
+      .addInput(CAMERA, 'Y', {
+        min: -200,
+        max: 0
+      })
+      .on('change', (val) => {
+        this.camera.position.y = val
+      })
+    cameraFl
+      .addInput(CAMERA, 'Z', {
+        min: -200,
+        max: 200
+      })
+      .on('change', (val) => {
+        this.camera.position.z = val
+      })
   }
 
   datGUI() {
     const dat = require('dat.gui') // eslint-disable-line
     this.gui = new dat.GUI()
-    const light = this.gui.addFolder('Light')
-    light.add(this.spotLight, 'penumbra', 1, 2).listen()
-    light.add(this.spotLight, 'decay', 0, 10).listen()
-    light.add(this.spotLight, 'distance', 1, 1000).listen()
-    light.add(this.spotLight, 'angle', 0, Math.PI).listen()
-    light.add(this.spotLight, 'intensity', 0, 3).listen()
-    light.open()
-
-    const lightPos = this.gui.addFolder('Light Position')
-    lightPos.add(this.spotLight.position, 'x', -200, 200).listen()
-    lightPos.add(this.spotLight.position, 'y', 0, 200).listen()
-    lightPos.add(this.spotLight.position, 'z', -200, 200).listen()
-    lightPos.open()
-
-    const lightShadow = this.gui.addFolder('Light Shadow')
-    lightShadow
-      .add(this.spotLight.shadow.mapSize, 'width', -2000, 2000)
-      .listen()
-    lightShadow
-      .add(this.spotLight.shadow.mapSize, 'height', -2000, 2000)
-      .listen()
-    lightShadow.add(this.spotLight.shadow.camera, 'near', -20, 20).listen()
-    lightShadow.add(this.spotLight.shadow.camera, 'far', -400, 400).listen()
-    lightShadow.open()
+    // const light = this.gui.addFolder('Light')
+    // light.add(this.spotLight, 'penumbra', 1, 2).listen()
+    // light.add(this.spotLight, 'decay', 0, 10).listen()
+    // light.add(this.spotLight, 'distance', 1, 1000).listen()
+    // light.add(this.spotLight, 'angle', 0, Math.PI).listen()
+    // light.add(this.spotLight, 'intensity', 0, 3).listen()
+    // light.open()
+    //
+    // const lightPos = this.gui.addFolder('Light Position')
+    // lightPos.add(this.spotLight.position, 'x', -200, 200).listen()
+    // lightPos.add(this.spotLight.position, 'y', 0, 200).listen()
+    // lightPos.add(this.spotLight.position, 'z', -200, 200).listen()
+    // lightPos.open()
+    //
+    // const lightShadow = this.gui.addFolder('Light Shadow')
+    // lightShadow
+    //   .add(this.spotLight.shadow.mapSize, 'width', -2000, 2000)
+    //   .listen()
+    // lightShadow
+    //   .add(this.spotLight.shadow.mapSize, 'height', -2000, 2000)
+    //   .listen()
+    // lightShadow.add(this.spotLight.shadow.camera, 'near', -20, 20).listen()
+    // lightShadow.add(this.spotLight.shadow.camera, 'far', -400, 400).listen()
+    // lightShadow.open()
     //
     const camera = this.gui.addFolder('Camera position')
     camera.add(this.camera.position, 'x', -200, 200).listen()
     camera.add(this.camera.position, 'y', -200, 200).listen()
     camera.add(this.camera.position, 'z', -200, 200).listen()
     camera.open()
-    const ground = this.gui.addFolder('Ground') // eslint-disable-line
-    // ground.add(this.ground.position, 'x', -1000, 1000).listen()
-    ground.add(this.ground.position, 'y', 0, 50).listen()
-    ground.open()
   }
 }
 export default new Common()
