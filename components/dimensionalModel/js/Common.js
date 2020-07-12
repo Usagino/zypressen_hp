@@ -1,7 +1,8 @@
+import Animate from "./Animate";// eslint-disable-line
+
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js' // eslint-disable-line
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js' // eslint-disable-line
-import { TimelineMax, TweenMax } from 'gsap' // eslint-disable-line
 import EventBus from "~/utils/event-bus"; // eslint-disable-line
 // import dat from 'dat.gui';// eslint-disable-line
 
@@ -16,21 +17,19 @@ class Common {
       windowW: null,
       windowH: null
     }
-    this.tl = null
     this.loader = null
     this.dracoLoader = null
-    this.dusts = null
     this.model = null
-    this.modelTernNum = 0
     this.currentPath = null
-
+    this.ground = null
     // event bus
     EventBus.$on('passingThePath', this.appliedPath.bind(this))
   }
 
   init($canvas) {
     this.setSize()
-    this.tl = new TimelineMax()
+    // scene
+    this.scene = new THREE.Scene()
     // renderer
     this.renderer = new THREE.WebGLRenderer({
       canvas: $canvas,
@@ -38,13 +37,13 @@ class Common {
     })
     // this.renderer.setClearColor(new THREE.Color(0x000000))
     this.renderer.shadowMap.enabled = true
-    this.renderer.gammaOutput = true
-    // scene
-    this.scene = new THREE.Scene()
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap
+    this.renderer.outputEncoding = THREE.sRGBEncoding
+    // this.renderer.gammaInput = true
+    // this.renderer.gammaOutput = true
+
     // this.scene.fog = new THREE.Fog(0x000000, -10, 300)
 
-    this.spotLightAdd()
-    // this.ambientLightAdd()
     // camera
     this.camera = new THREE.PerspectiveCamera(
       45,
@@ -54,14 +53,23 @@ class Common {
     )
     this.camera.position.set(0, 0, 100)
     this.camera.lookAt(new THREE.Vector3(0, 0, 0))
+    this.camera.position.y = 22
     this.renderer.setSize(this.size.windowW, this.size.windowH)
 
-    this.groundAdd()
-    this.gltfModel()
-    // this.dustAdd()
-    // this.Helpers()
-    // this.datGUI()
-    // this.tweakpane()
+    // model before
+    this.dracoLoader = new DRACOLoader()
+    this.dracoLoader.setDecoderPath('/draco/')
+    this.loader = new GLTFLoader()
+    this.loader.setDRACOLoader(this.dracoLoader)
+    const url = '/ayumu.glb'
+    this.loader.load(url, (gltf) => {
+      this.spotLightAdd()
+      this.modelAdd(gltf)
+      this.groundAdd()
+      this.Helpers()
+      this.datGUI()
+      // this.tweakpane()
+    })
   }
 
   setSize() {
@@ -75,11 +83,11 @@ class Common {
     this.setSize()
     this.camera.aspect = this.size.windowW / this.size.windowH
     this.camera.updateProjectionMatrix()
+    this.renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer.setSize(this.size.windowW, this.size.windowH)
   }
 
   render() {
-    // this.rotateModel()
     this.renderer.render(this.scene, this.camera)
   }
 
@@ -95,218 +103,78 @@ class Common {
   switchAnime() {
     switch (this.currentPath) {
       case 'index':
-        this.animateMoveDefaultPosition()
+        Animate.animateMoveDefaultPosition(this.model, this.camera)
         break
       case 'works':
-        this.animateMoveModelFadeOut()
+        Animate.animateMoveModelFadeOut(this.model, this.camera)
         break
       case 'about':
-        this.animateAboutPage()
+        Animate.animateAboutPage(this.model, this.camera)
         break
       case 'contact':
-        this.animateMoveShowBack()
+        Animate.animateMoveShowBack(this.model, this.camera)
         break
     }
   }
 
   spotLightAdd() {
     this.spotLight = new THREE.SpotLight(0x5c5c5c)
-    this.spotLight.position.set(100, 60, 30)
-    this.spotLight.angle = Math.PI / 8
+    this.spotLight.position.set(0, 60, 30)
+    this.spotLight.angle = Math.PI
     this.spotLight.penumbra = 0.5
     this.spotLight.decay = 2
+    this.spotLight.intensity = 2
     this.spotLight.distance = 300
+
     this.spotLight.castShadow = true
-    this.spotLight.shadow.mapSize.width = 1024
-    this.spotLight.shadow.mapSize.height = 1024
+    this.spotLight.shadow.mapSize.width = 2048
+    this.spotLight.shadow.mapSize.height = 2048
     this.spotLight.shadow.camera.near = 10
     this.spotLight.shadow.camera.far = 200
     this.scene.add(this.spotLight)
   }
 
-  cameraAdd() {}
-
-  ambientLightAdd() {
-    this.AmbientLight = new THREE.AmbientLight(0xe4e2c9, 0.2)
-    this.scene.add(this.AmbientLight)
-  }
-
-  gltfModel() {
-    this.dracoLoader = new DRACOLoader()
-    this.dracoLoader.setDecoderPath('/draco/')
-    this.loader = new GLTFLoader()
-    this.loader.setDRACOLoader(this.dracoLoader)
-    const url = '/ayumu.glb'
-    this.loader.load(url, (gltf) => {
-      this.model = gltf.scene
-      this.model.scale.set(20, 20, 20)
-      this.model.castShadow = true
-      gltf.scene.traverse(function(node) {
-        if (node.isMesh) {
-          node.castShadow = true
-        }
-      })
-      this.model.position.y = -20
-      this.scene.add(this.model)
-      this.switchAnime()
-      EventBus.$on('moveDefaultPosition', this.animateMoveDefaultPosition)
-      EventBus.$on('moveModelFadeOut', this.animateMoveModelFadeOut)
-      EventBus.$on('animateAboutPage', this.animateAboutPage)
-      EventBus.$on('moveShowBack', this.animateMoveShowBack)
-    })
-  }
-
-  rotateModel() {
-    if (this.model) {
-      this.modelTernNum += 0.01
-      this.model.rotation.y = this.modelTernNum
-      if (this.model.rotation.y >= 2 * Math.PI) {
-        this.modelTernNum = 0
-      }
-    }
-  }
-
-  animateMoveDefaultPosition() {
-    if (this.model) {
-      TweenMax.to(this.model.rotation, 2, {
-        y: -2 * Math.PI,
-        onComplete: () => {
-          this.model.rotation.y = 0
-        }
-      })
-      TweenMax.to(this.model.position, 2, {
-        x: 0
-      })
-      TweenMax.to(this.camera.position, 2, {
-        z: 100,
-        x: 0
-      })
-    }
-  }
-
-  animateMoveModelFadeOut() {
-    if (this.model) {
-      TweenMax.to(this.model.position, 2, {
-        x: -100
-      })
-      TweenMax.to(this.camera.position, 2, {
-        z: -100
-      })
-    }
-  }
-
-  animateMoveShowBack() {
-    if (this.model) {
-      TweenMax.to(this.model.rotation, 2, {
-        y: 1 * Math.PI
-      })
-      TweenMax.to(this.camera.position, 2, {
-        z: 33,
-        x: 0
-      })
-      TweenMax.to(this.model.position, 2, {
-        x: 0
-      })
-    }
-  }
-
-  animateAboutPage() {
-    if (this.model) {
-      TweenMax.to(this.model.rotation, 2, {
-        y: -2 * Math.PI,
-        onComplete: () => {
-          this.model.rotation.y = 0
-        }
-      })
-      TweenMax.to(this.camera.position, 2, {
-        x: -30
-      })
-    }
-  }
-
-  dustAdd() {
-    const geometry = new THREE.Geometry()
-    // 表示する範囲を宣言して
-    const SIZE = 200
-    // 表示するパーティクルの数を決めて
-    const LENGTH = 5000
-    // その数まで四方八方に表示させるループ処理をする
-    for (let i = 0; i < LENGTH; i++) {
-      geometry.vertices.push(
-        new THREE.Vector3(
-          SIZE * (Math.random() - 0.5),
-          SIZE * (Math.random() - 0.5),
-          SIZE * (Math.random() - 0.5)
-        )
-      )
-    }
-    const texture = new THREE.TextureLoader().load('/dust.png')
-    // const material = new THREE.MeshBasicMaterial({ map: texture })
-    let material = new THREE.PointsMaterial()
-    if (material.map) {
-      material.map.dispose()
-      material.map = texture
-    } else {
-      material = new THREE.PointsMaterial({
-        // color: '0xffffff',
-        size: 2,
-        map: texture,
-        transparent: true
-      })
-    }
-
-    this.dusts = new THREE.Points(geometry, material)
-
-    this.tl.to(this.dusts.rotation, 600, {
-      y: -2 * Math.PI,
-      repeat: -1
-    })
-    this.scene.add(this.dusts)
+  modelAdd(gltf) {
+    this.model = gltf.scene
+    this.model.scale.set(20, 20, 20)
+    this.model.position.y = 8
+    this.model.castShadow = true
+    this.scene.add(this.model)
+    this.switchAnime()
+    EventBus.$on('moveDefaultPosition', this.animateMoveDefaultPosition)
+    EventBus.$on('moveModelFadeOut', this.animateMoveModelFadeOut)
+    EventBus.$on('animateAboutPage', this.animateAboutPage)
+    EventBus.$on('moveShowBack', this.animateMoveShowBack)
   }
 
   groundAdd() {
-    // const groundGeometry = new THREE.BoxGeometry(1000000, 0, 1000000)
-    // const groundMaterial = new THREE.MeshBasicMaterial({
-    //   color: 0xffffff
-    // })
-    // const ground = new THREE.Mesh(groundGeometry, groundMaterial)
-    const geometry = new THREE.PlaneBufferGeometry(1000000, 1000000)
-    const material = new THREE.MeshPhongMaterial({
-      color: 0x000000,
-      dithering: true
+    const geometry = new THREE.BoxGeometry(1000000, 0, 1000000)
+    const material = new THREE.MeshStandardMaterial({
+      color: 0x666666,
+      roughness: 0.2
     })
+    this.ground = new THREE.Mesh(geometry, material)
+    /// this.ground.rotation.x = Math.PI / 2
 
-    const ground = new THREE.Mesh(geometry, material) // eslint-disable-line
-
-    const plane = new THREE.Mesh(
-      new THREE.PlaneGeometry(1000, 1000, 1, 1),
-      new THREE.MeshLambertMaterial({
-        side: THREE.DoubleSide,
-        color: 0xcd5c5c
-      })
-    )
-    plane.position.y = -22
-    plane.receiveShadow = true
-    this.scene.add(plane)
-
-    // ground.position.y = -22
-    // ground.rotation.x = -Math.PI * 0.5
-    // ground.receiveShadow = true
-    // this.scene.add(ground)
+    this.ground.receiveShadow = true
+    this.ground.position.y = 1
+    this.scene.add(this.ground)
   }
 
   Helpers() {
-    const axes = new THREE.AxesHelper(250)
+    const axes = new THREE.AxesHelper(2000)
     this.scene.add(axes)
-    const gridHelper = new THREE.GridHelper(200, 50) // 引数は サイズ、1つのグリッドの大きさ
-    this.scene.add(gridHelper)
+    // const gridHelper = new THREE.GridHelper(200, 50) // 引数は サイズ、1つのグリッドの大きさ
+    // this.scene.add(gridHelper)
     const LightHelper = new THREE.SpotLightHelper(this.spotLight)
     this.scene.add(LightHelper)
 
-    const spotLightShadowHelper = new THREE.CameraHelper(
-      this.spotLight.shadow.camera
-    )
-    this.scene.add(spotLightShadowHelper)
+    // const spotLightShadowHelper = new THREE.CameraHelper(
+    //   this.spotLight.shadow.camera
+    // )
+    // this.scene.add(spotLightShadowHelper)
+    const helperGround = new THREE.BoxHelper(this.ground, 0xff0000) // eslint-disable-line
+    this.scene.add(helperGround)
   }
 
   tweakpane() {
@@ -324,6 +192,20 @@ class Common {
       min: -200,
       max: 200
     })
+
+    const planeFl = pane.addFolder({
+      title: 'Ground'
+    })
+    const ground = this.groundAdd()
+    const GROUND = {
+      X: ground.rotation.x,
+      Y: ground.rotation.y,
+      Z: ground.rotation.z
+    }
+    planeFl.addInput(GROUND, 'X', {
+      min: -200,
+      max: 200
+    })
   }
 
   datGUI() {
@@ -333,7 +215,8 @@ class Common {
     light.add(this.spotLight, 'penumbra', 1, 2).listen()
     light.add(this.spotLight, 'decay', 0, 10).listen()
     light.add(this.spotLight, 'distance', 1, 1000).listen()
-    light.add(this.spotLight, 'angle', 0, Math.PI * 2).listen()
+    light.add(this.spotLight, 'angle', 0, Math.PI).listen()
+    light.add(this.spotLight, 'intensity', 0, 3).listen()
     light.open()
 
     const lightPos = this.gui.addFolder('Light Position')
@@ -341,19 +224,27 @@ class Common {
     lightPos.add(this.spotLight.position, 'y', 0, 200).listen()
     lightPos.add(this.spotLight.position, 'z', -200, 200).listen()
     lightPos.open()
-    if (this.model) {
-      const model = this.gui.addFolder('Model')
-      model.add(this.model.position, 'x', -200, 200).listen()
-      model.add(this.model.position, 'y', -200, 200).listen()
-      model.add(this.model.position, 'z', -200, 200).listen()
-      model.open()
-    }
 
+    const lightShadow = this.gui.addFolder('Light Shadow')
+    lightShadow
+      .add(this.spotLight.shadow.mapSize, 'width', -2000, 2000)
+      .listen()
+    lightShadow
+      .add(this.spotLight.shadow.mapSize, 'height', -2000, 2000)
+      .listen()
+    lightShadow.add(this.spotLight.shadow.camera, 'near', -20, 20).listen()
+    lightShadow.add(this.spotLight.shadow.camera, 'far', -400, 400).listen()
+    lightShadow.open()
+    //
     const camera = this.gui.addFolder('Camera position')
     camera.add(this.camera.position, 'x', -200, 200).listen()
     camera.add(this.camera.position, 'y', -200, 200).listen()
     camera.add(this.camera.position, 'z', -200, 200).listen()
     camera.open()
+    const ground = this.gui.addFolder('Ground') // eslint-disable-line
+    // ground.add(this.ground.position, 'x', -1000, 1000).listen()
+    ground.add(this.ground.position, 'y', 0, 50).listen()
+    ground.open()
   }
 }
 export default new Common()

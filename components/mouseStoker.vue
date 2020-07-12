@@ -72,14 +72,14 @@ export default {
   width: 36px;
   transform: translate(-50%, -50%);
   border-radius: 18px;
-  background: $color-gray;
+  background: $color-orange;
   pointer-events: none;
   transition: height 0.3s, width 0.3s, background 0.3s;
 }
 .hover-link {
   mix-blend-mode: normal;
   width: 200px;
-  background: $color-gray;
+  // background: $color-gray;
   border-radius: 0px;
   overflow: hidden;
   &__text {
@@ -92,11 +92,12 @@ export default {
   }
 }
 .hover-menu {
-  height: 56px;
-  width: 56px;
   background: transparent;
-  border: 2px solid $color-gray;
-  border-radius: 0px;
+  border: 2px solid $color-orange;
+  // border-radius: 0px;
+  border-radius: 200px;
+  height: 44px;
+  width: 44px;
   overflow: hidden;
 }
 .fade-enter-active,

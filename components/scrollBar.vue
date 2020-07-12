@@ -28,17 +28,21 @@ export default {
 <style lang="scss" scoped>
 .scroll-bar {
   position: fixed;
-  right: 0;
+  right: 12px;
   top: 0;
+  bottom: 0;
+  margin: auto;
   width: 8px;
-  height: 100vh;
+  height: calc(100vh - 24px);
+  overflow: hidden;
+  border-radius: 8px;
   z-index: 1;
   &__item {
     position: absolute;
     top: 0;
     left: 0;
-    background: $color-white;
-    height: 100vh;
+    background: $color-orange;
+    height: 100%;
     content: '';
     display: block;
     width: 100%;
