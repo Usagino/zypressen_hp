@@ -24,8 +24,8 @@ export default {
       },
       {
         rel: 'stylesheet',
-        type: 'text/css',
-        href: '//cloud.typenetwork.com/projects/3724/fontface.css/'
+        // type: 'text/css',
+        href: 'https://cloud.typenetwork.com/projects/3724/fontface.css/'
       }
     ]
   },
