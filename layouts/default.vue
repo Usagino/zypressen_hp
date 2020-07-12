@@ -3,7 +3,8 @@
     nuxt-link.page__logo(to="/")
       img.page__logo__image(src="/PageLogo.svg")
     PageMenu
-    DimensionalModel(v-show="this.$route.matched[0].path !== '/works/:page'")
+    client-only
+      DimensionalModel(v-show="this.$route.matched[0].path !== '/works/:page'")
     nuxt
 </template>
 
