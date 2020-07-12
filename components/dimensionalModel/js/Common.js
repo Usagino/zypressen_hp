@@ -79,6 +79,10 @@ class Common {
   }
 
   switchAnime() {
+    EventBus.$on('moveDefaultPosition', this.AnimateTopPage)
+    EventBus.$on('moveModelFadeOut', this.AnimateWorksPage)
+    EventBus.$on('animateAboutPage', this.AnimateAboutPage)
+    EventBus.$on('moveShowBack', this.AnimateContactPage)
     switch (this.currentPath) {
       case 'index':
         this.AnimateTopPage(this.model, this.camera)
@@ -209,10 +213,6 @@ class Common {
     this.model.castShadow = true
     this.scene.add(this.model)
     this.switchAnime()
-    EventBus.$on('moveDefaultPosition', this.AnimateTopPage)
-    EventBus.$on('moveModelFadeOut', this.AnimateWorksPage)
-    EventBus.$on('animateAboutPage', this.AnimateAboutPage)
-    EventBus.$on('moveShowBack', this.AnimateContactPage)
   }
 
   groundAdd() {
