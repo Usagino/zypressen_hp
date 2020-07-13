@@ -15,7 +15,6 @@ import EventBus from '@/utils/event-bus' // eslint-disable-line
 export default {
   mixins: [deviceMixin],
   mounted() {
-    console.log(this.$route.name !== 'works-page')
     addEventListener('keydown', (event) => {
       console.log(event.code)
     })

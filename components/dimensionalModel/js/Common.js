@@ -65,6 +65,7 @@ class Common {
       // this.Helpers()
       // this.datGUI()
       // this.tweakpane()
+      console.log('読み込み完了')
     })
   }
 
