@@ -65,7 +65,7 @@ class Common {
       this.groundAdd()
       // this.Helpers()
       // this.datGUI()
-      this.tweakpane()
+      // this.tweakpane()
     })
   }
 
