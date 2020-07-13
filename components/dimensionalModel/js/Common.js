@@ -172,7 +172,7 @@ class Common {
   setSize(props) {
     this.size = {
       windowW: window.innerWidth,
-      windowH: props.$pc !== undefined ? window.innerHeight : screen.height
+      windowH: props.$pc === undefined ? window.innerHeight : screen.height
     }
   }
 
