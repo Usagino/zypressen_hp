@@ -34,7 +34,7 @@ export default {
   height: 100vh;
   z-index: 9999;
   transition: all 1.2s ease;
-  background: rgba(255, 255, 255, 0.5);
+  background: $color-black;
   &__loader {
     position: absolute;
     top: 50%;
