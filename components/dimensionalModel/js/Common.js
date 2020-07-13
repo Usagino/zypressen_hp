@@ -121,7 +121,7 @@ class Common {
           scrollTrigger: {
             trigger: section,
             start: 'top top',
-            scrub: 0.4
+            scrub: true
           },
           y: Math.PI * 2
         })
