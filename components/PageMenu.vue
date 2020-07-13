@@ -20,7 +20,7 @@
         nuxt-link.menulist__box--link(to="/about" :class="{'menulist__box--fadein':!lottieOptions.toggle}") ABOUT
       li(@click="menuToggle").menulist__box--contact
         nuxt-link.menulist__box--link(to="/contact" :class="{'menulist__box--fadein':!lottieOptions.toggle}") CONTACT
-      li.social-button__list(@click="menuToggle" v-if="this.$ua.deviceType() === 'smartphone'")
+      li.social-button__list(@click="menuToggle" v-show="this.$ua.deviceType() === 'smartphone'")
         a.social-button__icon(href="https://twitter.com/home")
           img(src="/DEFAULT/twitter.svg")
         a.social-button__icon(href="https://www.instagram.com/?hl=ja")

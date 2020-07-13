@@ -1,6 +1,6 @@
 <template lang="pug">
-  section.webgl
-    canvas.webgl__canvas(ref='canvas')
+  .webgl
+    canvas(ref='canvas')
 </template>
 
 <script>
