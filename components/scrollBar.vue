@@ -28,15 +28,23 @@ export default {
 <style lang="scss" scoped>
 .scroll-bar {
   position: fixed;
-  right: 12px;
   top: 0;
   bottom: 0;
+  right: 0;
   margin: auto;
   width: 8px;
-  height: calc(100vh - 24px);
+  height: var(--wh, 100vh);
   overflow: hidden;
-  border-radius: 8px;
   z-index: 1;
+  @include mq(sm) {
+    height: 100vw;
+    transform: rotate(-90deg);
+    transform-origin: top center;
+    top: 0px;
+    left: 0px;
+    bottom: auto;
+    margin: inherit;
+  }
   &__item {
     position: absolute;
     top: 0;

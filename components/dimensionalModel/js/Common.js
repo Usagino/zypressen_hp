@@ -25,13 +25,13 @@ class Common {
     EventBus.$on('passingThePath', this.appliedPath.bind(this))
   }
 
-  init($canvas) {
-    this.setSize()
+  init(props) {
+    this.setSize(props)
     // scene
     this.scene = new THREE.Scene()
     // renderer
     this.renderer = new THREE.WebGLRenderer({
-      canvas: $canvas,
+      canvas: props.$canvas,
       antialias: true
     })
     // this.renderer.setClearColor(new THREE.Color(0x000000))
@@ -52,7 +52,6 @@ class Common {
     this.camera.lookAt(new THREE.Vector3(0, 0, 0))
     this.camera.position.y = 22
     this.renderer.setSize(this.size.windowW, this.size.windowH)
-
     // model before
     this.dracoLoader = new DRACOLoader()
     this.dracoLoader.setDecoderPath('/draco/')
@@ -170,10 +169,10 @@ class Common {
     }
   }
 
-  setSize() {
+  setSize(props) {
     this.size = {
       windowW: window.innerWidth,
-      windowH: window.innerHeight
+      windowH: props.$pc !== undefined ? window.innerHeight : screen.height
     }
   }
 

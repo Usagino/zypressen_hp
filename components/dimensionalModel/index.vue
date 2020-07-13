@@ -1,5 +1,5 @@
 <template lang="pug">
-  .webgl
+  .webgl(:ref='this.$ua.deviceType()')
     canvas(ref='canvas')
 </template>
 
@@ -16,7 +16,8 @@ export default {
   mounted() {
     // canvas要素を渡す。
     this.webglWrap = new WebglWrap({
-      $canvas: this.$refs.canvas
+      $canvas: this.$refs.canvas,
+      $device: this.$refs.pc
     })
   },
   destroyed() {

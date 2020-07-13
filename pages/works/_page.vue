@@ -2,7 +2,7 @@
 .container.works-page
   ScrollBar
   MouseStoker
-  .first-thumbnail(:style="{backgroundImage:BodyImage(ThumbnailImage+'?auto=compress'),backgroundSize:BackgroundSize+'%'}")
+  .first-thumbnail(:style="{backgroundImage:BodyImage(ThumbnailImage+'?auto=compress')}")
     .first-thumbnail--screen
       .first-thumbnail--title
         span.first-thumbnail--textwrap
@@ -141,7 +141,6 @@ export default {
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  background-size: 100%;
   position: relative;
   height: 200vh;
   will-change: contents;

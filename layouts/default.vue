@@ -3,8 +3,7 @@
     nuxt-link.page__logo(to="/")
       img.page__logo__image(src="/PageLogo.svg")
     PageMenu
-    client-only
-      DimensionalModel(v-show="this.$route.matched[0].path !== '/works/:page'")
+    DimensionalModel(v-show="this.$route.name !== 'works-page'")
     nuxt
 </template>
 
@@ -15,6 +14,7 @@ import EventBus from '@/utils/event-bus' // eslint-disable-line
 export default {
   mixins: [deviceMixin],
   mounted() {
+    console.log(this.$route.name !== 'works-page')
     addEventListener('keydown', (event) => {
       console.log(event.code)
     })
