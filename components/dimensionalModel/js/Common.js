@@ -26,7 +26,7 @@ class Common {
   }
 
   init(props) {
-    this.setSize(props)
+    this.setSize()
     // scene
     this.scene = new THREE.Scene()
     // renderer
@@ -169,10 +169,10 @@ class Common {
     }
   }
 
-  setSize(props) {
+  setSize() {
     this.size = {
       windowW: window.innerWidth,
-      windowH: props.$pc === undefined ? window.innerHeight : screen.height
+      windowH: window.innerHeight
     }
   }
 
