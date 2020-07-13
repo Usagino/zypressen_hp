@@ -2,8 +2,9 @@
   .page
     nuxt-link.page__logo(to="/")
       img.page__logo__image(src="/PageLogo.svg")
+    PageLoading
     PageMenu
-    DimensionalModel(v-show="this.$route.name !== 'works-page'")
+    DimensionalModel
     nuxt
 </template>
 

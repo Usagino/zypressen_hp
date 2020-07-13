@@ -1,5 +1,5 @@
 <template lang="pug">
-  .webgl(:ref='this.$ua.deviceType()')
+  .webgl(:ref='this.$ua.deviceType()' v-show="this.$route.name !== 'works-page'")
     canvas(ref='canvas')
 </template>
 
@@ -30,6 +30,8 @@ export default {
 .webgl {
   position: fixed;
   @include full-screen;
-  z-index: -1;
+  z-index: -10;
+  top: 0;
+  left: 0;
 }
 </style>
