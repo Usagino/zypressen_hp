@@ -2,7 +2,7 @@
 .container.works-page
   ScrollBar
   MouseStoker
-  .first-thumbnail(:style="{backgroundImage:BodyImage(ThumbnailImage+'?auto=compress')}")
+  .first-thumbnail(:style="{backgroundImage:BodyImage(ThumbnailImage+'?auto=compress&w=1440&h=900')}")
     .first-thumbnail--screen
       .first-thumbnail--title
         span.first-thumbnail--textwrap
@@ -30,7 +30,7 @@
         span(v-for='(color,index) in Work.COLOR' :style="{backgroundColor:color.COLOR}")
   .third-images
     span.third-images__wrap(v-for="(image,index) in Work.IMAGE" :key="image.index")
-      img.third-images--image(:src="image.IMAGE.url+'?auto=compress'")
+      img.third-images--image(:src="image.IMAGE.url+'?auto=compress&w=1000'")
       span.third-images--cover
   .fourth-button(v-show="Pagination.back !== '/works/undefined'")
     nuxt-link.fourth-button__link(:to="Pagination.back")
