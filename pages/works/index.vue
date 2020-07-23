@@ -5,7 +5,7 @@
     .works-page__wrap
       .works-item.works-first
         .works-item__image-wrap
-          img.works-item--thumbnail(:src="WORKS[0].THUMBNAIL.url+'?auto=compress'")
+          img.works-item--thumbnail(:src="WORKS[0].THUMBNAIL.url+'?auto=compress&w=600&h=600'")
         .works-item__body
           nuxt-link.works-item__body__title.works-item__body__contents(:to="'/works/'+WORKS[0].id")
             h2.works-item--title-text(style="opacity:1") {{WORKS[0].TITLE}}
@@ -18,7 +18,7 @@
 
       .works-item(v-for="(item,index) in WORKS" :key="item.id" v-if="index !== 0")
         .works-item__image-wrap
-          img.works-item--thumbnail(:src="item.THUMBNAIL.url+'?auto=compress'")
+          img.works-item--thumbnail(:src="item.THUMBNAIL.url+'?auto=compress&w=600&h=600'")
         .works-item__body
           nuxt-link.works-item__body__title.works-item__body__contents(:to="'/works/'+item.id")
             h2.works-item--title-text
