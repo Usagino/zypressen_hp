@@ -12,13 +12,17 @@
       @animCreated="handleAnimation")
   .menulist(v-show="!lottieOptions.toggle")
     ul.menulist__box
-      li(@click="menuToggle").menulist__box--top
+      li(@click="menuToggle").menulist__box__link
+        .hide-bar
         nuxt-link.menulist__box--link(to="/" :class="{'menulist__box--fadein':!lottieOptions.toggle}") TOP
-      li(@click="menuToggle").menulist__box--works
+      li(@click="menuToggle").menulist__box__link
+        .hide-bar
         nuxt-link.menulist__box--link(to="/works" :class="{'menulist__box--fadein':!lottieOptions.toggle}") WORKS
-      li(@click="menuToggle").menulist__box--about
+      li(@click="menuToggle").menulist__box__link
+        .hide-bar
         nuxt-link.menulist__box--link(to="/about" :class="{'menulist__box--fadein':!lottieOptions.toggle}") ABOUT
-      li(@click="menuToggle").menulist__box--contact
+      li(@click="menuToggle").menulist__box__link
+        .hide-bar
         nuxt-link.menulist__box--link(to="/contact" :class="{'menulist__box--fadein':!lottieOptions.toggle}") CONTACT
       li.social-button__list(@click="menuToggle" v-show="this.$ua.deviceType() === 'smartphone'")
         a.social-button__icon(href="https://twitter.com/home")
@@ -50,94 +54,64 @@ export default {
     }
   },
   mounted() {
-    const tl = gsap.timeline()
-    tl.set('.menulist__box--link', {
-      y: '150%',
-      z: '0',
-      rotateY: '-30deg',
-      scale: '1'
-    })
-    // this.hoverText()
+    // const tl = gsap.timeline()
+    // tl.set('.menulist__box--link', {
+    //   y: '150%',
+    //   z: '0',
+    //   rotateY: '-30deg',
+    //   scale: '1'
+    // })
   },
   methods: {
-    hoverText() {
-      const linkelement = document.querySelectorAll('.menulist__box--link')
-      linkelement.forEach((el, i) => {
-        el.addEventListener('mouseover', () => {
-          gsap.to(el, 0.3, { rotateY: '-15deg' })
-        })
-        el.addEventListener('mouseout', () => {
-          gsap.to(el, 0.3, { rotateY: '-30deg' })
-        })
-      })
-    },
     handleAnimation(anim) {
       this.anim = anim
       this.anim.setSpeed(3)
     },
     menuToggle() {
-      const tl = gsap.timeline()
+      const tl = gsap.timeline() // eslint-disable-line
 
       if (this.lottieOptions.toggle) {
-        console.log(this.lottieOptions.toggle)
-        gsap.set('html,body', { overflow: 'hidden' })
+        console.log('open')
         this.anim.setDirection(1)
         this.anim.play()
-        tl.to('.menulist', 0.2, {
-          y: 0
-        })
-          .to('.menulist__box--contact .menulist__box--link', 0.1, {
-            y: '0%',
-            delay: 0.5
-          })
-          .to('.menulist__box--about .menulist__box--link', 0.1, {
-            y: '0%'
-          })
-          .to('.menulist__box--works .menulist__box--link', 0.1, {
-            y: '0%'
-          })
-          .to('.menulist__box--top .menulist__box--link', 0.1, {
-            y: '0%'
-          })
-          .to('.social-button__icon', 0.1, {
-            y: '0%'
-          })
-          .set('.menulist__box--link', { pointerEvents: 'auto', delay: 1 })
         this.lottieOptions.toggle = !this.lottieOptions.toggle
+
+        tl.set('.menulist', { skewX: -20 }).to('.menulist', 0.4, {
+          x: 0,
+          skewX: 0
+        })
+        gsap.utils.toArray('.menulist__box__link').forEach((section, index) => {
+          // tl.to()
+          console.log(section.querySelector('.hide-bar'))
+          tl.to(section.querySelector('.hide-bar'), 0.2, {
+            x: 0
+          })
+            .set(section.querySelector('.menulist__box--link'), {
+              opacity: 1
+            })
+            .to(section.querySelector('.hide-bar'), 0.2, {
+              x: '100%',
+              delay: 0.1
+            })
+            .set(section.querySelector('.hide-bar'), { x: '-100%' })
+        })
       } else {
-        console.log(this.lottieOptions.toggle)
-        gsap.set('html,body', { overflow: 'scroll' })
+        console.log('close')
         this.anim.setDirection(-1)
         this.anim.play()
-
-        tl.set('.menulist__box--link', { pointerEvents: 'none' })
-        tl.to('.menulist__box--top .menulist__box--link', 0.1, {
-          y: '-150%'
+        tl.to('.menulist', 0.4, {
+          opacity: 0,
+          delay: 0.3
         })
-          .to('.menulist__box--works .menulist__box--link', 0.1, {
-            y: '-150%'
+          .set('.menulist', {
+            x: '-100%',
+            opacity: 1
           })
-          .to('.menulist__box--about .menulist__box--link', 0.1, {
-            y: '-150%'
-          })
-          .to('.menulist__box--contact .menulist__box--link', 0.1, {
-            y: '-150%'
-          })
-          .to('.social-button__icon', 0.1, {
-            y: '-100%'
-          })
-          .to('.menulist', 0.4, {
-            y: '-100%',
-            delay: 0.3,
+          .set('.menulist__box--link', {
+            opacity: 0,
             onComplete: () => {
               this.lottieOptions.toggle = !this.lottieOptions.toggle
             }
-          })
-          .set('.menulist,.social-button__icon', {
-            y: '100%'
-          })
-          .set('.menulist__box--link', {
-            y: '150%'
           })
       }
     }
@@ -167,7 +141,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateY(100%);
+  transform: translateX(-100%);
   &__box {
     width: 100%;
     position: absolute;
@@ -175,40 +149,32 @@ export default {
     @include secondary-margin;
     box-sizing: border-box;
     z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     @include mq(sm) {
       @include gap-bottom(8px);
     }
     li {
-      perspective: 500;
+      display: inline-block;
+      height: fit-content;
+      width: fit-content;
       overflow: hidden;
-      -webkit-perspective: 500;
-      -moz-perspective: 500;
-      transform-origin: right center;
-      will-change: transform;
-    }
-    &--top {
-      transform: rotate(-4deg);
-    }
-    &--works {
-      transform: rotate(-1.5deg);
-    }
-    &--about {
-      transform: rotate(1.5deg);
-    }
-    &--contact {
-      transform: rotate(4deg);
+      position: relative;
+      .hide-bar {
+        @include hide-bar;
+        z-index: 10;
+      }
     }
     &--link {
-      text-align: right;
-      transform-origin: right center;
-      transform-style: preserve-3d;
-      will-change: transform;
+      opacity: 0;
+      text-align: center;
       @include font-title-first;
       display: block;
       line-height: 80px;
       transition: all 300ms ease;
-      pointer-events: none;
-
+      // pointer-events: none;
       @include mq(sm) {
         line-height: 100%;
       }
@@ -231,7 +197,6 @@ export default {
     &__icon {
       height: fit-content;
       display: block;
-      transform: translateY(100%);
     }
     @include mq(sm) {
       display: none;

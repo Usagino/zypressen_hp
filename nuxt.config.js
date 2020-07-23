@@ -35,7 +35,6 @@ export default {
     { src: '@/assets/stylesheets/style.scss', lang: 'scss' }
   ],
   plugins: [
-    // '@/plugins/components.js',
     '@/plugins/day.js',
     '@/plugins/globalMethods.js',
     { src: '@/plugins/components', ssr: false },

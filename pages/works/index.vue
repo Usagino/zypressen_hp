@@ -16,7 +16,7 @@
             p.works-item--time-text(style="opacity:1") Created  - <span>{{ $dayjs(WORKS[0].DATE).format('MMM , DD , YYYY') }}</span>
             .works-item--bar
 
-      .works-item(v-for="(item,index) in WORKS" :key="item.id" v-show="index !== 0")
+      .works-item(v-for="(item,index) in WORKS" :key="item.id" v-if="index !== 0")
         .works-item__image-wrap
           img.works-item--thumbnail(:src="item.THUMBNAIL.url+'?auto=compress'")
         .works-item__body
@@ -184,7 +184,7 @@ export default {
   @include full-screen;
   display: grid;
   grid-template-columns: repeat(2, 50%);
-  grid-template-rows: 1fr;
+  grid-template-rows: 100%;
   @include mq(sm) {
     width: 100vw !important;
     height: 100vw !important;
@@ -196,6 +196,8 @@ export default {
     width: 50vw;
     height: 100%;
     height: 100%;
+    display: grid;
+    place-items: center;
     @include mq(sm) {
       position: absolute;
       top: 0;
@@ -206,7 +208,9 @@ export default {
     }
   }
   &--thumbnail {
-    @include full-size;
+    height: 60vh;
+    width: 60vh;
+    box-sizing: border-box;
     object-fit: cover;
   }
   &--bar {

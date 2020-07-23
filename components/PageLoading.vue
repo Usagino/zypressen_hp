@@ -12,6 +12,10 @@ export default {
       loading: false
     }
   },
+  mounted() {
+    const target = document.querySelector('.webgl')
+    console.log(target)
+  },
   methods: {
     start() {
       this.loading = true

@@ -21,6 +21,7 @@ class Common {
     this.model = null
     this.currentPath = null
     this.ground = null
+    this.currentToppage = false
     // event bus
     EventBus.$on('passingThePath', this.appliedPath.bind(this))
   }
@@ -65,7 +66,23 @@ class Common {
       // this.Helpers()
       // this.datGUI()
       // this.tweakpane()
-      console.log('読み込み完了')
+      const target = document.querySelector('.webgl')
+      console.log(target)
+      target.classList.add('model_load')
+      // if (this.currentToppage) {
+      //   // // scroll
+      //   gsap.utils.toArray('.link-window').forEach((section, index) => {
+      //     console.log(section)
+      //     gsap.to(this.model.rotation, 0.3, {
+      //       scrollTrigger: {
+      //         trigger: section,
+      //         start: 'top top',
+      //         scrub: true
+      //       },
+      //       y: Math.PI * 2
+      //     })
+      //   })
+      // }
     })
   }
 
@@ -100,6 +117,7 @@ class Common {
   }
 
   AnimateTopPage() {
+    this.currentToppage = true
     if (this.model) {
       gsap.to(this.model.rotation, 2, {
         y: -2 * Math.PI,
@@ -115,32 +133,26 @@ class Common {
         y: 22,
         x: 0
       })
-      // scroll
-      gsap.utils.toArray('.link-window').forEach((section, index) => {
-        gsap.to(this.model.rotation, 0.3, {
-          scrollTrigger: {
-            trigger: section,
-            start: 'top top',
-            scrub: true
-          },
-          y: Math.PI * 2
-        })
-      })
     }
   }
 
   AnimateWorksPage() {
+    this.currentToppage = false
     if (this.model) {
-      gsap.to(this.model.position, 2, {
-        x: -100
+      gsap.to(this.model.rotation, 2, {
+        y: -2 * Math.PI,
+        onComplete: () => {
+          this.model.rotation.y = 0
+        }
       })
       gsap.to(this.camera.position, 2, {
-        z: -100
+        x: 30
       })
     }
   }
 
   AnimateAboutPage() {
+    this.currentToppage = false
     if (this.model) {
       gsap.to(this.model.rotation, 2, {
         y: -2 * Math.PI,
@@ -155,9 +167,13 @@ class Common {
   }
 
   AnimateContactPage() {
+    this.currentToppage = false
     if (this.model) {
       gsap.to(this.model.rotation, 3, {
-        y: 0
+        y: -2 * Math.PI,
+        onComplete: () => {
+          this.model.rotation.y = 0
+        }
       })
       gsap.to(this.model.position, 2, {
         x: 0

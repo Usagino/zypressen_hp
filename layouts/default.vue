@@ -15,9 +15,9 @@ import EventBus from '@/utils/event-bus' // eslint-disable-line
 export default {
   mixins: [deviceMixin],
   mounted() {
-    addEventListener('keydown', (event) => {
-      console.log(event.code)
-    })
+    // addEventListener('keydown', (event) => {
+    //   console.log(event.code)
+    // })
     const babseStyle = [
       'padding:4px 12px',
       'font-size: 8px',
