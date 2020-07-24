@@ -46,7 +46,6 @@ export default {
       linkStyle
     )
   },
-
   methods: {}
 }
 </script>
