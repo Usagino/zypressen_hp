@@ -52,6 +52,7 @@ export default {
     // this.keyUp(this.scrollToPrev)
     // this.autoScroll()
   },
+
   methods: {
     scrollToPrev() {
       gsap.registerPlugin(ScrollToPlugin)

@@ -20,21 +20,28 @@ export default {
   mounted() {
     // const target = document.querySelector('.webgl')
     // console.log(target)
-    const tl = gsap.timeline()
-    tl.set('html,body', { overflow: 'hidden' })
-      .to('.loading__progress__bar', 14, {
-        scaleX: '1',
-        delay: 1
-      })
-      .set('html,body', {
-        overflow: 'scroll',
-        onComplete: () => {
-          console.log(this.animateProgress)
-          this.animateProgress = false
-        }
-      })
+    if (!this.hostNameToggle()) {
+      const tl = gsap.timeline()
+      tl.set('html,body', { overflow: 'hidden' })
+        .to('.loading__progress__bar', 14, {
+          scaleX: '1',
+          delay: 1
+        })
+        .set('html,body', {
+          overflow: 'scroll',
+          onComplete: () => {
+            console.log(this.animateProgress)
+            this.animateProgress = false
+          }
+        })
+    } else {
+      this.animateProgress = false
+    }
   },
   methods: {
+    hostNameToggle() {
+      return document.location.hostname === 'localhost'
+    },
     start() {
       this.loading = true
     },

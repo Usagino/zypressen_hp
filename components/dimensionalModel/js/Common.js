@@ -1,4 +1,7 @@
 import { gsap } from 'gsap' // eslint-disable-line
+import {TweenMax} from 'gsap' // eslint-disable-line
+import { ScrollTrigger } from 'gsap/ScrollTrigger' // eslint-disable-line
+
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js' // eslint-disable-line
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js' // eslint-disable-line
@@ -21,8 +24,10 @@ class Common {
     this.model = null
     this.currentPath = null
     this.ground = null
-    this.currentToppage = false
+    this.tween = gsap
+    this.scrollAnime = null
     // event bus
+    EventBus.$off('passingThePath')
     EventBus.$on('passingThePath', this.appliedPath.bind(this))
   }
 
@@ -66,23 +71,6 @@ class Common {
       // this.Helpers()
       // this.datGUI()
       // this.tweakpane()
-      const target = document.querySelector('.webgl')
-      console.log(target)
-      target.classList.add('model_load')
-      // if (this.currentToppage) {
-      //   // // scroll
-      //   gsap.utils.toArray('.link-window').forEach((section, index) => {
-      //     console.log(section)
-      //     gsap.to(this.model.rotation, 0.3, {
-      //       scrollTrigger: {
-      //         trigger: section,
-      //         start: 'top top',
-      //         scrub: true
-      //       },
-      //       y: Math.PI * 2
-      //     })
-      //   })
-      // }
     })
   }
 
@@ -96,10 +84,6 @@ class Common {
   }
 
   switchAnime() {
-    EventBus.$on('moveDefaultPosition', this.AnimateTopPage)
-    EventBus.$on('moveModelFadeOut', this.AnimateWorksPage)
-    EventBus.$on('animateAboutPage', this.AnimateAboutPage)
-    EventBus.$on('moveShowBack', this.AnimateContactPage)
     switch (this.currentPath) {
       case 'index':
         this.AnimateTopPage(this.model, this.camera)
@@ -117,7 +101,6 @@ class Common {
   }
 
   AnimateTopPage() {
-    this.currentToppage = true
     if (this.model) {
       gsap.to(this.model.rotation, 2, {
         y: -2 * Math.PI,
@@ -133,11 +116,24 @@ class Common {
         y: 22,
         x: 0
       })
+      //  scroll methods
+      const target = document.querySelector('body')
+      ScrollTrigger.create({
+        trigger: target,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: true,
+        onUpdate: ({ progress }) => {
+          if (this.currentPath === 'index') {
+            gsap.to(this.model.rotation, 1, { y: progress * Math.PI * 2 })
+            console.log(progress * Math.PI * 2)
+          }
+        }
+      })
     }
   }
 
   AnimateWorksPage() {
-    this.currentToppage = false
     if (this.model) {
       gsap.to(this.model.rotation, 2, {
         y: -2 * Math.PI,
@@ -152,7 +148,6 @@ class Common {
   }
 
   AnimateAboutPage() {
-    this.currentToppage = false
     if (this.model) {
       gsap.to(this.model.rotation, 2, {
         y: -2 * Math.PI,
@@ -167,7 +162,6 @@ class Common {
   }
 
   AnimateContactPage() {
-    this.currentToppage = false
     if (this.model) {
       gsap.to(this.model.rotation, 3, {
         y: -2 * Math.PI,

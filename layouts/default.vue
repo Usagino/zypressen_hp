@@ -1,6 +1,6 @@
 <template lang="pug">
   .page
-    nuxt-link.page__logo(to="/")
+    nuxt-link.page__logo(to="/" no-prefetch)
       img.page__logo__image(src="/PageLogo.svg")
     PageLoading
     PageMenu
