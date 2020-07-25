@@ -1,45 +1,49 @@
+import { gsap } from 'gsap' // eslint-disable-line
+import {TweenMax} from 'gsap' // eslint-disable-line
+import { ScrollTrigger } from 'gsap/ScrollTrigger' // eslint-disable-line
+
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'// eslint-disable-line
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'// eslint-disable-line
-import { TimelineMax, TweenMax } from 'gsap' // eslint-disable-line
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js' // eslint-disable-line
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js' // eslint-disable-line
 import EventBus from "~/utils/event-bus"; // eslint-disable-line
+// import dat from 'dat.gui';// eslint-disable-line
 
 class Common {
   constructor() {
     this.scene = null
     this.camera = null
-    this.light = null
+    this.spotLight = null
+    this.AmbientLight = null
     this.renderer = null
     this.size = {
       windowW: null,
       windowH: null
     }
-    this.tl = null
     this.loader = null
     this.dracoLoader = null
-    this.dusts = null
-    EventBus.$on('MOVE_MODEL', this.onChange.bind(this))
+    this.model = null
+    this.currentPath = null
+    this.ground = null
+    this.tween = gsap
+    this.scrollAnime = null
   }
 
-  init($canvas) {
+  init(props) {
     this.setSize()
-    this.tl = new TimelineMax()
-
-    // renderer
-    this.renderer = new THREE.WebGLRenderer({
-      canvas: $canvas
-    })
-    this.renderer.setClearColor(new THREE.Color(0x000000))
-    this.renderer.shadowMap.enabled = true
-    this.renderer.gammaOutput = true
     // scene
     this.scene = new THREE.Scene()
-    this.scene.fog = new THREE.Fog(0x000000, -20, 300)
-    // light
-    this.Light = new THREE.DirectionalLight(0xffffff, 4)
-    this.Light.position.set(40, 120, 80)
-    this.Light.castShadow = true
-    this.scene.add(this.Light)
+    // renderer
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: props.$canvas,
+      antialias: true
+    })
+    // this.renderer.setClearColor(new THREE.Color(0x000000))
+    this.renderer.shadowMap.enabled = true
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap
+    this.renderer.outputEncoding = THREE.sRGBEncoding
+
+    this.scene.fog = new THREE.Fog(0x000000, -10, 300)
+
     // camera
     this.camera = new THREE.PerspectiveCamera(
       45,
@@ -47,12 +51,126 @@ class Common {
       0.1,
       1000
     )
-    this.camera.position.set(0, 20, 150)
-    this.camera.lookAt(this.scene.position)
+    this.camera.position.set(0, 0, 100)
+    this.camera.lookAt(new THREE.Vector3(0, 0, 0))
+    this.camera.position.y = 22
     this.renderer.setSize(this.size.windowW, this.size.windowH)
-    // this.cube()
-    this.gltfModel()
-    this.dustAdd()
+    // model before
+    this.dracoLoader = new DRACOLoader()
+    this.dracoLoader.setDecoderPath('/draco/')
+    this.loader = new GLTFLoader()
+    this.loader.setDRACOLoader(this.dracoLoader)
+    const url = '/ayumu.glb'
+    this.loader.load(url, (gltf) => {
+      this.spotLightAdd()
+      this.modelAdd(gltf)
+      this.groundAdd()
+      this.switchAnime(props.$path)
+      EventBus.$on('passingThePath', this.switchAnime.bind(this))
+
+      // this.Helpers()
+      // this.datGUI()
+      // this.tweakpane()
+    })
+  }
+
+  switchAnime(name) {
+    this.currentPath = name
+    switch (this.currentPath) {
+      case 'index':
+        this.AnimateTopPage(this.model, this.camera)
+        break
+      case 'works':
+        this.AnimateWorksPage(this.model, this.camera)
+        break
+      case 'about':
+        this.AnimateAboutPage(this.model, this.camera)
+        break
+      case 'contact':
+        this.AnimateContactPage(this.model, this.camera)
+        break
+    }
+  }
+
+  AnimateTopPage() {
+    if (this.model) {
+      gsap.to(this.model.rotation, 2, {
+        y: -2 * Math.PI,
+        onComplete: () => {
+          this.model.rotation.y = 0
+        }
+      })
+      gsap.to(this.model.position, 2, {
+        x: 0
+      })
+      gsap.to(this.camera.position, 2, {
+        z: 100,
+        y: 22,
+        x: 0
+      })
+      //  scroll methods
+      const target = document.querySelector('body')
+      const sc = ScrollTrigger
+      sc.create({
+        trigger: target,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: true,
+        onUpdate: ({ progress }) => {
+          if (this.currentPath === 'index') {
+            gsap.to(this.model.rotation, 1, { y: progress * Math.PI * 6 })
+          }
+        }
+      })
+      // ---
+    }
+  }
+
+  AnimateWorksPage() {
+    if (this.model) {
+      gsap.to(this.model.rotation, 2, {
+        y: -2 * Math.PI,
+        onComplete: () => {
+          this.model.rotation.y = 0
+        }
+      })
+      gsap.to(this.camera.position, 2, {
+        x: 30
+      })
+    }
+  }
+
+  AnimateAboutPage() {
+    if (this.model) {
+      gsap.to(this.model.rotation, 2, {
+        y: -2 * Math.PI,
+        onComplete: () => {
+          this.model.rotation.y = 0
+        }
+      })
+      gsap.to(this.camera.position, 2, {
+        x: -30
+      })
+    }
+  }
+
+  AnimateContactPage() {
+    if (this.model) {
+      gsap.to(this.model.rotation, 3, {
+        y: -2 * Math.PI,
+        onComplete: () => {
+          this.model.rotation.y = 0
+        }
+      })
+      gsap.to(this.model.position, 2, {
+        x: 0
+      })
+      gsap.to(this.camera.position, 2, {
+        z: 33,
+        x: 0,
+        y: 36
+      })
+    }
   }
 
   setSize() {
@@ -66,6 +184,7 @@ class Common {
     this.setSize()
     this.camera.aspect = this.size.windowW / this.size.windowH
     this.camera.updateProjectionMatrix()
+    this.renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer.setSize(this.size.windowW, this.size.windowH)
   }
 
@@ -73,74 +192,131 @@ class Common {
     this.renderer.render(this.scene, this.camera)
   }
 
-  onChange(direction) {
-    console.log(direction)
+  spotLightAdd() {
+    this.spotLight = new THREE.SpotLight(0x5c5c5c)
+    this.spotLight.position.set(0, 60, 30)
+    this.spotLight.angle = Math.PI
+    this.spotLight.penumbra = 0.5
+    this.spotLight.decay = 2
+    this.spotLight.intensity = 2
+    this.spotLight.distance = 300
+
+    this.spotLight.castShadow = true
+    this.spotLight.shadow.mapSize.width = 2048
+    this.spotLight.shadow.mapSize.height = 2048
+    this.spotLight.shadow.camera.near = 10
+    this.spotLight.shadow.camera.far = 200
+    this.scene.add(this.spotLight)
   }
 
-  gltfModel() {
-    this.dracoLoader = new DRACOLoader()
-    this.dracoLoader.setDecoderPath('/draco/')
-    this.loader = new GLTFLoader()
-    this.loader.setDRACOLoader(this.dracoLoader)
-    const url = '/gltf/tel_min.gltf'
-    this.loader.load(url, (gltf) => {
-      this.model = gltf.scene
-      this.model.scale.set(10.0, 10.0, 10.0)
-      // this.model.castShadow = true
-      this.scene.add(this.model)
-      // this.ternModel()
+  modelAdd(gltf) {
+    this.model = gltf.scene
+    this.model.scale.set(20, 20, 20)
+    this.model.position.y = 8
+    this.model.castShadow = true
+    this.scene.add(this.model)
+  }
+
+  groundAdd() {
+    const geometry = new THREE.BoxGeometry(1000000, 0, 1000000)
+    const material = new THREE.MeshStandardMaterial({
+      color: 0x666666,
+      roughness: 0.2
     })
+    this.ground = new THREE.Mesh(geometry, material)
+    /// this.ground.rotation.x = Math.PI / 2
+
+    this.ground.receiveShadow = true
+    this.ground.position.y = 1
+    this.scene.add(this.ground)
   }
 
-  cube() {
-    const geometry = new THREE.BoxGeometry(10, 10, 10)
-    const material = new THREE.MeshBasicMaterial({
-      color: 0xff0000,
-      repeat: -1
+  Helpers() {
+    const axes = new THREE.AxesHelper(2000)
+    this.scene.add(axes)
+    // const gridHelper = new THREE.GridHelper(200, 50) // 引数は サイズ、1つのグリッドの大きさ
+    // this.scene.add(gridHelper)
+    const LightHelper = new THREE.SpotLightHelper(this.spotLight)
+    this.scene.add(LightHelper)
+
+    // const spotLightShadowHelper = new THREE.CameraHelper(
+    //   this.spotLight.shadow.camera
+    // )
+    // this.scene.add(spotLightShadowHelper)
+    const helperGround = new THREE.BoxHelper(this.ground, 0xff0000) // eslint-disable-line
+    this.scene.add(helperGround)
+  }
+
+  tweakpane() {
+    const Tweakpane = require('tweakpane') // eslint-disable-line
+    const pane = new Tweakpane()
+    const cameraFl = pane.addFolder({
+      title: 'CAMERA'
     })
-    const mesh = new THREE.Mesh(geometry, material)
-
-    this.tl.to(mesh.rotation, 10, { y: -2 * Math.PI, repeat: -1 })
-    this.scene.add(mesh)
-  }
-
-  dustAdd() {
-    const geometry = new THREE.Geometry()
-    // 表示する範囲を宣言して
-    const SIZE = 200
-    // 表示するパーティクルの数を決めて
-    const LENGTH = 5000
-    // その数まで四方八方に表示させるループ処理をする
-    for (let i = 0; i < LENGTH; i++) {
-      geometry.vertices.push(
-        new THREE.Vector3(
-          SIZE * (Math.random() - 0.5),
-          SIZE * (Math.random() - 0.5),
-          SIZE * (Math.random() - 0.5)
-        )
-      )
+    const CAMERA = {
+      X: this.camera.position.x,
+      Y: this.camera.position.y,
+      Z: this.camera.position.z
     }
-    const texture = new THREE.TextureLoader().load('/dust.png')
-    // const material = new THREE.MeshBasicMaterial({ map: texture })
-    let material = new THREE.PointsMaterial()
-    if (material.map) {
-      material.map.dispose() // これを必ず呼ぶこと！！！
-      material.map = texture
-    } else {
-      material = new THREE.PointsMaterial({
-        // color: '0xffffff',
-        size: 2,
-        map: texture,
-        transparent: true
+    cameraFl
+      .addInput(CAMERA, 'X', {
+        min: -200,
+        max: 200
       })
-    }
+      .on('change', (val) => {
+        this.camera.position.x = val
+      })
+    cameraFl
+      .addInput(CAMERA, 'Y', {
+        min: -200,
+        max: 0
+      })
+      .on('change', (val) => {
+        this.camera.position.y = val
+      })
+    cameraFl
+      .addInput(CAMERA, 'Z', {
+        min: -200,
+        max: 200
+      })
+      .on('change', (val) => {
+        this.camera.position.z = val
+      })
+  }
 
-    this.dusts = new THREE.Points(geometry, material)
-    this.tl.to(this.dusts.rotation, 600, {
-      y: -2 * Math.PI,
-      repeat: -1
-    })
-    this.scene.add(this.dusts)
+  datGUI() {
+    const dat = require('dat.gui') // eslint-disable-line
+    this.gui = new dat.GUI()
+    // const light = this.gui.addFolder('Light')
+    // light.add(this.spotLight, 'penumbra', 1, 2).listen()
+    // light.add(this.spotLight, 'decay', 0, 10).listen()
+    // light.add(this.spotLight, 'distance', 1, 1000).listen()
+    // light.add(this.spotLight, 'angle', 0, Math.PI).listen()
+    // light.add(this.spotLight, 'intensity', 0, 3).listen()
+    // light.open()
+    //
+    // const lightPos = this.gui.addFolder('Light Position')
+    // lightPos.add(this.spotLight.position, 'x', -200, 200).listen()
+    // lightPos.add(this.spotLight.position, 'y', 0, 200).listen()
+    // lightPos.add(this.spotLight.position, 'z', -200, 200).listen()
+    // lightPos.open()
+    //
+    // const lightShadow = this.gui.addFolder('Light Shadow')
+    // lightShadow
+    //   .add(this.spotLight.shadow.mapSize, 'width', -2000, 2000)
+    //   .listen()
+    // lightShadow
+    //   .add(this.spotLight.shadow.mapSize, 'height', -2000, 2000)
+    //   .listen()
+    // lightShadow.add(this.spotLight.shadow.camera, 'near', -20, 20).listen()
+    // lightShadow.add(this.spotLight.shadow.camera, 'far', -400, 400).listen()
+    // lightShadow.open()
+    //
+    const camera = this.gui.addFolder('Camera position')
+    camera.add(this.camera.position, 'x', -200, 200).listen()
+    camera.add(this.camera.position, 'y', -200, 200).listen()
+    camera.add(this.camera.position, 'z', -200, 200).listen()
+    camera.open()
   }
 }
 export default new Common()

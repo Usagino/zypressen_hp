@@ -1,11 +1,12 @@
-const axios = require('axios')
+const metaData = require('./assets/json/meta.json') // eslint-disable-line
 require('dotenv').config()
-const { CMSKEY } = process.env
 export default {
   mode: 'universal',
+  target: 'static',
   head: {
     title: 'ZYPRESSEN',
     meta: [
+      ...metaData,
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
@@ -23,27 +24,27 @@ export default {
       },
       {
         rel: 'stylesheet',
-        type: 'text/css',
-        href: '//cloud.typenetwork.com/projects/3724/fontface.css/'
+        // type: 'text/css',
+        href: 'https://cloud.typenetwork.com/projects/3724/fontface.css/'
       }
     ]
   },
   loading: { color: '#fff' },
-
   css: [
     { src: '~/assets/stylesheets/reset.css', lang: 'css' },
     { src: '@/assets/stylesheets/style.scss', lang: 'scss' }
   ],
-
   plugins: [
-    '@/plugins/components.js',
-    '~plugins/day.js',
-    '~plugins/globalMethods.js',
-    { src: '~/plugins/axios', ssr: false }
+    '@/plugins/day.js',
+    '@/plugins/globalMethods.js',
+    { src: '@/plugins/components', ssr: false },
+    { src: '@/plugins/axios', ssr: false }
   ],
-
-  buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/stylelint-module'],
-
+  buildModules: [
+    '@nuxt/components',
+    '@nuxtjs/eslint-module',
+    '@nuxtjs/stylelint-module'
+  ],
   modules: [
     '@nuxtjs/pwa',
     '@nuxtjs/axios',
@@ -62,16 +63,14 @@ export default {
   },
   webfontloader: {
     google: {
-      families: ['Teko:700', 'Roboto:400,700']
+      families: ['Noto+Sans+JP:400;500', 'Roboto:400,700']
     }
   },
+  axios: {},
   optimizedImages: {
     optimizeImages: true
   },
-  env: {
-    CMSKEY
-  },
-  axios: {},
+  env: { CMSKEY: process.env.CMSKEY },
   build: {
     extend(config, ctx) {
       if (config.module) {
@@ -81,28 +80,10 @@ export default {
         })
       }
     },
-    transpile: ['three']
+    transpile: ['three', 'gsap']
   },
+  components: ['~/components'],
   generate: {
-    routes() {
-      console.log('Generate start')
-      console.log('🔑', process.env.CMSKEY)
-
-      const posts = axios
-        .get('https://zypressen.microcms.io/api/v1/works', {
-          headers: { 'X-API-KEY': process.env.CMSKEY }
-        })
-        .then((res) => {
-          return res.data.contents.map((post) => {
-            console.log('/works/' + post.id)
-            return '/works/' + post.id
-          })
-        })
-
-      console.log('🏁Generate Finish')
-      return Promise.all([posts]).then((values) => {
-        return values.join().split(',')
-      })
-    }
+    exclude: ['/works/undefined']
   }
 }

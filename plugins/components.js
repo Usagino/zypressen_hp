@@ -1,14 +1,14 @@
-// import Vue from 'vue/dist/vue.esm.js'
-import Vue from 'vue'
-
-import Logo from '@/components/Logo'
-import PageMenuIcon from '~/components/PageMenuIcon'
-import lottie from '~/components/lottie'
-import PageScroll from '~/components/PageScroll'
-import imgWebp from '~/components/imgWebp'
-
-Vue.component('Logo', Logo)
-Vue.component('PageMenuIcon', PageMenuIcon)
-Vue.component('lottie', lottie)
-Vue.component('PageScroll', PageScroll)
-Vue.component('imgWebp', imgWebp)
+// // import Vue from 'vue/dist/vue.esm.js'
+// import Vue from 'vue'
+//
+// import lottie from '~/components/lottie'// eslint-disable-line
+// import pageScroll from '~/components/pageScroll'// eslint-disable-line
+// import imgWebp from '~/components/imgWebp'// eslint-disable-line
+// import mouseStoker from '~/components/mouseStoker'// eslint-disable-line
+// import scrollBar from '~/components/scrollBar'// eslint-disable-line
+//
+// Vue.component('lottie', lottie)
+// Vue.component('pageScroll', pageScroll)
+// Vue.component('imgWebp', imgWebp)
+// Vue.component('mouseStoker', mouseStoker)
+// Vue.component('scrollBar', scrollBar)

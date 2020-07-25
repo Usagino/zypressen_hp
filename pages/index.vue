@@ -1,204 +1,245 @@
 <template lang="pug">
-.container.pageAyumukun
-  .switch_linked
-    .switch_linked__wrap
-      .switch_linked__wrap__text
-        p.s-lw-top(@click="modelFunction('hoge')") ZYPRESSEN
-        nuxt-link.s-lw-works(to="/works") WORKS
-        nuxt-link.s-lw-about(to="/about") ABOUT
-        nuxt-link.s-lw-contact(to="/contact") CONTACT
-  .switch_linked__scroll
-    p SCROLL
+  .container
+    ScrollBar
+    MouseStoker
+    .top-page
+      .link-window.fisrt
+        .link-window__wrap
+          p.link-window--text(style="opacity:1") HELLO!!
+      .link-window(v-for="data in linkData")
+        .link-window__wrap
+          nuxt-link.link-window--text(:to="data.link") {{ data.name }}
+          .link-window--bar
+    .navigation
+      .navigation__wrap
+        p.navigation--current.navigation--num(v-for="i of 4") {{'0'+i}}
+      .navigation--bar
+      p.navigation--maxnum.navigation--num 04
+    .scroll-wire
+      .scroll-wire__text
+        p.scroll-wire--item SCROLL
+        .scroll-wire--bar
 </template>
 
 <script>
-import { TimelineMax } from 'gsap'
-import dimensionalModel from '@/components/dimensionalModel'
-import EventBus from "~/utils/event-bus"; // eslint-disable-line
+import { gsap } from 'gsap' // eslint-disable-line
+import { ScrollTrigger } from "gsap/ScrollTrigger";  // eslint-disable-line
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";  // eslint-disable-line
 
 export default {
-  components: {
-    dimensionalModel
-  },
   data() {
-    const tl = new TimelineMax()
     return {
-      tl,
-      animaChangeCount: 1,
-      PreviousClass: 'top'
+      screenHeight: 0,
+      linkData: [
+        {
+          name: 'WORKS',
+          link: '/works'
+        },
+        {
+          name: 'ABOUT',
+          link: '/about'
+        },
+        {
+          name: 'CONTACT',
+          link: '/contact'
+        }
+      ]
     }
   },
-
   mounted() {
-    this.tl
-      .set('.s-lw-top', {
-        display: 'block'
-      })
-      .to('.s-lw-top', 0.3, {
-        y: '0%',
-        ease: 'ease-in',
-        delay: 2,
-        rotate: '0deg'
-      })
-    this.pageNoScroll()
-    this.wheelAction()
-    this.swipeAciton()
+    this.changeLinkText()
+    // this.keyDown(this.scrollToNext)
+    // this.keyUp(this.scrollToPrev)
+    // this.autoScroll()
   },
+
   methods: {
-    modelFunction(direction) {
-      EventBus.$emit('MOVE_MODEL', direction)
+    scrollToPrev() {
+      gsap.registerPlugin(ScrollToPlugin)
+      gsap.registerPlugin(ScrollTrigger)
+      let displayEl = 0 // eslint-disable-line
+      const linkWindowArray = document.querySelectorAll('.link-window')
+      linkWindowArray.forEach((section, index) => {
+        ScrollTrigger.create({
+          trigger: section,
+          onEnter: () => {
+            displayEl = linkWindowArray[index - 1]
+          }
+        })
+      })
+      gsap.to(window, { duration: 0.7, scrollTo: { y: displayEl } })
     },
-    wheelAction() {
-      // Function of the wheel. Scrolling at a constant power will do the job.
-      let wheelToggle = true
-      window.onmousewheel = (event) => {
-        const wheelPower = 10
-        if (event.wheelDelta > wheelPower && wheelToggle) {
-          this.animaChangeCount -= 1
-          if (this.animaChangeCount <= 0) {
-            this.animaChangeCount = 4
+    scrollToNext() {
+      gsap.registerPlugin(ScrollToPlugin)
+      gsap.registerPlugin(ScrollTrigger)
+      let displayEl = 0
+      let nowPosY = 0
+      const linkWindowArray = document.querySelectorAll('.link-window')
+      linkWindowArray.forEach((section, index) => {
+        ScrollTrigger.create({
+          trigger: section,
+          onEnter: (el) => {
+            displayEl = linkWindowArray[index + 1]
+            nowPosY = el.end
           }
-          // this.changeAnimation(this.animaChangeCount)
-          this.changeTitleText(this.animaChangeCount)
-          wheelToggle = false
-          setTimeout(() => {
-            wheelToggle = true
-          }, 1000)
-        } else if (event.wheelDelta < wheelPower * -1 && wheelToggle) {
-          this.animaChangeCount += 1
-          if (this.animaChangeCount >= 5) {
-            this.animaChangeCount = 1
-          }
-          // this.changeAnimation(this.animaChangeCount)
-          this.changeTitleText(this.animaChangeCount)
-          wheelToggle = false
-          setTimeout(() => {
-            wheelToggle = true
-          }, 1000)
-        }
+        })
+      })
+      const wh = window.innerHeight * -1 // eslint-disable-line
+
+      if (document.body.clientHeight !== nowPosY) {
+        gsap.to(window, {
+          duration: 1,
+          scrollTo: { y: displayEl }
+        })
+      } else {
+        gsap.to(window, { duration: 1, scrollTo: { y: 0 } })
       }
     },
-    swipeAciton() {
-      window.addEventListener('touchstart', (event) => {
-        this.swipeStart = event.changedTouches[0].pageY
-      })
-      window.addEventListener('touchend', (event) => {
-        this.swipeEnd = event.changedTouches[0].pageY
-        const absValue = Math.abs(this.swipeStart - this.swipeEnd)
-        if (absValue > 100) {
-          if (this.swipeStart > this.swipeEnd) {
-            console.log('👇', absValue)
-            this.animaChangeCount -= 1
-            if (this.animaChangeCount <= 0) {
-              this.animaChangeCount = 4
+    autoScroll() {
+      gsap.registerPlugin(ScrollToPlugin)
+      gsap.registerPlugin(ScrollTrigger)
+      gsap.utils.toArray('.link-window').forEach((section, index) => {
+        console.log(section)
+        gsap.timeline({// eslint-disable-line
+          scrollTrigger: {
+            trigger: section,
+            onEnter: () => {
+              gsap.to(window, { duration: 0.6, scrollTo: section, delay: 0.6 })
             }
-            this.changeTitleText(this.animaChangeCount)
-          } else {
-            console.log('☝️', absValue)
-            this.animaChangeCount += 1
-            if (this.animaChangeCount >= 5) {
-              this.animaChangeCount = 1
-            }
-            this.changeTitleText(this.animaChangeCount)
           }
+        })
+      })
+    },
+    changeLinkText() {
+      gsap.registerPlugin(ScrollToPlugin)
+      gsap.registerPlugin(ScrollTrigger)
+      gsap.utils.toArray('.link-window').forEach((section, index) => {
+        if (!section.className.includes('fisrt')) {
+          const tl = gsap.timeline({// eslint-disable-line
+            scrollTrigger: {
+              trigger: section.querySelector('.link-window--text'),
+              toggleActions: 'play none play reset'
+            }
+          })
+          tl.to(section.querySelector(`.link-window--bar`), 0.3, {
+            x: 0,
+            delay: 0.7
+          })
+            .set(section.querySelector(`.link-window--text`), { opacity: 1 })
+            .to(section.querySelector(`.link-window--bar`), 0.3, {
+              x: '101%'
+            })
+            .to(section, { delay: 1 })
+
+          gsap.to(`.navigation--current:nth-child(${index + 1})`, 0.3, {
+            scrollTrigger: {
+              trigger: section.querySelector(`.link-window--text`),
+              toggleActions: 'play reverse resume reverse'
+            },
+            y: 0
+          })
         }
       })
-    },
-    changeTitleText(number) {
-      switch (number) {
-        case 1:
-          console.log(number)
-          this.switchText('top')
-          EventBus.$emit('MOVE_MODEL', 'TOP')
-          this.PreviousClass = 'top'
-          break
-        case 2:
-          console.log(number)
-          this.switchText('works')
-          EventBus.$emit('MOVE_MODEL', 'WORKS')
-          this.PreviousClass = 'works'
-          break
-        case 3:
-          console.log(number)
-          this.switchText('about')
-          EventBus.$emit('MOVE_MODEL', 'ABOUT')
-          this.PreviousClass = 'about'
-          break
-        case 4:
-          console.log(number)
-          this.switchText('contact')
-          EventBus.$emit('MOVE_MODEL', 'CONTACT')
-          this.PreviousClass = 'contact'
-          break
-      }
-    },
-    switchText(CurrentClass) {
-      this.tl
-        .to(`.s-lw-${this.PreviousClass}`, 0.3, {
-          y: '120%',
-          rotate: '10deg'
-        })
-        .set(`.s-lw-${this.PreviousClass}`, { display: 'none' })
-        .set(`.s-lw-${CurrentClass}`, { display: 'block' })
-        .to(`.s-lw-${CurrentClass}`, 0.3, {
-          y: '0%',
-          rotate: '0deg',
-          delay: 0.3
-        })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.pageAyumukun {
+.link-window {
+  height: var(--wh, 100vh);
+  width: 100vw;
+  // top: 0px !important;
+  @include flex-middle;
+  &__wrap {
+    height: fit-content;
+    width: fit-content;
+    position: relative;
+    overflow: hidden;
+    // transform: translateY(-50vh);
+  }
+  &--text {
+    @include font-title-first;
+    opacity: 0;
+  }
+  &--bar,
+  &--bar-hide {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    background: $color-gray;
+    transform: translateX(-101%);
+  }
+}
+.navigation {
+  mix-blend-mode: difference;
   position: fixed;
   top: 0;
-  left: 0;
-  @include full-screen;
-  .switch_linked {
+  bottom: 0;
+  margin: auto;
+  z-index: 2;
+  right: $pri-value;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  @include gap-bottom(20px);
+  @include mq(sm) {
+    display: none;
+  }
+  &__wrap {
+    overflow: hidden;
+    position: relative;
+    height: 1em;
+    width: 100%;
+  }
+  &--num {
+    font-family: $en;
+    font-size: 16px;
+    text-align: center;
+  }
+  &--current {
+    transform: translateY(101%);
     position: absolute;
     top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-
-    width: fit-content;
-    height: fit-content;
+    background: $color-black;
+    &:first-child {
+      transform: translateY(0);
+    }
+  }
+  &--bar {
+    content: '';
+    height: 1px;
+    width: 28px;
     display: block;
-    margin: auto;
+    background: $color-white;
+  }
+}
+.scroll-wire {
+  bottom: $pri-value;
+  width: 100vw;
+  position: fixed;
+  @include flex-middle;
+  @include mq(sm) {
+    bottom: 32px;
+  }
+  &__arrow {
+    position: absolute;
+    right: $pri-value;
+    bottom: 0;
+    cursor: pointer;
+  }
+  &--item {
+    @include font-nav-secondary;
+    color: $color-gray;
     @include mq(sm) {
-      bottom: 32px;
-    }
-    &__wrap {
-      &__text {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        margin: auto;
-        width: fit-content;
-        overflow: hidden;
-        text-align: center;
-        @include font-title-first;
-        p,
-        a {
-          display: none;
-          transform: translateY(120%) rotate(5deg);
-          transform-origin: left;
-        }
-      }
-    }
-    &__scroll {
-      position: absolute;
-      bottom: $pri-value;
-      left: 0px;
-      right: 0px;
-      text-align: center;
-      @include font-nav-primary;
-      p {
-        color: $color-gray;
-      }
+      font-size: 10px;
+      letter-spacing: normal;
     }
   }
 }

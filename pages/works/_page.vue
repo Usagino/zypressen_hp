@@ -1,23 +1,21 @@
 <template lang="pug">
 .container.works-page
-  .first-thumbnail(:style="{backgroundImage:BodyImage(ThumbnailImage),backgroundSize:BackgroundSize+'%'}")
+  ScrollBar
+  MouseStoker
+  .first-thumbnail(:style="{backgroundImage:BodyImage(ThumbnailImage+'?auto=compress&w=1440&h=900')}")
     .first-thumbnail--screen
       .first-thumbnail--title
         span.first-thumbnail--textwrap
           h1 {{Work.TITLE}}
       .first-thumbnail--scroll
-        p scroll
-      //.first-thumbnail--navwrap
-        .first-thumbnail--next.first-thumbnail--nav(v-if="Pagination.next !== '/works/undefined'")
-          nuxt-link(:to="Pagination.next")
-            p NEXT
-            span
-        .first-thumbnail--back.first-thumbnail--nav(v-if="Pagination.back !== '/works/undefined'")
-          nuxt-link(:to="Pagination.back")
-            p BACK
-            span
+        p SCROLL
     .cover-wrap
   .second-body
+
+    .second-body--japansetext
+      p {{Work.BODY_JA}}
+    .second-body--englishtext
+      p {{Work.BODY_EN}}
     .second-body--infomation
       .second-body--infomation__createdtime
         p.second-body--infomation__title Created
@@ -30,16 +28,10 @@
         p {{Work.DESIGNER}}
       .second-body--infomation__colors
         span(v-for='(color,index) in Work.COLOR' :style="{backgroundColor:color.COLOR}")
-    .second-body--japansetext
-      p {{Work.BODY_JA}}
-    .second-body--englishtext
-      p {{Work.BODY_EN}}
-
   .third-images
-    span.third-images__wrap
-      .third-images--image.third-images--first(:style="{backgroundImage:BodyImage(Work.IMAGE[0].IMAGE.url),backgroundSize:'cover'}")
-    span.third-images__wrap(v-for="(image,index) in Work.IMAGE" :key="image.index" )
-      .third-images--image(v-if="index !== 0" :class="'page-image-' + index" :style="{backgroundImage:BodyImage(image.IMAGE.url),backgroundSize:'cover',backgroundPosition:'center'}")
+    span.third-images__wrap(v-for="(image,index) in Work.IMAGE" :key="image.index")
+      img.third-images--image(:src="image.IMAGE.url+'?auto=compress&w=1000'")
+      span.third-images--cover
   .fourth-button(v-show="Pagination.back !== '/works/undefined'")
     nuxt-link.fourth-button__link(:to="Pagination.back")
       p NEXT
@@ -48,8 +40,10 @@
 
 <script>
 import axios from 'axios'
-import { TimelineMax, TweenMax, Expo } from 'gsap'
-import inView from 'in-view'
+import { TimelineMax, TweenMax, Power2,gsap } from 'gsap' // eslint-disable-line
+import { ScrollTrigger } from "gsap/ScrollTrigger";  // eslint-disable-line
+
+import inView from 'in-view' // eslint-disable-line
 export default {
   async asyncData({ params }) {
     const { data } = await axios.get(
@@ -66,6 +60,7 @@ export default {
       next: '/works/' + idArray[idArray.indexOf(params.page) - 1],
       back: '/works/' + idArray[idArray.indexOf(params.page) + 1]
     }
+    console.log(work.THUMBNAIL)
     return {
       Data: data.contents,
       Work: work,
@@ -98,137 +93,33 @@ export default {
     }
   },
   mounted() {
-    // this.imageDisplay()
-    this.windowHeight = window.innerHeight
-    this.windowWidth = window.innerWidth
-    this.notScroll()
     this.hideDisplay()
-    this.setThirdImage()
-    window.onscroll = () => {
-      this.hideDisplay()
-      this.animationThirdImage()
-    }
+
+    gsap.registerPlugin(ScrollTrigger)
+    gsap.utils.toArray('.third-images__wrap').forEach((section) => {
+      gsap.to(section.querySelector('.third-images--cover'), {
+        scrollTrigger: {
+          trigger: section,
+          scrub: true,
+          end: 'center center'
+          // markers: true
+        },
+        scaleX: 0,
+        ease: Power2.easeOut
+      })
+    })
   },
   methods: {
-    setThirdImage() {
-      console.log('🧰setThirdImage')
-      const tl = new TimelineMax()
-      const windowHeight = window.innerHeight
-      const windowWidth = window.innerWidth
-
-      const bodyRect = document.body.getBoundingClientRect()
-      const thirdImage = document
-        .querySelector('.third-images--first')
-        .getBoundingClientRect()
-      const offsetTop = thirdImage.top - bodyRect.top + windowHeight
-      this.offsetTop = offsetTop
-      tl.set('.works-page', { height: offsetTop + 'px', overflowY: 'hidden' })
-      const baseElWidth =
-        document.getElementsByClassName('second-body')[0].clientWidth - 140
-
-      tl.set('.third-images--first', {
-        padding: (windowWidth - baseElWidth) / 2 + 'px'
-      })
-      this.thirdImagePadding = (windowWidth - baseElWidth) / 2
-    },
-    animationThirdImage() {
-      console.log('🧰animationThirdImage')
-      const tl = new TimelineMax()
-      const y = document.documentElement.scrollTop // eslint-disable-line
-      if (this.offsetTop - this.windowHeight <= y) {
-        console.log('hi')
-        tl.to('.third-images--first', 1, {
-          padding: '0px',
-          ease: Expo.easeInOut
-        }).set('.works-page', {
-          height: 'fit-content',
-          overflowY: '',
-          delay: 0.3
-        })
-      }
-      // window.onscroll = () => {
-      //   console.log(y)
-      // }
-      // window.onmousewheel = (event) => {
-      //   if (this.offsetTop - this.windowHeight <= y) {
-      //     const wheelPower = 50
-      //     // console.log(event.wheelDelta)
-      //     if (
-      //       event.wheelDelta * -1 > wheelPower &&
-      //       this.thirdImagePadding >= -10
-      //     ) {
-      //       this.thirdImagePadding = this.thirdImagePadding - 1
-      //     }
-      //   }
-      // }
-    },
     hideDisplay() {
-      const windowHeight = window.innerHeight
-      const y = document.documentElement.scrollTop
-      // console.log(this.BackgroundSize)
-      if (y < windowHeight) {
-        const size = y * 0.06 + 100
-        this.BackgroundSize = size
-      }
-      const transformValue = (y / windowHeight) * 100
-      if (transformValue <= 120) {
-        TweenMax.set('.cover-wrap', { width: transformValue + 'vw' })
-      }
-    },
-    thirdImageDisplay() {
-      const tl = new TimelineMax()
-      const baseElWidth =
-        document.getElementsByClassName('second-body')[0].clientWidth - 140
-
-      // const baseElWidth = 1080
-      const windowWidth = window.innerWidth
-      const imageWidthScale = baseElWidth / windowWidth
-      // const windowHeight = window.parent.screen.height
-      tl.set('.page-image-0', {
-        scale: imageWidthScale
-      })
-      const bodyRect = document.body.getBoundingClientRect()
-      const thirdImage = document
-        .querySelector('.third-images')
-        .getBoundingClientRect()
-      // 👇ブラウザーの高さ
-      const windowHeight = window.innerHeight
-      // 👇thirdImageのページの一番上からの距離から、ブラウザーの高さを引いたもの
-      const offsetTop = thirdImage.top - bodyRect.top - windowHeight
-      // 👇 スクロール量からoffsetTopを引いた
-      const offsetTopY = document.documentElement.scrollTop - offsetTop
-      const percentage = Math.round((offsetTopY / windowHeight) * 100) / 100
-
-      if (percentage < 1) {
-        tl.set('.page-image-0', {
-          backgroundSize: 'cover',
-          scale: imageWidthScale + (1 - imageWidthScale) * percentage
-        })
-      } else {
-        tl.set('.page-image-0', {
-          backgroundSize: 'cover',
-          scale: 1
-        })
-      }
-    },
-    imageDisplay() {
-      const tl = new TimelineMax()
-      const baseElWidth =
-        document.getElementsByClassName('second-body')[0].clientWidth - 280
-
-      // const baseElWidth = 1080
-      const windowWidth = window.innerWidth
-      // const windowHeight = window.parent.screen.height
-      tl.set('.page-image-0', {
-        scale: baseElWidth / windowWidth
-      })
-      inView.offset(500)
-      inView('.third-images').on('enter', (el) => {
-        tl.to('.page-image-0', 0.3, {
-          backgroundSize: '100%',
-          scale: 1,
-          ease: 'easeOut'
-        })
+      gsap.registerPlugin(ScrollTrigger)
+      gsap.set('.cover-wrap', { x: '100%' })
+      gsap.to('.cover-wrap', {
+        scrollTrigger: {
+          trigger: '.cover-wrap',
+          scrub: true,
+          end: 'bottom bottom'
+        },
+        x: '0%'
       })
     },
     BodyImage(image) {
@@ -250,9 +141,12 @@ export default {
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  background-size: 100%;
   position: relative;
   height: 200vh;
+  will-change: contents;
+  @include mq(sm) {
+    background-size: cover;
+  }
   &--screen {
     @include full-screen;
     @include flex-middle;
@@ -312,33 +206,6 @@ export default {
       }
     }
   }
-  // &--next {
-  //   right: 0px;
-  //   -webkit-writing-mode: vertical-rl;
-  //   transform: rotate(180deg);
-  //   @include mq(sm) {
-  //     transform: rotate(0deg);
-  //     display: flex;
-  //     justify-content: center;
-  //     align-items: center;
-  //     flex-direction: row;
-  //     &::after {
-  //       height: 8px;
-  //       width: 2px;
-  //       background: $color-white;
-  //       content: ' ';
-  //       display: block;
-  //       margin: 8px;
-  //     }
-  //   }
-  // }
-  // &--back {
-  //   left: 0px;
-  //   -webkit-writing-mode: vertical-rl;
-  //   @include mq(sm) {
-  //     transform: rotate(180deg);
-  //   }
-  // }
   &--scroll {
     position: absolute;
     bottom: $pri-value;
@@ -347,9 +214,14 @@ export default {
     margin: auto;
     display: block;
     width: fit-content;
+    @include mq(sm) {
+      bottom: 32px;
+    }
     p {
       display: inline-block;
-      @include font-nav-primary;
+      color: $color-gray;
+      font-size: 10px;
+      font-family: $en;
     }
   }
   &--textwrap {
@@ -368,8 +240,10 @@ export default {
   position: absolute;
   bottom: 0px;
   right: 0px;
-  height: 100vh;
-  width: 0vw;
+  height: var(--wh, 100vh);
+  width: 100vw;
+  transform-origin: right bottom;
+  will-change: transform;
 }
 .second-body {
   padding: 140px 0px;
@@ -379,14 +253,26 @@ export default {
   grid-template-rows: 1fr 1fr;
   gap: 24px 24px;
   grid-template-areas: 'infomation body_ja body_ja body_ja body_ja' 'infomation body_en body_en body_en body_en';
+  @include mq(sm) {
+    display: flex;
+    flex-direction: column;
+    padding: 60px 24px;
+    @include gap-bottom(44px);
+  }
   &--infomation {
     grid-area: infomation;
     @include gap-bottom(20px);
+
     p {
       @include font-text-secondary;
+      color: $color-gray;
+      @include mq(sm) {
+        font-size: 16px;
+        line-height: normal;
+      }
     }
     &__title {
-      color: $color-gray;
+      color: $color-white !important;
       padding-bottom: 8px;
     }
     &__colors {
@@ -418,41 +304,51 @@ export default {
 }
 .third-images {
   padding-bottom: 160px;
-  // @include default-width;
-  position: relative;
-  @include gap-bottom(2px);
+  @include default-width;
+  @include gap-bottom(60px);
   @include mq(sm) {
     padding: 32px 0px 0px;
   }
   &__wrap {
     display: block;
+    position: relative;
+    overflow: hidden;
   }
   &--image {
     will-change: transform;
     transform-origin: center center;
-    width: 100vw;
-    height: auto;
-    @include full-screen;
-    height: calc(1000vw / 16);
-    // background-size: cover;
-    background-position: center;
-    background-size: cover;
+    width: 100%;
+    height: 580px;
+    object-fit: cover;
     background: $color-gray;
+    @include mq(sm) {
+      height: 268px;
+    }
   }
-  &--first {
-    padding: 74px;
-    box-sizing: border-box;
-    background-clip: content-box;
+  &--cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: scaleY(1.1);
+    background-color: $color-black;
+    transform-origin: right bottom;
+    will-change: transform;
   }
 }
 .fourth-button {
   @include default-width;
   margin-bottom: 160px;
+  @include mq(sm) {
+    margin-bottom: 100px;
+    margin-top: 100px;
+  }
   &__link {
     p {
       @include font-title-secondary;
       text-align: right;
-      @include textOutline;
+      @include text-outline;
     }
     h2 {
       @include font-title-first;

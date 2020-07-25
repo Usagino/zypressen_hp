@@ -1,11 +1,13 @@
-$default-size:1080px;
+$default-size:1100px;
 $default-size-sp:100%;
 
-$color-black: rgba(0,0,0,1);
-$color-gray: rgba(122,122,122,1);
-$color-light-gray: rgba(228,228,228,1);
-$color-white: #ffffff;
-$color-orange: rgba(255,61,0,1);
+$color-black: rgb(3, 3, 3);
+$color-white: rgba(230,230,230,1);
+$color-gray: rgba(140,140,140,1);
+$color-orange: rgba(255,69,0,1);
 
-$pri-value:70px;
+$pri-value:60px;
 $sec-value:160px;
+
+$en: 'Titling Gothic FB Extd Bd',YakuHanJP,"Roboto";
+$ja: YakuHanJP,'Roboto', sans-serif;

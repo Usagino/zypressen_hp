@@ -1,45 +1,52 @@
 <template lang="pug">
-  div.page
-    nuxt-link.page__logo(to="/")
+  .page
+    nuxt-link.page__logo(to="/" no-prefetch)
       img.page__logo__image(src="/PageLogo.svg")
-    .page__copylight
-      p.page__copylight__text ©️2020ZYPRESSEN
-    client-only
-      PageMenuIcon
-    PageScroll
-    dimensionalModel
+    PageLoading
+    PageMenu
+    DimensionalModel
     nuxt
 </template>
 
 <script>
-import { TweenMax } from 'gsap'
-import dimensionalModel from '@/components/dimensionalModel'
+import deviceMixin from '@/assets/js/device'
+import EventBus from '@/utils/event-bus' // eslint-disable-line
 
 export default {
-  components: {
-    dimensionalModel
-  },
+  mixins: [deviceMixin],
   mounted() {
-    this.notScroll()
+    // addEventListener('keydown', (event) => {
+    //   console.log(event.code)
+    // })
+    const babseStyle = [
+      'padding:4px 12px',
+      'font-size: 8px',
+      'border:1px solid #020202'
+    ]
+    const textStyle = [
+      ...babseStyle,
+      'background-color: #020202',
+      'color: white',
+      'border-right: none'
+    ].join(';')
+    const iconStyle = [
+      ...babseStyle,
+      'text-decoration: none;',
+      'background-color: #5e5e5e',
+      'border-right: none',
+      'border-left: none',
+      'padding:4px 2px'
+    ].join(';')
+    const linkStyle = [...babseStyle, 'border-left: none'].join(';')
+
+    console.log(
+      '%cMADE WITH BY ZYPRESSEN%c🌲%chttps://zypressen.org',
+      textStyle,
+      iconStyle,
+      linkStyle
+    )
   },
-  methods: {
-    notScroll() {
-      const containerClass = document.getElementsByClassName('container')
-      const containerClassHeight = containerClass[0].clientHeight
-      // console.log('container', containerClassHeight)
-      const windowHeight = window.parent.screen.height
-      // console.log('window', windowHeight)
-      if (containerClassHeight < windowHeight) {
-        TweenMax.set('html,body', { overflow: 'hidden' })
-      } else {
-        TweenMax.set('html,body', { overflow: 'scroll' })
-      }
-      window.onresize = () => {
-        this.notScroll()
-        console.log('hi')
-      }
-    }
-  }
+  methods: {}
 }
 </script>
 
@@ -48,14 +55,15 @@ html {
   background: $color-black;
 }
 .page {
-  min-height: 100vh;
+  min-height: var(--wh, 100vh);
   width: 100vw;
-  overflow: hidden;
+  //overflow: hidden;
   &__logo {
+    mix-blend-mode: difference;
     position: fixed;
     top: $pri-value;
     left: $pri-value;
-    height: 18px;
+    height: 16px;
     font-size: medium;
     z-index: 1000;
     @include mq(sm) {
@@ -66,7 +74,7 @@ html {
       top: 32px;
     }
     img {
-      height: 18px;
+      height: 16px;
       width: auto;
     }
   }
@@ -94,5 +102,12 @@ html {
       }
     }
   }
+}
+.testbuton {
+  cursor: pointer;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
 }
 </style>

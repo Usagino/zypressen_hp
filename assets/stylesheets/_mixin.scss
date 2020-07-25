@@ -9,59 +9,67 @@
   font-family:'Titling Gothic FB Extd Bd',YakuHanJP,"Roboto";
 }
 
-$color-black: rgba(0,0,0,1);
-$color-white: rgba(255,255,255,1);
-$color-glay: rgba(122,122,122,1);
-@mixin font-logo {
-	font-size:16px;
-	font-family:"Eagle";
-	font-weight:book;
-}
 @mixin font-title-first {
-	font-size:92px;
-	@include font-family;
+	font-size:88px;
+	font-family: $en;
 	font-weight:bold;
   @include mq(sm){
-    font-size:32px;
-    letter-spacing: 2px;
+    font-size:30px;
+
   }
 }
 @mixin font-title-secondary {
 	font-size:56px;
-	@include font-family;
+	font-family: $en;
 	font-weight:bold;
   @include mq(sm){
-    font-size:24px;
+    font-size:22px;
+  }
+}
+@mixin font-title-thirdry {
+	font-size:20px;
+	font-family: $en;
+	font-weight:bold;
+  @include mq(sm){
+    font-size:16px;
   }
 }
 
-@mixin font-title-third {
-	font-size:16px;
-	@include font-family;
-	font-weight:bold;
-}
+// notosans
 @mixin font-nav-primary {
-	font-size:14px;
-	font-family:"Roboto";
+	font-size:15px;
+  font-family: $ja;
 	font-weight:medium;
 }
 @mixin font-nav-secondary {
 	font-size:16px;
-	font-family:"Roboto";
-	font-weight:bold;
-}
-@mixin font-text-primary {
-	font-size:14px;
-	font-family:"Roboto";
+  font-family: $en;
 	font-weight:medium;
-	line-height:180%;
+  letter-spacing: 4px;
+}
+
+// texts
+@mixin font-text-primary {
+	font-size:15px;
+  font-family: $ja;
+	font-weight:500;
+	line-height:28px;
+  @include mq(sm){
+    font-size:16px;
+  }
 }
 @mixin font-text-secondary {
 	font-size:16px;
-	font-family:"Roboto";
+  font-family: $ja;
 	font-weight:black;
 }
 
+@mixin font-text-secondary {
+	font-size:28px;
+  font-family: $ja;
+	font-weight:black;
+  line-height:44px;
+}
 
 $breakpoints: (
   'sm': 'screen and (max-width: 450px)',
@@ -81,9 +89,16 @@ $breakpoints: (
   justify-content: center;
   align-items: center;
 }
-
+@mixin absolute-middle{
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+}
 @mixin full-screen{
-  height: 100vh;
+  height: var(--wh, 100vh);
   width: 100vw;
 }
 @mixin full-size{
@@ -118,8 +133,8 @@ $breakpoints: (
   padding-right: $pri-value;
   margin: auto;
   @include mq(sm){
-    padding-left: 24px;
-    padding-right: 24px;
+    padding-left: 30px;
+    padding-right: 30px;
   }
 }
 @mixin primary-margin{
@@ -140,7 +155,29 @@ $breakpoints: (
     overflow: visible;
   }
 }
-@mixin textOutline{
+@mixin text-outline{
   -webkit-text-stroke: 2px $color-white;
   color: transparent;
+  @include mq(sm){
+    -webkit-text-stroke: 1px $color-white;
+  }
+}
+
+@mixin pageNoscroll{
+  html,
+  body {
+    overflow: hidden;
+  }
+}
+@mixin hide-bar-parent{
+  position: relative;
+  overflow: hidden;
+}
+@mixin hide-bar{
+  position: absolute;
+  top: 0;
+  left: 0;
+  @include full-size;
+  background: $color-gray;
+  transform: translateX(-101%);
 }
