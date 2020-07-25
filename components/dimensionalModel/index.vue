@@ -5,6 +5,8 @@
 
 <script>
 import WebglWrap from './js/index.js'
+import EventBus from "~/utils/event-bus"; // eslint-disable-line
+
 export default {
   name: 'DimensionalModel',
   components: {},
@@ -13,15 +15,19 @@ export default {
     return {}
   },
   computed: {},
+  watch: {
+    '$route.name'(_new, _old) {
+      EventBus.$emit('passingThePath', _new)
+    }
+  },
   mounted() {
     // canvas要素を渡す。
+    EventBus.$emit('passingThePath', this.$route.name)
     this.webglWrap = new WebglWrap({
       $canvas: this.$refs.canvas,
-      $device: this.$refs.pc
+      $device: this.$refs.pc,
+      $path: this.$route.name
     })
-  },
-  destroyed() {
-    // canvasを作ったり壊したりする前提の場合はここに処理停止する処理を書く（今回省略）。
   }
 }
 </script>

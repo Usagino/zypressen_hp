@@ -7,6 +7,7 @@ import { TimelineMax, TweenMax } from 'gsap'// eslint-disable-line
 export default class WebglWrap {
   constructor(props) {
     this.props = props
+    this.currentPath = null
     this.init()
     window.addEventListener('resize', this.resize.bind(this))
   }

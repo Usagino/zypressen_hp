@@ -38,8 +38,7 @@ export default {
     '@/plugins/day.js',
     '@/plugins/globalMethods.js',
     { src: '@/plugins/components', ssr: false },
-    { src: '@/plugins/axios', ssr: false },
-    { src: '@/plugins/routerOption.js', ssr: false }
+    { src: '@/plugins/axios', ssr: false }
   ],
   buildModules: [
     '@nuxt/components',

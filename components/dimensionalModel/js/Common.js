@@ -26,9 +26,6 @@ class Common {
     this.ground = null
     this.tween = gsap
     this.scrollAnime = null
-    // event bus
-    EventBus.$off('passingThePath')
-    EventBus.$on('passingThePath', this.appliedPath.bind(this))
   }
 
   init(props) {
@@ -68,22 +65,17 @@ class Common {
       this.spotLightAdd()
       this.modelAdd(gltf)
       this.groundAdd()
+      this.switchAnime(props.$path)
+      EventBus.$on('passingThePath', this.switchAnime.bind(this))
+
       // this.Helpers()
       // this.datGUI()
       // this.tweakpane()
     })
   }
 
-  onChange(direction) {
-    console.log(direction)
-  }
-
-  appliedPath(name) {
+  switchAnime(name) {
     this.currentPath = name
-    this.switchAnime()
-  }
-
-  switchAnime() {
     switch (this.currentPath) {
       case 'index':
         this.AnimateTopPage(this.model, this.camera)
@@ -118,18 +110,19 @@ class Common {
       })
       //  scroll methods
       const target = document.querySelector('body')
-      ScrollTrigger.create({
+      const sc = ScrollTrigger
+      sc.create({
         trigger: target,
         start: 'top top',
         end: 'bottom bottom',
         scrub: true,
         onUpdate: ({ progress }) => {
           if (this.currentPath === 'index') {
-            gsap.to(this.model.rotation, 1, { y: progress * Math.PI * 2 })
-            console.log(progress * Math.PI * 2)
+            gsap.to(this.model.rotation, 1, { y: progress * Math.PI * 6 })
           }
         }
       })
+      // ---
     }
   }
 
@@ -222,7 +215,6 @@ class Common {
     this.model.position.y = 8
     this.model.castShadow = true
     this.scene.add(this.model)
-    this.switchAnime()
   }
 
   groundAdd() {
