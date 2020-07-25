@@ -154,7 +154,7 @@ export default {
     justify-content: center;
     align-items: center;
     @include mq(sm) {
-      @include gap-bottom(8px);
+      @include gap-bottom(20px);
     }
     li {
       display: inline-block;
@@ -207,6 +207,7 @@ export default {
     }
     &__list {
       @include gap-right(28px);
+      display: flex;
     }
   }
 }

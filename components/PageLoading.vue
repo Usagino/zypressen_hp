@@ -72,6 +72,11 @@ export default {
   grid-gap: $pri-value;
   padding: $pri-value * 2;
   box-sizing: border-box;
+  @include mq(sm) {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2, 1fr);
+    padding: 240px 0px;
+  }
   &__logo {
     height: 40px;
     width: auto;
