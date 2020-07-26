@@ -29,7 +29,7 @@ h1,h2{
   overflow-x: hidden;
   max-width: 100vw;
 }
-p::selection {
+p::selection,a::selection,h1::selection,h2::selection,h3::selection {
     background:$color-orange;
     color: $color-white;
 }
