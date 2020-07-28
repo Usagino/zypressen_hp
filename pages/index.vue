@@ -63,7 +63,6 @@ export default {
     this.$nextTick(function() {
       this.topEnter()
     })
-
     this.slideChangeStart()
     this.slideChangeEnd()
   },
