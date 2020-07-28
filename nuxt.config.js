@@ -1,4 +1,5 @@
-const metaData = require('./assets/json/meta.json') // eslint-disable-line
+const metaData = require('./assets/json/meta.json')
+const fontData = require('./assets/json/fontData.json') // eslint-disable-line
 require('dotenv').config()
 export default {
   mode: 'universal',
@@ -17,16 +18,7 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      {
-        rel: 'style',
-        href:
-          'https://cdn.jsdelivr.net/npm/yakuhanjp@3.3.1/dist/css/yakuhanjp.min.css'
-      },
-      {
-        rel: 'stylesheet',
-        // type: 'text/css',
-        href: 'https://cloud.typenetwork.com/projects/3724/fontface.css/'
-      }
+      ...fontData
     ]
   },
   loading: { color: '#fff' },
@@ -38,7 +30,8 @@ export default {
     '@/plugins/day.js',
     '@/plugins/globalMethods.js',
     { src: '@/plugins/components', ssr: false },
-    { src: '@/plugins/axios', ssr: false }
+    { src: '@/plugins/axios', ssr: false },
+    { src: '@/plugins/vue-awesome-swiper', ssr: false }
   ],
   buildModules: [
     '@nuxt/components',
@@ -61,17 +54,13 @@ export default {
   styleResources: {
     scss: ['~/assets/stylesheets/style.scss']
   },
-  webfontloader: {
-    google: {
-      families: ['Noto+Sans+JP:400;500', 'Roboto:400,700']
-    }
-  },
   axios: {},
   optimizedImages: {
     optimizeImages: true
   },
   env: { CMSKEY: process.env.CMSKEY },
   build: {
+    vendor: ['vue-awesome-swiper'],
     extend(config, ctx) {
       if (config.module) {
         config.module.rules.push({
@@ -82,7 +71,13 @@ export default {
     },
     transpile: ['three', 'gsap']
   },
-  components: ['~/components'],
+  components: [
+    '~/components',
+    {
+      path: '~/components/topPage/',
+      prefix: 'tp'
+    }
+  ],
   generate: {
     exclude: ['/works/undefined']
   }

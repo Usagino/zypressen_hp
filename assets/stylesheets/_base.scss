@@ -1,12 +1,10 @@
 html{
-  scrollbar-width: none;
   overflow-x: hidden;
   overscroll-behavior-y: none;
   overflow: scroll;
   max-width: 100vw;
-  &::-webkit-scrollbar {
-    display:none;
-  }
+  scrollbar-width: none;
+
 }
 html
 *{
@@ -14,6 +12,10 @@ html
   text-decoration: none;
   // cursor: none !important;
 
+}
+
+body{
+  overflow-y: hidden;
 }
 
 a{
@@ -24,10 +26,6 @@ ul{
 }
 h1,h2{
   @include font-title-first
-}
-.container{
-  overflow-x: hidden;
-  max-width: 100vw;
 }
 p::selection,a::selection,h1::selection,h2::selection,h3::selection {
     background:$color-orange;

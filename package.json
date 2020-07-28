@@ -30,9 +30,11 @@
     "nuxt-user-agent": "^1.2.2",
     "nuxt-webfontloader": "^1.1.0",
     "rgbaster": "^2.1.1",
+    "swiper": "^6.0.4",
     "three": "^0.116.1",
     "tweakpane": "^1.4.0",
     "unsplash-js": "^6.0.0",
+    "vue-awesome-swiper": "^4.1.1",
     "vue-lottie": "^0.2.1"
   },
   "devDependencies": {

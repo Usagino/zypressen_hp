@@ -1,0 +1,12 @@
+[
+  {
+  "rel": "stylesheet",
+  "href":
+    "https://cdn.jsdelivr.net/npm/yakuhanjp@3.1.0/dist/css/yakuhanjp-narrow.min.css"
+  },
+  {
+    "rel": "stylesheet",
+    "href":
+      "https://fonts.googleapis.com/css2?family=Oswald:wght@300;400&family=Playfair+Display:ital@1&family=Roboto:wght@400;500&display=swap"
+  }
+]
