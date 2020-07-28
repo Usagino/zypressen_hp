@@ -57,12 +57,13 @@ export default {
     },
     topPageEl() {
       return this.$refs.topPage.$el
+    },
+    aboutPageEl() {
+      return this.$refs.aboutPage.$el
     }
   },
   mounted() {
-    this.$nextTick(function() {
-      this.topEnter()
-    })
+    // this.$nextTick(function() {})
     this.slideChangeStart()
     this.slideChangeEnd()
   },
@@ -80,20 +81,20 @@ export default {
       if (e !== undefined) {
         switch (e.snapIndex) {
           case 0:
-            this.activeTopToggle = true
+            this.topEnter()
             break
           case 1:
             this.activeWorksToggle = true
             break
           case 2:
-            this.activeAboutToggle = true
+            this.aboutEnter()
             break
           case 3:
             this.activeContactToggle = true
             break
         }
       } else {
-        this.activeTopToggle = true
+        this.topEnter()
       }
     },
     indicatorAnimation(index) {
@@ -135,6 +136,14 @@ export default {
       gsap.to(getEl('.top-page__copylight__text'), 0.8, {
         x: '0%',
         delay: 0.3
+      })
+    },
+    aboutEnter() {
+      const targetAll = this.aboutPageEl.querySelectorAll(
+        '.about-page__textwrap__item'
+      )
+      targetAll.forEach((item, i) => {
+        gsap.to(item.querySelector('p'), 0.3, { x: '0%', delay: i * 0.01 })
       })
     }
   }
