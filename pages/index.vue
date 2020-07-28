@@ -5,26 +5,42 @@
     PageIndicator(:refs="this.$refs")
     .background-movie
       img(src="/image/background.png")
-    client-only
-      swiper(:options="swiperOption" ref="pageSwiper" @slideChangeTransitionStart="slideChange")
-        swiper-slide
-          tp-top
-        swiper-slide()
-          .slide-contents
-            h1 2
-        swiper-slide
-          tp-about
-        swiper-slide
-          tp-contact
+    swiper(
+      :options="swiperOption"
+      ref="pageSwiper"
+      @slideChangeTransitionStart="slideChangeStart"
+      @slideChangeTransitionEnd="slideChangeEnd")
+      swiper-slide
+        tp-top(ref="topPage")
+      swiper-slide
+        tp-works(:works="this.data" ref="worksPage")
+      swiper-slide
+        tp-about(ref="aboutPage")
+      swiper-slide
+        tp-contact(ref="contactPage")
 </template>
 
 <script>
 import { gsap } from 'gsap' // eslint-disable-line
-import { ScrollTrigger } from "gsap/ScrollTrigger";  // eslint-disable-line
 
 export default {
+  async asyncData({ app, params }) {
+    const { data } = await app.$axios.get(
+      'https://zypressen.microcms.io/api/v1/works/',
+      {
+        headers: { 'X-API-KEY': process.env.CMSKEY }
+      }
+    )
+    return {
+      data: data.contents
+    }
+  },
   data() {
     return {
+      activeTopToggle: false,
+      activeWorksToggle: false,
+      activeAboutToggle: false,
+      activeContactToggle: false,
       swiperOption: {
         speed: 1000,
         direction: 'vertical',
@@ -38,13 +54,21 @@ export default {
   computed: {
     swiper() {
       return this.$refs.pageSwiper.$swiper
+    },
+    topPageEl() {
+      return this.$refs.topPage.$el
     }
   },
   mounted() {
-    this.slideChange()
+    this.$nextTick(function() {
+      this.topEnter()
+    })
+
+    this.slideChangeStart()
+    this.slideChangeEnd()
   },
   methods: {
-    slideChange(e) {
+    slideChangeStart(e) {
       let index = 0
       if (e !== undefined) {
         index = e.snapIndex
@@ -53,15 +77,33 @@ export default {
         this.indicatorAnimation(index)
       }
     },
+    slideChangeEnd(e) {
+      if (e !== undefined) {
+        switch (e.snapIndex) {
+          case 0:
+            this.activeTopToggle = true
+            break
+          case 1:
+            this.activeWorksToggle = true
+            break
+          case 2:
+            this.activeAboutToggle = true
+            break
+          case 3:
+            this.activeContactToggle = true
+            break
+        }
+      } else {
+        this.activeTopToggle = true
+      }
+    },
     indicatorAnimation(index) {
-      console.log(index)
       gsap.utils.toArray('.page-indicator__meter').forEach((section, i) => {
-        console.log(section)
         if (i === index) {
-          gsap.to(section.querySelector('.page-indicator__meter__bar'), 0.3, {
+          gsap.to(section.querySelector('.page-indicator__meter__bar'), 0.8, {
             x: 0
           })
-          gsap.to(section.querySelector('.page-indicator__meter__text'), 0.5, {
+          gsap.to(section.querySelector('.page-indicator__meter__text'), 0.9, {
             color: 'white',
             scale: 1
           })
@@ -74,6 +116,26 @@ export default {
             scale: 0.9
           })
         }
+      })
+    },
+    topEnter() {
+      const getEl = (el) => {
+        return this.topPageEl.querySelector(el)
+      }
+      gsap.to(getEl('.top-page__title__wrap:nth-child(1) > span'), 0.8, {
+        x: '0%'
+      })
+      gsap.to(getEl('.top-page__title__wrap:nth-child(2) > span'), 0.8, {
+        x: '0%',
+        delay: 0.1
+      })
+      gsap.to(getEl('.top-page__title__wrap:nth-child(3) > span'), 0.8, {
+        x: '0%',
+        delay: 0.2
+      })
+      gsap.to(getEl('.top-page__copylight__text'), 0.8, {
+        x: '0%',
+        delay: 0.3
       })
     }
   }

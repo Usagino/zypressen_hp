@@ -1,16 +1,7 @@
 <template lang="pug">
   .page-indicator
-    .page-indicator__meter
-      p.page-indicator__meter__text 01
-      .page-indicator__meter__bar
-    .page-indicator__meter
-      p.page-indicator__meter__text 02
-      .page-indicator__meter__bar
-    .page-indicator__meter
-      p.page-indicator__meter__text 03
-      .page-indicator__meter__bar
-    .page-indicator__meter
-      p.page-indicator__meter__text 04
+    .page-indicator__meter(v-for="n of 4" :key="n")
+      p.page-indicator__meter__text(@click="toScroll(n-1)") 0{{n}}
       .page-indicator__meter__bar
 </template>
 
@@ -25,18 +16,10 @@ export default {
       default: () => {}
     }
   },
-  watch: {
-    refs() {
-      this.indicatorAnimation()
-    }
-  },
-  mounted() {
-    console.log(this.refs)
-  },
   methods: {
-    indicatorAnimation() {
-      const sw = this.$refs.pageSwiper.$swiper
-      console.log(sw.progress)
+    toScroll(i) {
+      const sw = this.refs.pageSwiper.$swiper
+      sw.slideTo(i)
     }
   }
 }
@@ -45,7 +28,7 @@ export default {
 <style lang="scss">
 .page-indicator {
   position: fixed;
-  z-index: 1;
+  z-index: 10;
   top: 0;
   bottom: 0;
   right: 0;
@@ -61,9 +44,15 @@ export default {
     justify-content: space-between;
     align-items: center;
     &__text {
+      cursor: pointer;
       @include font-text-en;
       font-size: 16px;
       color: $color-gray;
+      transition: all 0.4s ease;
+      &:hover {
+        color: $color-white;
+        transform: scale(1);
+      }
     }
     &__bar {
       transform: translateX(100%);

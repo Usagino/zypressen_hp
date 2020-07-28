@@ -8,7 +8,14 @@
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    active: {
+      type: Boolean,
+      default: false
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

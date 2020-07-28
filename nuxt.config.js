@@ -54,7 +54,7 @@ export default {
   styleResources: {
     scss: ['~/assets/stylesheets/style.scss']
   },
-  axios: {},
+  axios: { proxy: true },
   optimizedImages: {
     optimizeImages: true
   },
