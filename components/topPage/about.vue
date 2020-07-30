@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { gsap } from 'gsap'
 export default {
   props: {
     active: {
@@ -17,6 +18,23 @@ export default {
     return {
       texts:
         'ZYPRESSEN IS A CREATIVE TEAM THAT CREATES DIGITAL PRODUCT DESIGN. EACH MEMBER OF THE TEAM IS FREE FROM STEREOTYPES AND ALWAYS AT THE FOREFRONT OF PHILOSOPHY. OUR DESIGNS ARE BASED ON THE PHILOSOPHY THAT OUR PREDECESSORS HAVE BUILT TO CREATE SOMETHING NEW AND DIFFERENT. BY OBSERVING AND ABSORBING THINGS, WE ARE FINDING NEW VALUES THAT HAVE NEVER BEEN SEEN BEFORE. AND WE CALL IT "DIFFERENT FROM OTHERS".'
+    }
+  },
+  methods: {
+    enterAnime() {
+      gsap.utils.toArray('.about-page__textwrap__item').forEach((item, i) => {
+        gsap.to(item.querySelector('p'), 0.3, {
+          x: '0%',
+          delay: i * 0.01
+        })
+      })
+    },
+    offAnime() {
+      gsap.utils.toArray('.about-page__textwrap__item').forEach((item, i) => {
+        gsap.set(item.querySelector('p'), {
+          x: '-100%'
+        })
+      })
     }
   }
 }

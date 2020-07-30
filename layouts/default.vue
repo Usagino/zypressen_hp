@@ -47,7 +47,6 @@ export default {
 
 <style lang="scss">
 html {
-  background: $color-black;
   overflow-scrolling: touch;
   &::-webkit-scrollbar {
     -ms-overflow-style: none !important;

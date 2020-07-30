@@ -30,8 +30,9 @@ export default {
     '@/plugins/day.js',
     '@/plugins/globalMethods.js',
     { src: '@/plugins/components', ssr: false },
-    { src: '@/plugins/axios', ssr: false },
-    { src: '@/plugins/vue-awesome-swiper', ssr: false }
+    // { src: '@/plugins/axios', ssr: false },
+    { src: '@/plugins/vue-awesome-swiper', ssr: false },
+    { src: '@/plugins/vue-carousel', ssr: false }
   ],
   buildModules: [
     '@nuxt/components',
@@ -58,6 +59,13 @@ export default {
   optimizedImages: {
     optimizeImages: true
   },
+  components: [
+    '~/components',
+    {
+      path: '~/components/topPage/',
+      prefix: 'tp'
+    }
+  ],
   env: { CMSKEY: process.env.CMSKEY },
   build: {
     vendor: ['vue-awesome-swiper'],
@@ -71,13 +79,6 @@ export default {
     },
     transpile: ['three', 'gsap']
   },
-  components: [
-    '~/components',
-    {
-      path: '~/components/topPage/',
-      prefix: 'tp'
-    }
-  ],
   generate: {
     exclude: ['/works/undefined']
   }

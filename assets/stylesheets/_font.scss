@@ -11,10 +11,13 @@ $roboto: 'Roboto', sans-serif;
 }
 
 @mixin font-title-first {
-	font-size:144px;
+  $fs: 80px;
+	font-size:$fs;
 	font-family: $oswald;
-	font-weight: 400;
+	font-weight: 300;
   line-height: 160px;
+  letter-spacing: 68px;
+  text-indent: $fs;
   @include mq(sm){
     font-size:30px;
   }

@@ -24,9 +24,6 @@ a{
 ul{
   list-style: none;
 }
-h1,h2{
-  @include font-title-first
-}
 p::selection,a::selection,h1::selection,h2::selection,h3::selection {
     background:$color-orange;
     color: $color-white;
@@ -84,4 +81,28 @@ a,p,li,span,h1,h2,h3{
 }
 .tp-dfwv{
   position: fixed !important;
+}
+.scrollButton {
+  position: absolute;
+  bottom: 0;
+  z-index: 10;
+  left: 0;
+  right: 0;
+  margin: auto;
+  @include just-fitsize;
+  @include flex-middle;
+  flex-direction: column;
+  cursor: pointer;
+  &__text {
+    padding-bottom: 20px;
+    @include font-text-en;
+    font-size: 16px;
+  }
+  &__bar {
+    content: '';
+    height: 32px;
+    width: 1px;
+    display: block;
+    background: $color-white;
+  }
 }

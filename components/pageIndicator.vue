@@ -16,6 +16,13 @@ export default {
       default: () => {}
     }
   },
+  mounted() {
+    console.log(this.refs)
+    gsap.to('.page-indicator', 0.4, {
+      x: '0%',
+      delay: 0.6
+    })
+  },
   methods: {
     toScroll(i) {
       const sw = this.refs.pageSwiper.$swiper
@@ -27,6 +34,7 @@ export default {
 
 <style lang="scss">
 .page-indicator {
+  transform: translateX(150%);
   position: fixed;
   z-index: 10;
   top: 0;

@@ -3,21 +3,26 @@
     MouseStoker
     PageHeader(:refs="this.$refs")
     PageIndicator(:refs="this.$refs")
+    .scrollButton(@click="nextSlide")
+      p.scrollButton__text scroll
+      .scrollButton__bar
     .background-movie
       img(src="/image/background.png")
-    swiper(
-      :options="swiperOption"
-      ref="pageSwiper"
-      @slideChangeTransitionStart="slideChangeStart"
-      @slideChangeTransitionEnd="slideChangeEnd")
-      swiper-slide
-        tp-top(ref="topPage")
-      swiper-slide
-        tp-works(:works="this.data" ref="worksPage")
-      swiper-slide
-        tp-about(ref="aboutPage")
-      swiper-slide
-        tp-contact(ref="contactPage")
+    client-only
+      swiper(
+        :options="swiperOption"
+        ref="pageSwiper"
+        @ready="swiperRedy"
+        @slideChangeTransitionStart="slideChangeStart"
+        @slideChangeTransitionEnd="slideChangeEnd")
+        swiper-slide
+          tp-top(ref="topPage")
+        swiper-slide
+          tp-works(ref="worksPage" :works="this.data")
+        swiper-slide
+          tp-about(ref="aboutPage")
+        swiper-slide
+          tp-contact(ref="contactPage")
 </template>
 
 <script>
@@ -37,10 +42,6 @@ export default {
   },
   data() {
     return {
-      activeTopToggle: false,
-      activeWorksToggle: false,
-      activeAboutToggle: false,
-      activeContactToggle: false,
       swiperOption: {
         speed: 1000,
         direction: 'vertical',
@@ -53,21 +54,26 @@ export default {
   },
   computed: {
     swiper() {
-      return this.$refs.pageSwiper.$swiper
-    },
-    topPageEl() {
-      return this.$refs.topPage.$el
-    },
-    aboutPageEl() {
-      return this.$refs.aboutPage.$el
+      return this.$refs.mySwiper.$swiper
     }
   },
   mounted() {
-    // this.$nextTick(function() {})
-    this.slideChangeStart()
     this.slideChangeEnd()
   },
   methods: {
+    setTimeoutAsync(delay) {
+      return new Promise(function(resolve, reject) {
+        setTimeout(resolve, delay)
+      })
+    },
+    nextSlide() {
+      const swiper = this.$refs.pageSwiper.$swiper // eslint-disable-line
+      swiper.slideNext(1000)
+    },
+    swiperRedy(e) {
+      this.slideChangeEnd(e)
+      this.slideChangeStart(e)
+    },
     slideChangeStart(e) {
       let index = 0
       if (e !== undefined) {
@@ -81,20 +87,26 @@ export default {
       if (e !== undefined) {
         switch (e.snapIndex) {
           case 0:
-            this.topEnter()
+            this.$refs.topPage.enterAnime()
+            this.$refs.worksPage.offAnime()
             break
           case 1:
-            this.activeWorksToggle = true
+            this.$refs.worksPage.enterAnime()
+            this.$refs.aboutPage.offAnime()
+            this.$refs.topPage.offAnime()
             break
           case 2:
-            this.aboutEnter()
+            this.$refs.aboutPage.enterAnime()
+            this.$refs.worksPage.offAnime()
+            this.$refs.topPage.offAnime()
+            // this.$refs.contactPage.offAnime()
             break
           case 3:
-            this.activeContactToggle = true
+            this.$refs.contactPage.enterAnime()
+            this.$refs.aboutPage.offAnime()
+            this.$refs.topPage.offAnime()
             break
         }
-      } else {
-        this.topEnter()
       }
     },
     indicatorAnimation(index) {
@@ -116,26 +128,6 @@ export default {
             scale: 0.9
           })
         }
-      })
-    },
-    topEnter() {
-      const getEl = (el) => {
-        return this.topPageEl.querySelector(el)
-      }
-      gsap.to(getEl('.top-page__title__wrap:nth-child(1) > span'), 0.8, {
-        x: '0%'
-      })
-      gsap.to(getEl('.top-page__title__wrap:nth-child(2) > span'), 0.8, {
-        x: '0%',
-        delay: 0.1
-      })
-      gsap.to(getEl('.top-page__title__wrap:nth-child(3) > span'), 0.8, {
-        x: '0%',
-        delay: 0.2
-      })
-      gsap.to(getEl('.top-page__copylight__text'), 0.8, {
-        x: '0%',
-        delay: 0.3
       })
     },
     aboutEnter() {
@@ -167,5 +159,29 @@ export default {
   //scroll-snap-align: start;
   @include full-screen;
   @include flex-middle;
+}
+.scrollButton {
+  position: fixed;
+  bottom: 0;
+  z-index: 10;
+  left: 0;
+  right: 0;
+  margin: auto;
+  @include just-fitsize;
+  @include flex-middle;
+  flex-direction: column;
+  cursor: pointer;
+  &__text {
+    padding-bottom: 20px;
+    @include font-text-en;
+    font-size: 16px;
+  }
+  &__bar {
+    content: '';
+    height: 32px;
+    width: 1px;
+    display: block;
+    background: $color-white;
+  }
 }
 </style>
