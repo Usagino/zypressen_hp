@@ -21,6 +21,7 @@ export default {
       default: () => {}
     }
   },
+  mounted() {},
   methods: {
     toScroll(i) {
       const sw = this.refs.pageSwiper.$swiper

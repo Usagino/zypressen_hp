@@ -15,6 +15,7 @@
   .second-wrap
     .second-wrap__infomation
       p CREATED<br>{{this.$dayjs(data.DATE).format('MMM , DD , YYYY')}}
+      a.second-wrap__infomation__sitelink(:href="data.LINK" target="_blank" rel="noopener noreferrer") VISIT SITE
       .second-wrap__infomation__colors
         .second-wrap__infomation__colors__item(v-for="color in data.COLOR" :style="{backgroundColor:color.COLOR}")
     .second-wrap__text
@@ -176,9 +177,15 @@ export default {
   }
   &__infomation {
     width: 200px;
+    @include gap-bottom(32px);
     margin-right: 200px;
+    &__sitelink {
+      @include font-text-en;
+      display: inline-block;
+      font-size: 16px;
+      text-decoration: underline;
+    }
     &__colors {
-      margin-top: 32px;
       display: flex;
       &__item {
         width: 32px;

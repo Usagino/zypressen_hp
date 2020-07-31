@@ -1,22 +1,14 @@
 <template lang="pug">
   .works-page
     .works-page__contents
-      // carousel.works-page__contents(
-        :per-page="1"
-        :paginationEnabled="true"
-        :perPage="1"
-        :adjustableHeight="true" )
-        slide(v-for="item in works" :key="item.id")
-          img(:src="`${item.THUMBNAIL.url}?auto=compress&w=600&h=600`")
-          .works-page__contents__item(@click="linkPage(item.id)")
+      .swiper(v-swiper="swiperWorksOption")
+        .swiper-wrapper(:style="{display:'flex'}")
+          .swiper-slide.works-page__contents__item(
+            v-for="item in works"
+            :key="item.id"
+            @click="linkPage(item.id)")
             img(:src="`${item.THUMBNAIL.url}?auto=compress&w=600&h=600`")
             p.works-page__contents__item__title {{item.TITLE}}
-      .swiper(v-swiper:worksPage="swiperWorksOption")
-        .swiper-wrapper
-          .swiper-slide(v-for="item in works" :key="item.id")
-            .works-page__contents__item(@click="linkPage(item.id)")
-              img(:src="`${item.THUMBNAIL.url}?auto=compress&w=600&h=600`")
-              p.works-page__contents__item__title {{item.TITLE}}
 </template>
 
 <script>
@@ -38,17 +30,12 @@ export default {
       windowImage: '',
       swiperWorksOption: {
         speed: 1000,
-        slidesPerView: 4,
+        slidesPerView: 'auto',
         spaceBetween: 100,
         slidesOffsetBefore: 320,
         slidesOffsetAfter: 320,
         direction: 'horizontal'
       }
-    }
-  },
-  computed: {
-    swiper() {
-      return this.$refs.worksPage.$swiper
     }
   },
   methods: {
@@ -126,20 +113,6 @@ export default {
   align-items: center;
   backdrop-filter: blur(0px);
   position: relative;
-
-  &__window {
-    @include absolute-middle;
-    position: fixed;
-    height: 750px;
-    width: 488px;
-    display: block;
-    z-index: 1;
-    &__image {
-      @include full-size;
-      object-fit: cover;
-      clip-path: inset(0 100% 0 0%);
-    }
-  }
   &__contents {
     display: flex;
     width: 100vw;

@@ -22,9 +22,6 @@ export default {
   },
 
   methods: {
-    hoge() {
-      console.log('hi hi')
-    },
     enterAnime() {
       gsap.set('.top-page', {
         backdropFilter: 'blur(0px)'

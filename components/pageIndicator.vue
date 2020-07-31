@@ -17,7 +17,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.refs)
     gsap.to('.page-indicator', 0.4, {
       x: '0%',
       delay: 0.6

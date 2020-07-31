@@ -1,8 +1,8 @@
 <template lang="pug">
   .container
     MouseStoker
-    PageHeader(:refs="this.$refs")
     PageIndicator(:refs="this.$refs")
+    PageHeader(:refs="this.$refs")
     .scrollButton(@click="nextSlide")
       p.scrollButton__text scroll
       .scrollButton__bar
@@ -58,6 +58,8 @@ export default {
     }
   },
   mounted() {
+    // console.log(this.pageSwiper)
+    // console.log(this.pageSwiper)
     this.slideChangeEnd()
   },
   methods: {
