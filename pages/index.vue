@@ -43,9 +43,11 @@ export default {
   data() {
     return {
       swiperOption: {
-        speed: 1000,
+        speed: 2000,
+        simulateTouch: false,
         direction: 'vertical',
         slidesPerView: 1,
+        parallax: true,
         mousewheel: {
           invert: false
         }

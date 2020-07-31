@@ -1,6 +1,7 @@
 <template lang="pug">
   .works-page
     .works-page__contents
+      .works-page__blur
       .swiper(v-swiper="swiperWorksOption")
         .swiper-wrapper(:style="{display:'flex'}")
           .swiper-slide.works-page__contents__item(
@@ -34,7 +35,10 @@ export default {
         spaceBetween: 100,
         slidesOffsetBefore: 320,
         slidesOffsetAfter: 320,
-        direction: 'horizontal'
+        direction: 'horizontal',
+        autoplay: {
+          delay: 5000
+        }
       }
     }
   },
@@ -72,7 +76,7 @@ export default {
     },
     enterAnime() {
       const tl = gsap.timeline() // eslint-disable-line
-      gsap.to('.works-page', 1, {
+      gsap.to('.works-page__blur', 1, {
         backdropFilter: 'blur(20px)'
       })
       gsap.utils
@@ -95,8 +99,8 @@ export default {
         })
     },
     offAnime() {
-      gsap.set('.works-page', {
-        backdropFilter: ''
+      gsap.set('.works-page__blur', {
+        backdropFilter: 'blur(0px)'
       })
       gsap.set('.works-page__contents__item img', {
         clipPath: 'inset(0 100% 0 0%)'
@@ -111,8 +115,15 @@ export default {
   @include full-screen;
   display: flex;
   align-items: center;
-  backdrop-filter: blur(0px);
   position: relative;
+  &__blur {
+    @include full-screen;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    backdrop-filter: blur(20px);
+  }
   &__contents {
     display: flex;
     width: 100vw;
@@ -128,6 +139,13 @@ export default {
       overflow: hidden;
       pointer-events: none;
       cursor: pointer;
+      &:last-child {
+        padding-right: 320px;
+        box-sizing: border-box;
+      }
+      &:active {
+        cursor: grabbing;
+      }
       img {
         clip-path: inset(0 100% 0 0%);
         @include full-size;
