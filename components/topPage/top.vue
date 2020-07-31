@@ -58,6 +58,9 @@ export default {
   &__title {
     @include absolute-middle;
     @include just-fitsize;
+    @include mq(sm) {
+      width: 100vw;
+    }
     &__text {
       @include font-title-first;
       display: flex;
@@ -69,10 +72,22 @@ export default {
       overflow: hidden;
       @include just-fitsize;
       line-height: 100%;
+      @include mq(sm) {
+        width: 100vw;
+        @include flex-middle;
+      }
       &__text {
         display: inline-block;
         line-height: 160px;
         transform: translateY(150%);
+        @include mq(sm) {
+          text-indent: 32px;
+          width: 100vw;
+          text-align: center;
+          font-size: 32px;
+          letter-spacing: 20px;
+          line-height: 2em;
+        }
       }
     }
   }

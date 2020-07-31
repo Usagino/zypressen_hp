@@ -63,16 +63,26 @@ export default {
   @include full-screen;
   display: flex;
   align-items: center;
+  @include mq(sm) {
+    padding: 0 30px;
+    box-sizing: border-box;
+  }
   &__textwrap {
     width: 560px;
     height: fit-content;
     margin-left: auto;
     margin-right: $pri-value;
-
+    @include mq(sm) {
+      margin-right: auto;
+    }
     &__container {
       display: inline-flex;
       flex-wrap: wrap;
       gap: 12px;
+      @include mq(sm) {
+        gap: 6px;
+        text-align: center;
+      }
       &__text {
         overflow: hidden;
         p {
@@ -83,12 +93,21 @@ export default {
     p,
     a {
       @include font-text-en;
+      @include mq(sm) {
+        font-size: 16px;
+        line-height: 18px;
+        letter-spacing: 1.2px;
+      }
     }
     a {
       text-decoration: underline;
     }
     &__social {
       @include gap-right(20px);
+      @include mq(sm) {
+        padding-top: 12px;
+        @include flex-middle;
+      }
       &__wrap {
         display: inline-block;
         overflow: hidden;

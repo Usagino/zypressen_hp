@@ -82,8 +82,10 @@ export default {
         })
     },
     enterAnime() {
-      gsap.to('.first-wrap__title-container__image', 1, {
-        clipPath: 'inset(0 0% 0% 0%)',
+      const tl = gsap.timeline() // eslint-disable-line
+
+      tl.to('.first-wrap__title-container__image', 1, {
+        clipPath: 'inset(0% 0% 0% 0%)',
         delay: 1,
         onComplete: () => {
           gsap.utils
@@ -95,6 +97,9 @@ export default {
               })
             })
         }
+      }).to('.first-wrap__title-container', 1, {
+        clipPath: 'inset(0% 0% 0% 0%)',
+        delay: 1
       })
     },
     scrollToSecond() {
@@ -132,10 +137,9 @@ export default {
     z-index: 1;
     &__image {
       @include absolute-middle;
-      height: 70vh;
-      width: 488px;
+      @include full-size;
       object-fit: cover;
-      clip-path: inset(0 100% 0 0%);
+      clip-path: inset(0% 100% 0% 0%);
     }
   }
   &__title-text {
@@ -149,9 +153,16 @@ export default {
       span {
         text-align: center;
         @include font-title-first;
+        font-size: 120px;
         @include just-fitsize;
         display: inline-block;
         transform: translateX(-150%);
+        @include mq(sm) {
+          font-size: 32px;
+          letter-spacing: 20px;
+          text-indent: 10px;
+          line-height: 1.8em;
+        }
       }
     }
   }
@@ -160,10 +171,15 @@ export default {
   padding: 200px 0px;
   margin: auto;
   width: 920px;
-
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  @include mq(sm) {
+    padding: 64px 30px;
+    width: 100%;
+    box-sizing: border-box;
+    flex-direction: column;
+  }
   & * p {
     @include font-text-en;
     font-size: 16px;
@@ -172,7 +188,14 @@ export default {
   }
   &__text {
     width: 100%;
+    @include mq(sm) {
+      padding-top: 32px !important;
+    }
     p {
+      @include mq(sm) {
+        font-size: 16px;
+        letter-spacing: 1.2px;
+      }
     }
   }
   &__infomation {
@@ -200,11 +223,18 @@ export default {
   width: 1100px;
   margin: auto;
   @include gap-bottom(100px);
+  @include mq(sm) {
+    width: 100%;
+    @include gap-bottom(60px);
+  }
   &__image-wrap {
     &__image {
       width: 100%;
       height: 640px;
       object-fit: cover;
+      @include mq(sm) {
+        height: auto;
+      }
     }
   }
 }
@@ -214,6 +244,12 @@ export default {
   h2 {
     @include font-title-first;
     text-align: center;
+    @include mq(sm) {
+      font-size: 32px;
+      letter-spacing: 20px;
+      text-indent: 10px;
+      line-height: 1.8em;
+    }
   }
 }
 </style>

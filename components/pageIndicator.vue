@@ -45,6 +45,9 @@ export default {
   justify-content: space-between;
   @include just-fitsize;
   height: 180px;
+  @include mq(sm) {
+    display: none;
+  }
   &__meter {
     width: 65px;
     display: flex;

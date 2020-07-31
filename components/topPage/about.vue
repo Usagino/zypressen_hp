@@ -45,10 +45,19 @@ export default {
   @include full-screen;
   display: flex;
   align-items: center;
+  box-sizing: border-box;
+  @include mq(sm) {
+    padding: 0px 30px;
+  }
   &__textwrap {
     margin-left: $pri-value;
     width: 560px;
     height: fit-content;
+    @include mq(sm) {
+      width: 100%;
+      margin-left: 0px;
+      text-align: center;
+    }
     &__item {
       display: inline-block;
       overflow: hidden;
@@ -57,6 +66,10 @@ export default {
       @include font-text-en;
       margin-right: 0.5em;
       transform: translateX(-100%);
+      @include mq(sm) {
+        font-size: 16px;
+        letter-spacing: 1.2px;
+      }
     }
   }
 }

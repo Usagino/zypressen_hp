@@ -42,8 +42,12 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @include mq(sm) {
+    top: 20px;
+    justify-content: center;
+  }
   &__logo {
-    height: 14px;
+    padding: 0px $pri-value;
   }
   &__menu {
     display: flex;
@@ -52,6 +56,9 @@ export default {
     font-size: 18px;
     &__item {
       cursor: pointer;
+    }
+    @include mq(sm) {
+      display: none;
     }
   }
 }
