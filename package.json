@@ -17,6 +17,7 @@
     "@bazzite/nuxt-optimized-images": "^0.4.0",
     "@nuxt/components": "^1.0.7",
     "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/proxy": "^2.0.1",
     "@nuxtjs/pwa": "^3.0.0-beta.20",
     "curtainsjs": "^6.1.0",
     "dat.gui": "^0.7.7",
@@ -30,9 +31,12 @@
     "nuxt-user-agent": "^1.2.2",
     "nuxt-webfontloader": "^1.1.0",
     "rgbaster": "^2.1.1",
+    "swiper": "^6.0.4",
     "three": "^0.116.1",
     "tweakpane": "^1.4.0",
     "unsplash-js": "^6.0.0",
+    "vue-awesome-swiper": "^4.1.1",
+    "vue-carousel": "^0.18.0",
     "vue-lottie": "^0.2.1"
   },
   "devDependencies": {

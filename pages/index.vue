@@ -1,144 +1,145 @@
 <template lang="pug">
   .container
-    ScrollBar
     MouseStoker
-    .top-page
-      .link-window.fisrt
-        .link-window__wrap
-          p.link-window--text(style="opacity:1") HELLO!!
-      .link-window(v-for="data in linkData")
-        .link-window__wrap
-          nuxt-link.link-window--text(:to="data.link") {{ data.name }}
-          .link-window--bar
-    .navigation
-      .navigation__wrap
-        p.navigation--current.navigation--num(v-for="i of 4") {{'0'+i}}
-      .navigation--bar
-      p.navigation--maxnum.navigation--num 04
-    .scroll-wire
-      .scroll-wire__text
-        p.scroll-wire--item SCROLL
-        .scroll-wire--bar
+    PageIndicator(:refs="this.$refs")
+    PageHeader(:refs="this.$refs")
+    .scrollButton(@click="nextSlide")
+      p.scrollButton__text scroll
+      .scrollButton__bar
+    .background-movie
+      img(src="/image/background.png")
+    client-only
+      swiper(
+        :options="swiperOption"
+        ref="pageSwiper"
+        @ready="swiperRedy"
+        @slideChangeTransitionStart="slideChangeStart"
+        @slideChangeTransitionEnd="slideChangeEnd")
+        swiper-slide
+          tp-top(ref="topPage")
+        swiper-slide
+          tp-works(ref="worksPage" :works="this.data")
+        swiper-slide
+          tp-about(ref="aboutPage")
+        swiper-slide
+          tp-contact(ref="contactPage")
 </template>
 
 <script>
 import { gsap } from 'gsap' // eslint-disable-line
-import { ScrollTrigger } from "gsap/ScrollTrigger";  // eslint-disable-line
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";  // eslint-disable-line
 
 export default {
+  async asyncData({ app, params }) {
+    const { data } = await app.$axios.get(
+      'https://zypressen.microcms.io/api/v1/works/',
+      {
+        headers: { 'X-API-KEY': process.env.CMSKEY }
+      }
+    )
+    return {
+      data: data.contents
+    }
+  },
   data() {
     return {
-      screenHeight: 0,
-      linkData: [
-        {
-          name: 'WORKS',
-          link: '/works'
-        },
-        {
-          name: 'ABOUT',
-          link: '/about'
-        },
-        {
-          name: 'CONTACT',
-          link: '/contact'
+      swiperOption: {
+        speed: 2000,
+        simulateTouch: false,
+        direction: 'vertical',
+        slidesPerView: 1,
+        parallax: true,
+        mousewheel: {
+          invert: false
         }
-      ]
+      }
+    }
+  },
+  computed: {
+    swiper() {
+      return this.$refs.mySwiper.$swiper
     }
   },
   mounted() {
-    this.changeLinkText()
-    // this.keyDown(this.scrollToNext)
-    // this.keyUp(this.scrollToPrev)
-    // this.autoScroll()
+    // console.log(this.pageSwiper)
+    // console.log(this.pageSwiper)
+    this.slideChangeEnd()
   },
-
   methods: {
-    scrollToPrev() {
-      gsap.registerPlugin(ScrollToPlugin)
-      gsap.registerPlugin(ScrollTrigger)
-      let displayEl = 0 // eslint-disable-line
-      const linkWindowArray = document.querySelectorAll('.link-window')
-      linkWindowArray.forEach((section, index) => {
-        ScrollTrigger.create({
-          trigger: section,
-          onEnter: () => {
-            displayEl = linkWindowArray[index - 1]
-          }
-        })
+    setTimeoutAsync(delay) {
+      return new Promise(function(resolve, reject) {
+        setTimeout(resolve, delay)
       })
-      gsap.to(window, { duration: 0.7, scrollTo: { y: displayEl } })
     },
-    scrollToNext() {
-      gsap.registerPlugin(ScrollToPlugin)
-      gsap.registerPlugin(ScrollTrigger)
-      let displayEl = 0
-      let nowPosY = 0
-      const linkWindowArray = document.querySelectorAll('.link-window')
-      linkWindowArray.forEach((section, index) => {
-        ScrollTrigger.create({
-          trigger: section,
-          onEnter: (el) => {
-            displayEl = linkWindowArray[index + 1]
-            nowPosY = el.end
-          }
-        })
-      })
-      const wh = window.innerHeight * -1 // eslint-disable-line
-
-      if (document.body.clientHeight !== nowPosY) {
-        gsap.to(window, {
-          duration: 1,
-          scrollTo: { y: displayEl }
-        })
+    nextSlide() {
+      const swiper = this.$refs.pageSwiper.$swiper // eslint-disable-line
+      swiper.slideNext(1000)
+    },
+    swiperRedy(e) {
+      this.slideChangeEnd(e)
+      this.slideChangeStart(e)
+    },
+    slideChangeStart(e) {
+      let index = 0
+      if (e !== undefined) {
+        index = e.snapIndex
+        this.indicatorAnimation(index)
       } else {
-        gsap.to(window, { duration: 1, scrollTo: { y: 0 } })
+        this.indicatorAnimation(index)
       }
     },
-    autoScroll() {
-      gsap.registerPlugin(ScrollToPlugin)
-      gsap.registerPlugin(ScrollTrigger)
-      gsap.utils.toArray('.link-window').forEach((section, index) => {
-        console.log(section)
-        gsap.timeline({// eslint-disable-line
-          scrollTrigger: {
-            trigger: section,
-            onEnter: () => {
-              gsap.to(window, { duration: 0.6, scrollTo: section, delay: 0.6 })
-            }
-          }
-        })
-      })
+    slideChangeEnd(e) {
+      if (e !== undefined) {
+        switch (e.snapIndex) {
+          case 0:
+            this.$refs.topPage.enterAnime()
+            this.$refs.worksPage.offAnime()
+            break
+          case 1:
+            this.$refs.worksPage.enterAnime()
+            this.$refs.aboutPage.offAnime()
+            this.$refs.topPage.offAnime()
+            break
+          case 2:
+            this.$refs.aboutPage.enterAnime()
+            this.$refs.worksPage.offAnime()
+            this.$refs.topPage.offAnime()
+            // this.$refs.contactPage.offAnime()
+            break
+          case 3:
+            this.$refs.contactPage.enterAnime()
+            this.$refs.aboutPage.offAnime()
+            this.$refs.topPage.offAnime()
+            break
+        }
+      }
     },
-    changeLinkText() {
-      gsap.registerPlugin(ScrollToPlugin)
-      gsap.registerPlugin(ScrollTrigger)
-      gsap.utils.toArray('.link-window').forEach((section, index) => {
-        if (!section.className.includes('fisrt')) {
-          const tl = gsap.timeline({// eslint-disable-line
-            scrollTrigger: {
-              trigger: section.querySelector('.link-window--text'),
-              toggleActions: 'play none play reset'
-            }
+    indicatorAnimation(index) {
+      gsap.utils.toArray('.page-indicator__meter').forEach((section, i) => {
+        if (i === index) {
+          gsap.to(section.querySelector('.page-indicator__meter__bar'), 0.8, {
+            x: 0
           })
-          tl.to(section.querySelector(`.link-window--bar`), 0.3, {
-            x: 0,
-            delay: 0.7
+          gsap.to(section.querySelector('.page-indicator__meter__text'), 0.9, {
+            color: 'white',
+            scale: 1
           })
-            .set(section.querySelector(`.link-window--text`), { opacity: 1 })
-            .to(section.querySelector(`.link-window--bar`), 0.3, {
-              x: '101%'
-            })
-            .to(section, { delay: 1 })
-
-          gsap.to(`.navigation--current:nth-child(${index + 1})`, 0.3, {
-            scrollTrigger: {
-              trigger: section.querySelector(`.link-window--text`),
-              toggleActions: 'play reverse resume reverse'
-            },
-            y: 0
+        } else {
+          gsap.to(section.querySelector('.page-indicator__meter__bar'), 0.3, {
+            x: '100%'
+          })
+          gsap.to(section.querySelector('.page-indicator__meter__text'), 0.5, {
+            color: '',
+            scale: 0.9
           })
         }
+      })
+    },
+    aboutEnter() {
+      const targetAll = this.aboutPageEl.querySelectorAll(
+        '.about-page__textwrap__item'
+      )
+      targetAll.forEach((item, i) => {
+        gsap.to(item.querySelector('p'), 0.3, { x: '0%', delay: i * 0.01 })
       })
     }
   }
@@ -146,101 +147,45 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.link-window {
-  height: var(--wh, 100vh);
-  width: 100vw;
-  // top: 0px !important;
-  @include flex-middle;
-  &__wrap {
-    height: fit-content;
-    width: fit-content;
-    position: relative;
-    overflow: hidden;
-    // transform: translateY(-50vh);
-  }
-  &--text {
-    @include font-title-first;
-    opacity: 0;
-  }
-  &--bar,
-  &--bar-hide {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 2;
-    background: $color-gray;
-    transform: translateX(-101%);
+.container {
+  @include full-screen;
+}
+.background-movie {
+  position: fixed;
+  z-index: -1;
+  @include full-screen;
+  img {
+    @include full-screen;
+    object-fit: cover;
   }
 }
-.navigation {
-  mix-blend-mode: difference;
+.slide-contents {
+  //scroll-snap-align: start;
+  @include full-screen;
+  @include flex-middle;
+}
+.scrollButton {
   position: fixed;
-  top: 0;
   bottom: 0;
+  z-index: 10;
+  left: 0;
+  right: 0;
   margin: auto;
-  z-index: 2;
-  right: $pri-value;
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
-  display: flex;
+  @include just-fitsize;
+  @include flex-middle;
   flex-direction: column;
-  align-items: center;
-  @include gap-bottom(20px);
-  @include mq(sm) {
-    display: none;
-  }
-  &__wrap {
-    overflow: hidden;
-    position: relative;
-    height: 1em;
-    width: 100%;
-  }
-  &--num {
-    font-family: $en;
+  cursor: pointer;
+  &__text {
+    padding-bottom: 20px;
+    @include font-text-en;
     font-size: 16px;
-    text-align: center;
   }
-  &--current {
-    transform: translateY(101%);
-    position: absolute;
-    top: 0px;
-    background: $color-black;
-    &:first-child {
-      transform: translateY(0);
-    }
-  }
-  &--bar {
+  &__bar {
     content: '';
-    height: 1px;
-    width: 28px;
+    height: 32px;
+    width: 1px;
     display: block;
     background: $color-white;
-  }
-}
-.scroll-wire {
-  bottom: $pri-value;
-  width: 100vw;
-  position: fixed;
-  @include flex-middle;
-  @include mq(sm) {
-    bottom: 32px;
-  }
-  &__arrow {
-    position: absolute;
-    right: $pri-value;
-    bottom: 0;
-    cursor: pointer;
-  }
-  &--item {
-    @include font-nav-secondary;
-    color: $color-gray;
-    @include mq(sm) {
-      font-size: 10px;
-      letter-spacing: normal;
-    }
   }
 }
 </style>

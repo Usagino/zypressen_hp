@@ -1,9 +1,6 @@
 <template lang="pug">
   .mouse-stoker(:class="{ 'hover-link':linkClassToggle}")
     span
-    transition(name="fade")
-      .hover-link__text(v-show="linkClassToggle")
-        p CLICK HERE
 </template>
 
 <script>
@@ -62,17 +59,16 @@ export default {
 <style lang="scss" scoped>
 .mouse-stoker {
   will-change: transform;
-  mix-blend-mode: difference;
   position: fixed;
   top: 0;
   left: 0;
   opacity: 0;
   z-index: 1000;
-  height: 36px;
-  width: 36px;
+  height: 40px;
+  width: 40px;
   transform: translate(-50%, -50%);
-  border-radius: 18px;
-  background: $color-orange;
+  border-radius: 20px;
+  border: 2px solid $color-white;
   pointer-events: none;
   transition: height 0.3s, width 0.3s, background 0.3s;
 }

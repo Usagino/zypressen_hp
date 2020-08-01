@@ -1,18 +1,23 @@
 //font
-@font-face {
-  font-family: "Titling Gothic FB Extd Bd";
-   font-display: swap;
-   font-style: normal;
-   font-weight: normal;
-}
+
+// font-family: 'Oswald', sans-serif;
+// font-family: 'Playfair Display', serif;
+// font-family: 'Roboto', sans-serif;
+$oswald: 'Oswald', sans-serif;
+$playfair: 'Playfair Display', serif;
+$roboto: 'Roboto', sans-serif;
 @mixin font-family{
   font-family:'Titling Gothic FB Extd Bd',YakuHanJP,"Roboto";
 }
 
 @mixin font-title-first {
-	font-size:88px;
-	font-family: $en;
-	font-weight:bold;
+  $fs: 80px;
+	font-size:$fs;
+	font-family: $oswald;
+	font-weight: 300;
+  line-height: 160px;
+  letter-spacing: 68px;
+  text-indent: $fs;
   @include mq(sm){
     font-size:30px;
   }
@@ -57,15 +62,13 @@
     font-size:16px;
   }
 }
-@mixin font-text-secondary {
-	font-size:16px;
-  font-family: $ja;
-	font-weight:black;
+@mixin font-text-en{
+  font-size: 28px;
+  font-family: $oswald;
+  font-weight: 300;
 }
-
-@mixin font-text-secondary {
-	font-size:28px;
-  font-family: $ja;
-	font-weight:black;
-  line-height:44px;
+@mixin font-copylight {
+  font-size: 96px;
+  letter-spacing: 0.4px;
+  font-family: $playfair;
 }

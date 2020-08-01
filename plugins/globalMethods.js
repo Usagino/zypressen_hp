@@ -45,24 +45,23 @@ Vue.mixin({
         const target = document.querySelector('.mouse-stoker')
         target.classList.remove(el)
       }
+    },
+    notScroll() {
+      console.log('✋not scroll')
+      function noScroll(event) {
+        event.preventDefault()
+      }
+      document.addEventListener('touchmove', noScroll, { passive: false })
+      document.addEventListener('mousewheel', noScroll, { passive: false })
+    },
+    onScroll() {
+      console.log('👌on scroll')
+      function noScroll(event) {
+        event.preventDefault()
+      }
+      document.removeEventListener('touchmove', noScroll, { passive: false })
+      // スクロール禁止を解除(PC)
+      document.removeEventListener('mousewheel', noScroll, { passive: false })
     }
-
-    // notScroll() {
-    //   const windowHeight = window.innerHeight
-    //   const bodyElement = document.querySelector('body')
-    //   const bodyHeight = bodyElement.clientHeight
-    //   console.log(bodyHeight, windowHeight)
-    //   console.log(bodyHeight <= windowHeight)
-    //   if (bodyHeight <= windowHeight) {
-    //     TweenMax.set('html,body', { overflow: 'hidden' })
-    //     console.log('hidden')
-    //   } else {
-    //     TweenMax.set('html,body', { overflow: '' })
-    //     console.log('scroll')
-    //   }
-    //   window.onresize = () => {
-    //     this.notScroll()
-    //   }
-    // }
   }
 })
