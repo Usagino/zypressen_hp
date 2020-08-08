@@ -3,6 +3,10 @@
 // font-family: 'Oswald', sans-serif;
 // font-family: 'Playfair Display', serif;
 // font-family: 'Roboto', sans-serif;
+@mixin just-letter-space($i){
+  letter-spacing: $i;
+  text-indent: $i / 2;
+}
 $oswald: 'Oswald', sans-serif;
 $playfair: 'Playfair Display', serif;
 $roboto: 'Roboto', sans-serif;
@@ -17,14 +21,14 @@ $roboto: 'Roboto', sans-serif;
 	font-weight: 300;
   line-height: 160px;
   letter-spacing: 68px;
-  text-indent: $fs;
+  text-indent: 34px;
   @include mq(sm){
     font-size:30px;
   }
 }
 @mixin font-title-secondary {
 	font-size:56px;
-	font-family: $en;
+	font-family: $oswald;
 	font-weight:bold;
   @include mq(sm){
     font-size:22px;
@@ -32,7 +36,7 @@ $roboto: 'Roboto', sans-serif;
 }
 @mixin font-title-thirdry {
 	font-size:20px;
-	font-family: $en;
+	font-family: $oswald;
 	font-weight:bold;
   @include mq(sm){
     font-size:16px;
@@ -71,4 +75,100 @@ $roboto: 'Roboto', sans-serif;
   font-size: 96px;
   letter-spacing: 0.4px;
   font-family: $playfair;
+}
+
+// new fontmixins
+
+@mixin font-one {
+	font-size:16px;
+	font-family: $oswald;
+	font-weight: 300;
+  @include just-letter-space(2px);
+}
+@mixin font-two {
+	font-size:36px;
+	font-family: $oswald;
+	font-weight: 300;
+	line-height:50px;
+  @include just-letter-space(2px);
+
+}
+@mixin font-three {
+	font-size:32px;
+	font-family: $oswald;
+	font-weight: 300;
+	line-height:54px;
+  @include just-letter-space(2px);
+
+}
+@mixin font-four {
+	font-size:32px;
+	font-family: $oswald;
+	font-weight: 300;
+	line-height:51px;
+  @include just-letter-space(2px);
+
+}
+@mixin font-five {
+	font-size:80px;
+	font-family: $oswald;
+	font-weight: 300;
+	line-height:180px;
+  @include just-letter-space(68px);
+
+}
+@mixin font-six {
+	font-size:16px;
+	font-family: $oswald;
+	font-weight: 300;
+	line-height:29px;
+  @include just-letter-space(2.2px);
+}
+@mixin font-seven-sp {
+	font-size:32px;
+	font-family: $oswald;
+	font-weight: 300;
+	line-height:58px;
+  @include just-letter-space(20px);
+}
+@mixin font-eight-sp {
+	font-size:32px;
+	font-family: $oswald;
+	font-weight: 300;
+	line-height:44px;
+  @include just-letter-space(0.02em);
+}
+@mixin font-nine-sp {
+	font-size:16px;
+	font-family: $oswald;
+	font-weight: 300;
+	line-height:29px;
+  @include just-letter-space(1.2px);
+}
+@mixin font-ten-sp {
+	font-size:16px;
+	font-family: $oswald;
+	font-weight: 300;
+	line-height:29px;
+  @include just-letter-space(1.2px);
+}
+@mixin font-eleven-sp {
+	font-size:16px;
+	font-family: $oswald;
+	font-weight: 300;
+  @include just-letter-space(2px);
+}
+@mixin font-twelve {
+	font-size:120px;
+	font-family: $oswald;
+	font-weight: 300;
+  line-height: 178px;
+  @include just-letter-space(48px);
+}
+@mixin font-thirteen-sp {
+	font-size:36px;
+	font-family: $oswald;
+	font-weight: 300;
+	line-height:44px;
+  @include just-letter-space(6px);
 }

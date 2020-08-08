@@ -28,10 +28,15 @@ p::selection,a::selection,h1::selection,h2::selection,h3::selection {
     background:$color-orange;
     color: $color-white;
 }
-.noscroll{
-  height: var(--wh, 100vh);
-  width: 100vw;
-  overflow: hidden !important;
+button{
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 a,p,li,span,h1,h2,h3{
   line-height: normal;

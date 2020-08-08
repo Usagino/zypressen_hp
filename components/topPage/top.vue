@@ -86,7 +86,7 @@ export default {
           text-align: center;
           font-size: 32px;
           letter-spacing: 20px;
-          line-height: 2em;
+          line-height: 10px;
         }
       }
     }

@@ -89,6 +89,10 @@ $breakpoints: (
   justify-content: center;
   align-items: center;
 }
+@mixin grid-middle{
+  display: grid;
+  place-items: center;
+}
 @mixin absolute-middle{
   position: absolute;
   top: 0;

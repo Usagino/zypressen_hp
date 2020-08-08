@@ -1,36 +1,32 @@
 <template lang="pug">
   .works-page
+    .works-page__blur
     .works-page__contents
-      .works-page__blur
-      transition(name="title")
-        .works-page__contents__title-box(
-          v-if="titleFade"
-          @click="linkPage(slideChangeIndex)")
-          h2 {{works[slideChangeIndex].TITLE}}
-      carousel(
-        :loop="true"
-        :autoplayTimeout="5000"
-        :per-page="1"
-        :paginationEnabled="false"
-        @pageChange="onPageChange"
-        @transitionStart="startChange"
-        @transitionEnd="endChange")
-        slide.slide-item(
-          v-for="item in works"
-          :key="item.id"
-          :style="{background:`url(${item.THUMBNAIL.url}?auto=compress)`}")
-          //.slide-item__image(:style="{background:`url(${item.THUMBNAIL.url}?auto=compress)`}")
+      .item
+        .item__thumbnail
+          img.item__thumbnail__image(
+            v-for="item in works"
+            :src="`${item.THUMBNAIL.url}?auto=compress&w=400&h=600&fit=crop`")
+        .item__title
+          h2.item__title__text {{itemTitle}}
+      .infomation
+        .infomation__numbers
+          p.infomation__numbers__current {{zeroPadding(countNum + 1)}}
+          p /
+          p.infomation__numbers__maxed {{zeroPadding(worksArrayLength)}}
+        .infomation__indicator
+          .infomation__indicator__bar
+        .infomation__buttons
+          button.infomation__buttons__back(@click="backSlide(),resetProgressTimeline()" :class="{enable:colorEnableBack}") BACK
+          p /
+          button.infomation__buttons__next(@click="nextSlide(),resetProgressTimeline()" :class="{enable:colorEnableNext}") NEXT
 </template>
 
 <script>
-import { gsap } from 'gsap' // eslint-disable-line
+import { gsap } from 'gsap'
 
 export default {
   props: {
-    active: {
-      type: Boolean,
-      default: false
-    },
     works: {
       type: Array,
       default: () => {}
@@ -38,77 +34,166 @@ export default {
   },
   data() {
     return {
-      titleFade: true,
-      slideIndex: 0,
-      slideChangeIndex: 0,
-      windowImage: ''
+      itemImage: '',
+      itemTitle: '',
+      pageNum: 0,
+      countNum: 0,
+      colorEnableNext: false,
+      colorEnableBack: false,
+      worksArrayLength: 0,
+      progressBarTimeline: gsap.timeline({
+        onComplete() {
+          this.restart()
+        }
+      })
     }
   },
+  mounted() {
+    this.itemTitle = this.works[this.pageNum].TITLE
+    this.worksArrayLength = this.works.length
+    this.progressBarAnime()
+
+    gsap.set('.item__thumbnail__image:nth-child(1)', {
+      x: '0%'
+    })
+  },
   methods: {
-    onPageChange(index) {
-      this.slideIndex = index
-    },
-    startChange() {
-      this.titleFade = false
-    },
-    endChange() {
-      this.slideChangeIndex = this.slideIndex
-      this.titleFade = true
-    },
-    linkPage(index) {
-      const tl = gsap.timeline() // eslint-disable-line
-      const id = this.works[index].id
-      console.log(id)
-      tl.to('.VueCarousel', 0.4, {
-        clipPath: 'inset(0% 0% 0% 100%)'
+    resetProgressTimeline() {
+      gsap.to('.infomation__indicator__bar', 0.5, {
+        scaleX: 0,
+        onComplete: () => {
+          this.progressBarTimeline.seek(0)
+        }
       })
-        .to('.works-page__contents__title-box h2', 0.4, {
-          x: '100%'
-        })
-        .set('.works-page', {
-          // position: 'fixed',
+    },
+    progressBarAnime() {
+      this.progressBarTimeline.pause()
+      const bar = '.infomation__indicator__bar'
+      this.progressBarTimeline
+        .to(bar, 10, {
+          scaleX: 1,
+          ease: 'linear',
+          delay: 1,
           onComplete: () => {
-            this.$router.push(`/${id}`)
+            this.nextSlide()
           }
         })
+        .set(bar, {
+          transformOrigin: 'right'
+        })
+        .to(bar, 1, {
+          scaleX: 0,
+          ease: 'linear'
+        })
+        .set(bar, {
+          transformOrigin: ''
+        })
+    },
+    nextSlide() {
+      if (!(this.pageNum >= this.worksArrayLength - 1)) {
+        const oldPageNum = this.pageNum
+        this.pageNum += 1
+        this.colorEnableNext = this.colorEnableBack = false
+        this.changeSlideAnime(oldPageNum + 1, this.pageNum + 1)
+      } else {
+        const oldPageNum = this.pageNum
+        this.pageNum = 0
+        this.colorEnableNext = this.colorEnableBack = false
+        this.changeSlideAnime(oldPageNum + 1, this.pageNum + 1)
+      }
+    },
+    backSlide() {
+      if (!(this.pageNum === 0)) {
+        const oldPageNum = this.pageNum
+        this.pageNum -= 1
+        this.colorEnableNext = this.colorEnableBack = false
+        this.changeSlideAnime(oldPageNum + 1, this.pageNum + 1)
+      } else {
+        const oldPageNum = 0
+        this.pageNum = this.worksArrayLength
+        this.colorEnableNext = this.colorEnableBack = false
+        this.changeSlideAnime(oldPageNum + 1, this.pageNum)
+        this.pageNum = this.worksArrayLength - 1
+      }
+    },
+    changeSlideAnime(oldVal, newVal) {
+      // title change
+      gsap
+        .timeline()
+        .to('.item__title__text', 0.3, {
+          opacity: 0,
+          onComplete: () => {
+            this.itemTitle = this.works[newVal - 1].TITLE
+          }
+        })
+        .to('.item__title__text', 0.3, {
+          opacity: 1
+        })
+      // slide change
+      gsap
+        .timeline()
+        .set('.infomation__buttons button', {
+          pointerEvents: 'none'
+        })
+        .to(`.item__thumbnail__image:nth-child(${oldVal})`, 0.6, {
+          x: oldVal < newVal ? '-150%' : '150%'
+        })
+        .set(`.item__thumbnail__image:nth-child(${newVal})`, {
+          x: oldVal < newVal ? '150%' : '-150%'
+        })
+        .to(`.item__thumbnail__image:nth-child(${newVal})`, 0.6, {
+          x: '0%',
+          delay: 0.5
+        })
+        .set('.infomation__buttons button', {
+          pointerEvents: ''
+        })
+      // change page number
+      gsap
+        .timeline()
+        .to('.infomation__numbers__current', 0.3, {
+          y: oldVal < newVal ? '-150%' : '150%',
+          opacity: 0
+        })
+        .set('.infomation__numbers__current', {
+          y: oldVal < newVal ? '150%' : '-150%',
+          onComplete: () => {
+            this.countNum = this.pageNum
+          }
+        })
+        .to('.infomation__numbers__current', 0.3, {
+          y: '0%',
+          opacity: 1
+        })
+
+      console.log(oldVal < newVal ? 'next' : 'back')
     },
     enterAnime() {
       const tl = gsap.timeline() // eslint-disable-line
       gsap.to('.works-page__blur', 1, {
-        backdropFilter: 'blur(20px)'
+        backdropFilter: 'blur(20px)',
+        onComplete: () => {
+          this.progressBarTimeline.play()
+        }
       })
-      // gsap.utils
-      //   .toArray('.works-page__contents .swiper-slide')
-      //   .forEach((section, i) => {
-      //     gsap.to(
-      //       section.querySelector('.works-page__contents__item img'),
-      //       0.8,
-      //       {
-      //         clipPath: 'inset(0 0% 0% 0%)',
-      //         delay: 0.2 * i,
-      //         ease: 'expo.out',
-      //         onComplete: () => {
-      //           gsap.set('.works-page__contents__item', {
-      //             pointerEvents: 'auto'
-      //           })
-      //         }
-      //       }
-      //     )
-      //   })
     },
     offAnime() {
-      // gsap.set('.works-page__blur', {
-      //   backdropFilter: 'blur(0px)'
-      // })
-      // gsap.set('.works-page__contents__item img', {
-      //   clipPath: 'inset(0 100% 0 0%)'
-      // })
+      this.progressBarTimeline.pause()
+      gsap.set('.works-page__blur', {
+        backdropFilter: 'blur(0px)'
+      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.startButton {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+}
 .works-page {
   @include full-screen;
   display: flex;
@@ -123,78 +208,96 @@ export default {
     top: 0;
     left: 0;
     z-index: -1;
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(0px);
   }
   &__contents {
     display: flex;
     width: 100vw;
-    cursor: grab;
+    // cursor: grab;
     position: relative;
     @include flex-middle;
-    &:active {
-      cursor: grabbing;
+    flex-direction: column;
+    @include gap-bottom(56px);
+    //
+    // &:active {
+    //   cursor: grabbing;
+    // }
+  }
+}
+.enable {
+  color: $color-gray;
+  pointer-events: none;
+}
+.item {
+  position: relative;
+  @include full-size;
+  @include grid-middle;
+  &__thumbnail {
+    height: 60vh;
+    width: 40vh;
+    overflow: hidden;
+    position: relative;
+    &__image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: inherit;
+      width: inherit;
+      object-fit: cover;
+      transform: translateX(150%);
     }
-    &__title-box {
-      @include just-fitsize;
-      @include absolute-middle;
-      z-index: 2;
-      overflow: hidden;
-      @include mq(sm) {
-        bottom: 20px;
-        top: auto;
-      }
-      h2 {
+  }
+  &__title {
+    @include absolute-middle;
+    z-index: 2;
+    @include just-fitsize;
+    display: block;
+    @include grid-middle;
+    &__text {
+      @include font-twelve;
+      display: inline;
+      text-align: center;
+    }
+  }
+}
+.infomation {
+  @include flex-middle;
+  @include gap-right(36px);
+  &__numbers,
+  &__buttons {
+    overflow: hidden;
+    width: 140px;
+    @include flex-middle;
+    @include gap-right(20px);
+    * {
+      user-select: none;
+    }
+    p,
+    button {
+      @include font-one;
+      background: transparent;
+    }
+  }
+  &__buttons {
+    button {
+      transition: color 1s ease;
+      &:active {
         cursor: pointer;
-        @include font-title-first;
-        font-size: 120px;
-        text-align: center;
-        transform: translateX(0%);
-        @include mq(sm) {
-          font-size: 32px;
-          letter-spacing: 0.02em;
-          line-height: 44px;
-          text-indent: 0px;
-        }
+        transform: translateY(1px);
       }
     }
   }
-}
-.slide-item {
-  @include full-size;
-  background-size: cover !important;
-  background-position: center !important;
-  background-attachment: fixed;
-}
-</style>
-<style lang="scss">
-.VueCarousel {
-  height: 70vh;
-  width: 500px;
-  clip-path: inset(0% 0% 0% 0%);
-  @include mq(sm) {
-    width: 80vw;
+  &__indicator {
+    height: 4px;
+    width: 360px;
+    background: $color-gray;
+    &__bar {
+      transform-origin: left;
+      transform: scaleX(0);
+      height: inherit;
+      width: inherit;
+      background: $color-green;
+    }
   }
-}
-.VueCarousel-wrapper,
-.VueCarousel-inner,
-.VueCarousel-slide {
-  width: 100% !important;
-  height: 100% !important;
-}
-.VueCarousel-slide .slider-inner {
-  @include full-size;
-}
-
-.title-enter-active,
-.title-leave-active {
-  transition: all 0.5s;
-}
-.title-leave,
-.title-enter-to {
-  opacity: 1;
-}
-.title-enter,
-.title-leave-to {
-  opacity: 0;
 }
 </style>
