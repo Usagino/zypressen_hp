@@ -169,17 +169,16 @@ export default {
       console.log(oldVal < newVal ? 'next' : 'back')
     },
     enterAnime() {
-      const tl = gsap.timeline() // eslint-disable-line
-      gsap.to('.works-page__blur', 1, {
-        backdropFilter: 'blur(20px)',
-        onComplete: () => {
-          this.progressBarTimeline.play()
-        }
+      this.progressBarTimeline.play()
+      gsap.to('.works-page__contents', 0.5, { opacity: 1 })
+      gsap.to('.works-page__blur', 0.5, {
+        backdropFilter: 'blur(20px)'
       })
     },
     offAnime() {
       this.progressBarTimeline.pause()
-      gsap.set('.works-page__blur', {
+      gsap.to('.works-page__contents', 0.5, { opacity: 0 })
+      gsap.to('.works-page__blur', 1, {
         backdropFilter: 'blur(0px)'
       })
     }

@@ -44,7 +44,7 @@ export default {
       }
     },
     moveCircle(e) {
-      TweenLite.set('.mouse-stoker', {
+      gsap.set('.mouse-stoker', {
         css: {
           opacity: 1,
           x: e.clientX,

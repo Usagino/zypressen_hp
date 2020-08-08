@@ -3,7 +3,7 @@
     MouseStoker
     PageIndicator(:refs="this.$refs")
     PageHeader(:refs="this.$refs")
-    .scrollButton(@click="nextSlide")
+    .scrollButton(@click="nextSlide()")
       p.scrollButton__text scroll
       .scrollButton__bar
     .background-movie
@@ -44,12 +44,14 @@ export default {
     return {
       swiperOption: {
         speed: 2000,
-        simulateTouch: false,
         direction: 'vertical',
         slidesPerView: 1,
-        parallax: true,
+        effect: 'fade',
         mousewheel: {
           invert: false
+        },
+        fadeEffect: {
+          crossFade: true
         }
       }
     }
@@ -60,9 +62,8 @@ export default {
     }
   },
   mounted() {
-    // console.log(this.pageSwiper)
-    // console.log(this.pageSwiper)
     this.slideChangeEnd()
+    console.log('hi')
   },
   methods: {
     setTimeoutAsync(delay) {
@@ -83,6 +84,24 @@ export default {
       if (e !== undefined) {
         index = e.snapIndex
         this.indicatorAnimation(index)
+        switch (e.snapIndex) {
+          case 0:
+            this.$refs.worksPage.offAnime()
+            break
+          case 1:
+            this.$refs.aboutPage.offAnime()
+            this.$refs.topPage.offAnime()
+            break
+          case 2:
+            this.$refs.worksPage.offAnime()
+            this.$refs.topPage.offAnime()
+            this.$refs.contactPage.offAnime()
+            break
+          case 3:
+            this.$refs.aboutPage.offAnime()
+            this.$refs.topPage.offAnime()
+            break
+        }
       } else {
         this.indicatorAnimation(index)
       }
@@ -92,23 +111,15 @@ export default {
         switch (e.snapIndex) {
           case 0:
             this.$refs.topPage.enterAnime()
-            this.$refs.worksPage.offAnime()
             break
           case 1:
             this.$refs.worksPage.enterAnime()
-            this.$refs.aboutPage.offAnime()
-            this.$refs.topPage.offAnime()
             break
           case 2:
             this.$refs.aboutPage.enterAnime()
-            this.$refs.worksPage.offAnime()
-            this.$refs.topPage.offAnime()
-            // this.$refs.contactPage.offAnime()
             break
           case 3:
             this.$refs.contactPage.enterAnime()
-            this.$refs.aboutPage.offAnime()
-            this.$refs.topPage.offAnime()
             break
         }
       }

@@ -31,7 +31,7 @@ export default {
     },
     offAnime() {
       gsap.utils.toArray('.about-page__textwrap__item').forEach((item, i) => {
-        gsap.set(item.querySelector('p'), {
+        gsap.to(item.querySelector('p'), 1, {
           x: '-100%'
         })
       })

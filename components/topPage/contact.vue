@@ -47,11 +47,11 @@ export default {
         })
     },
     offAnime() {
-      gsap.set('.contact-page__textwrap__container__text p', {
-        x: ''
+      gsap.to('.contact-page__textwrap__container__text p', 1, {
+        x: '-100%'
       })
-      gsap.set('.contact-page__textwrap__social__wrap a', {
-        x: ''
+      gsap.to('.contact-page__textwrap__social__wrap a', 1, {
+        x: '-100%'
       })
     }
   }

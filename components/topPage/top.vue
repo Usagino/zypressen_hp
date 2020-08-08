@@ -27,23 +27,25 @@ export default {
         backdropFilter: 'blur(0px)'
       })
       gsap.to('.top-page__title__wrap:nth-child(1) > span', 0.8, {
-        y: '0%',
-        delay: 0.6
+        y: '0%'
       })
       gsap.to('.top-page__title__wrap:nth-child(2) > span', 0.8, {
         y: '0%',
-        delay: 0.8
+        delay: 0.2
       })
       gsap.to('.top-page__title__wrap:nth-child(3) > span', 0.8, {
         y: '0%',
-        delay: 1
+        delay: 0.4
       })
     },
     offAnime() {
-      gsap.set('.top-page__title__wrap > span', {
+      const tl = gsap.timeline()
+      tl.to('.top-page__title__wrap > span', 1, {
+        y: '-150%'
+      }).set('.top-page__title__wrap > span', {
         y: '150%'
       })
-      gsap.set('.top-page', {
+      tl.to('.top-page', 1, {
         backdropFilter: 'blur(20px)'
       })
     }
