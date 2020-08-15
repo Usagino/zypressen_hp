@@ -2,24 +2,35 @@
   .works-page
     .works-page__blur
     .works-page__contents
-      .item
-        .item__thumbnail
-          img.item__thumbnail__image(
-            v-for="item in works"
-            :src="`${item.THUMBNAIL.url}?auto=compress&w=400&h=600&fit=crop`")
-        .item__title
-          h2.item__title__text {{itemTitle}}
-      .infomation
-        .infomation__numbers
-          p.infomation__numbers__current {{zeroPadding(countNum + 1)}}
-          p /
-          p.infomation__numbers__maxed {{zeroPadding(worksArrayLength)}}
-        .infomation__indicator
-          .infomation__indicator__bar
-        .infomation__buttons
-          button.infomation__buttons__back(@click="backSlide(),resetProgressTimeline()" :class="{enable:colorEnableBack}") BACK
-          p /
-          button.infomation__buttons__next(@click="nextSlide(),resetProgressTimeline()" :class="{enable:colorEnableNext}") NEXT
+      .items
+        .items__card(
+          v-for="item in works"
+          :key="item.id")
+          img.items__card__image(:src="`${item.THUMBNAIL.url}?auto=compress&w=900&h=900`")
+    .infomation
+      .infomation__title
+        h2 {{itemTitle}}
+      .infomation__data
+        p created  -  {{this.$dayjs(itemCreateDay).format('MMM , DD , YYYY')}}
+      .infomation__link
+        nuxt-link(:to="itemLink") view more
+    .next-button(@click="nextSlide()")
+    .back-button(@click="backSlide()")
+    .numbering
+      svg.numbering__circle(width="56" height="56"  viewBox="0,0,56,56" xmlns="http://www.w3.org/2000/svg")
+        circle.numbering__circle__back(cx="50%" cy="50%" r="27" stroke-width="2" stroke="white" fill="none" stroke-opacity="0.6")
+        circle.numbering__circle__front(
+          cx="50%"
+          cy="50%"
+          r="27"
+          stroke-width="2"
+          stroke="#61FF7A"
+          fill="none"
+          :stroke-dasharray="2 * 27 * Math.PI"
+          :stroke-dashoffset="2 * 27 * Math.PI"
+        )
+      .numbering__numberwrap
+        p.numbering__numberwrap__number(v-for="(num,index) in this.works" :key="index" :class="{numbering__numberwrap__white:pageNum === index}") {{('0' + (index+1)).slice(-2)}}
 </template>
 
 <script>
@@ -34,12 +45,11 @@ export default {
   },
   data() {
     return {
-      itemImage: '',
       itemTitle: '',
-      pageNum: 0,
-      countNum: 0,
-      colorEnableNext: false,
-      colorEnableBack: false,
+      itemCreateDay: '',
+      itemLink: '',
+      pageNum: 0, // 現在表示されてるスライドのナンバー
+      thumbnailPosition: 0,
       worksArrayLength: 0,
       progressBarTimeline: gsap.timeline({
         onComplete() {
@@ -51,122 +61,152 @@ export default {
   mounted() {
     this.itemTitle = this.works[this.pageNum].TITLE
     this.worksArrayLength = this.works.length
-    this.progressBarAnime()
-
-    gsap.set('.item__thumbnail__image:nth-child(1)', {
-      x: '0%'
-    })
+    this.itemCreateDay = this.works[this.pageNum].createdAt
+    this.itemLink = `/${this.works[this.pageNum].id}`
+    this.autoSlideNext()
   },
   methods: {
-    resetProgressTimeline() {
-      gsap.to('.infomation__indicator__bar', 0.5, {
-        scaleX: 0,
-        onComplete: () => {
-          this.progressBarTimeline.seek(0)
-        }
-      })
-    },
-    progressBarAnime() {
-      this.progressBarTimeline.pause()
-      const bar = '.infomation__indicator__bar'
-      this.progressBarTimeline
-        .to(bar, 10, {
-          scaleX: 1,
-          ease: 'linear',
-          delay: 1,
-          onComplete: () => {
-            this.nextSlide()
-          }
-        })
-        .set(bar, {
-          transformOrigin: 'right'
-        })
-        .to(bar, 1, {
-          scaleX: 0,
-          ease: 'linear'
-        })
-        .set(bar, {
-          transformOrigin: ''
-        })
-    },
     nextSlide() {
-      if (!(this.pageNum >= this.worksArrayLength - 1)) {
-        const oldPageNum = this.pageNum
-        this.pageNum += 1
-        this.colorEnableNext = this.colorEnableBack = false
-        this.changeSlideAnime(oldPageNum + 1, this.pageNum + 1)
+      const thumbnailEl = document.querySelectorAll('.items__card')
+      const circleEl = document.querySelector('.numbering__circle') // eslint-disable-line
+      if (this.pageNum < this.worksArrayLength - 1) {
+        gsap.to('.items', 1, {
+          x: `-=${thumbnailEl[0].clientWidth + 100}px`
+        })
+        gsap.to('.numbering__circle', 1, {
+          x: `+=${circleEl.clientWidth}px`
+        })
+        this.pageNum++
+        gsap
+          .timeline()
+          .to(`.items__card:nth-child(${this.pageNum})`, 1, {
+            opacity: 0,
+            rotate: '-10deg'
+          })
+          .set(`.items__card:nth-child(${this.pageNum})`, {
+            rotate: '0deg'
+          })
+
+        this.toggleText('.infomation__title', true, () => {
+          this.itemTitle = this.works[this.pageNum].TITLE
+        })
+        this.toggleText('.infomation__data', true, () => {
+          this.itemCreateDay = this.works[this.pageNum].createdAt
+        })
+        this.toggleText('.infomation__link', true, () => {
+          this.itemLink = `/${this.works[this.pageNum].id}`
+        })
       } else {
-        const oldPageNum = this.pageNum
+        gsap.to('.items', 1, {
+          x: '0px'
+        })
+        gsap.to('.numbering__circle', 1, {
+          x: ``
+        })
         this.pageNum = 0
-        this.colorEnableNext = this.colorEnableBack = false
-        this.changeSlideAnime(oldPageNum + 1, this.pageNum + 1)
+        gsap.to(`.items__card`, 1, {
+          opacity: 1
+        })
+        this.toggleText('.infomation__title', true, () => {
+          this.itemTitle = this.works[this.pageNum].TITLE
+        })
+        this.toggleText('.infomation__data', true, () => {
+          this.itemCreateDay = this.works[this.pageNum].createdAt
+        })
+        this.toggleText('.infomation__link', true, () => {
+          this.itemLink = `/${this.works[this.pageNum].id}`
+        })
       }
     },
     backSlide() {
-      if (!(this.pageNum === 0)) {
-        const oldPageNum = this.pageNum
-        this.pageNum -= 1
-        this.colorEnableNext = this.colorEnableBack = false
-        this.changeSlideAnime(oldPageNum + 1, this.pageNum + 1)
+      const thumbnailEl = document.querySelectorAll('.items__card')
+      const circleEl = document.querySelector('.numbering__circle') // eslint-disable-line
+      if (this.pageNum > 0) {
+        // バックボタンを押したときの処理
+        gsap.to('.items', 1, {
+          x: `+=${thumbnailEl[0].clientWidth + 100}px`
+        })
+        gsap.to('.numbering__circle', 1, {
+          x: `-=${circleEl.clientWidth}px`
+        })
+        this.pageNum--
+        gsap.to(`.items__card:nth-child(${this.pageNum + 1})`, 1, {
+          opacity: 1,
+          rotate: '0deg'
+        })
+        this.toggleText('.infomation__title', false, () => {
+          this.itemTitle = this.works[this.pageNum].TITLE
+        })
+        this.toggleText('.infomation__data', false, () => {
+          this.itemCreateDay = this.works[this.pageNum].createdAt
+        })
+        this.toggleText('.infomation__link', false, () => {
+          this.itemLink = `/${this.works[this.pageNum].id}`
+        })
       } else {
-        const oldPageNum = 0
-        this.pageNum = this.worksArrayLength
-        this.colorEnableNext = this.colorEnableBack = false
-        this.changeSlideAnime(oldPageNum + 1, this.pageNum)
+        // もし初めのスライドにいるときバックボタンを押したときの処理
+        gsap.to('.items', 2, {
+          x: `-${(thumbnailEl[0].clientWidth + 100) *
+            (this.worksArrayLength - 1)}px`
+        })
+        gsap.to('.numbering__circle', 2, {
+          x: `${circleEl.clientWidth * (this.worksArrayLength - 1)}px`
+        })
         this.pageNum = this.worksArrayLength - 1
+        console.log(`.items__card:nth-child(${this.pageNum})`)
+        gsap
+          .timeline()
+          .to(`.items__card:not(:last-child)`, 0.5, {
+            opacity: 0
+          })
+          .set(`.items__card:not(:last-child)`, {
+            opacity: 0
+          })
+        this.toggleText('.infomation__title', true, () => {
+          this.itemTitle = this.works[this.pageNum].TITLE
+        })
+        this.toggleText('.infomation__data', true, () => {
+          this.itemCreateDay = this.works[this.pageNum].createdAt
+        })
+        this.toggleText('.infomation__link', true, () => {
+          this.itemLink = `/${this.works[this.pageNum].id}`
+        })
       }
     },
-    changeSlideAnime(oldVal, newVal) {
-      // title change
+    toggleText(el, vector, onCompleteMethods) {
       gsap
         .timeline()
-        .to('.item__title__text', 0.3, {
-          opacity: 0,
-          onComplete: () => {
-            this.itemTitle = this.works[newVal - 1].TITLE
-          }
-        })
-        .to('.item__title__text', 0.3, {
-          opacity: 1
-        })
-      // slide change
-      gsap
-        .timeline()
-        .set('.infomation__buttons button', {
+        .set('.next-button,.back-button', {
           pointerEvents: 'none'
         })
-        .to(`.item__thumbnail__image:nth-child(${oldVal})`, 0.6, {
-          x: oldVal < newVal ? '-150%' : '150%'
+        .to(`${el} *`, 0.6, {
+          y: vector ? '100%' : '-100%',
+          onComplete: onCompleteMethods
         })
-        .set(`.item__thumbnail__image:nth-child(${newVal})`, {
-          x: oldVal < newVal ? '150%' : '-150%'
+        .set(`${el} *`, {
+          y: vector ? '-100%' : '100%'
         })
-        .to(`.item__thumbnail__image:nth-child(${newVal})`, 0.6, {
-          x: '0%',
-          delay: 0.5
+        .to(`${el} *`, 0.6, {
+          y: '0%'
         })
-        .set('.infomation__buttons button', {
+        .set('.next-button,.back-button', {
           pointerEvents: ''
         })
-      // change page number
-      gsap
-        .timeline()
-        .to('.infomation__numbers__current', 0.3, {
-          y: oldVal < newVal ? '-150%' : '150%',
-          opacity: 0
-        })
-        .set('.infomation__numbers__current', {
-          y: oldVal < newVal ? '150%' : '-150%',
-          onComplete: () => {
-            this.countNum = this.pageNum
-          }
-        })
-        .to('.infomation__numbers__current', 0.3, {
-          y: '0%',
-          opacity: 1
-        })
-
-      console.log(oldVal < newVal ? 'next' : 'back')
+    },
+    autoSlideNext() {
+      const tl = gsap.timeline({
+        repeat: -1
+      })
+      tl.to('.numbering__circle__front', 7, {
+        strokeDashoffset: 0,
+        ease: 'linear',
+        onComplete: () => {
+          this.nextSlide()
+        }
+      }).to('.numbering__circle__front', 1, {
+        strokeDashoffset: 2 * 27 * Math.PI,
+        ease: 'linear'
+      })
     },
     enterAnime() {
       this.progressBarTimeline.play()
@@ -187,12 +227,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.startButton {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  cursor: pointer;
-}
 .works-page {
   @include full-screen;
   display: flex;
@@ -201,6 +235,7 @@ export default {
   top: 0;
   left: 0;
   z-index: 20;
+  overflow: hidden;
   &__blur {
     @include full-screen;
     position: absolute;
@@ -216,86 +251,116 @@ export default {
     position: relative;
     @include flex-middle;
     flex-direction: column;
-    @include gap-bottom(56px);
     //
     // &:active {
     //   cursor: grabbing;
     // }
   }
 }
-.enable {
-  color: $color-gray;
-  pointer-events: none;
-}
-.item {
-  position: relative;
-  @include full-size;
-  @include grid-middle;
-  &__thumbnail {
-    height: 60vh;
-    width: 40vh;
-    overflow: hidden;
-    position: relative;
+.items {
+  $contents-width: 64vw;
+  $contents-height: 60vh;
+  width: $contents-width;
+  height: $contents-height;
+  display: flex;
+  @include gap-right(100px);
+  will-change: transform;
+  &__card {
     &__image {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: inherit;
-      width: inherit;
+      width: $contents-width;
+      height: $contents-height;
       object-fit: cover;
-      transform: translateX(150%);
-    }
-  }
-  &__title {
-    @include absolute-middle;
-    z-index: 2;
-    @include just-fitsize;
-    display: block;
-    @include grid-middle;
-    &__text {
-      @include font-twelve;
-      display: inline;
-      text-align: center;
+      user-select: none;
     }
   }
 }
 .infomation {
-  @include flex-middle;
-  @include gap-right(36px);
-  &__numbers,
-  &__buttons {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 10vw;
+  margin: auto;
+  @include just-fitsize;
+  * {
     overflow: hidden;
-    width: 140px;
-    @include flex-middle;
-    @include gap-right(20px);
     * {
       user-select: none;
     }
-    p,
-    button {
+  }
+  &__title {
+    h2 {
+      @include font-five;
+      text-indent: 0px;
+      line-height: 160%;
+      margin-bottom: 16px;
+    }
+  }
+  &__data {
+    p {
+      @include font-three;
+    }
+  }
+  &__link {
+    a {
+      @include just-fitsize;
+      display: inline-block;
+      @include font-four;
+      text-decoration: underline;
+    }
+  }
+}
+.next-button,
+.back-button {
+  position: absolute;
+  content: '';
+  width: 15vw;
+  height: 100vh;
+  top: 0px;
+  cursor: pointer;
+}
+.next-button {
+  right: 0px;
+}
+.back-button {
+  left: 0px;
+}
+.numbering {
+  position: absolute;
+  bottom: $pri-value;
+  right: $pri-value;
+  z-index: 1;
+  &__circle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    // left: -20px;
+    left: 0px;
+    margin: auto;
+    @include just-fitsize;
+    width: 56px;
+    height: 56px;
+    transform: rotate(-90deg);
+    &__front,
+    &__back {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+  &__numberwrap {
+    display: flex;
+    align-items: center;
+    // @include gap-right(40px);
+    transition: color 1s ease;
+    &__number {
       @include font-one;
-      background: transparent;
-    }
-  }
-  &__buttons {
-    button {
+      color: $color-gray;
       transition: color 1s ease;
-      &:active {
-        cursor: pointer;
-        transform: translateY(1px);
-      }
+      width: 56px;
+      text-align: center;
     }
-  }
-  &__indicator {
-    height: 4px;
-    width: 360px;
-    background: $color-gray;
-    &__bar {
-      transform-origin: left;
-      transform: scaleX(0);
-      height: inherit;
-      width: inherit;
-      background: $color-green;
+    &__white {
+      color: $color-white;
     }
   }
 }

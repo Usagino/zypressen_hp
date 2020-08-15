@@ -46,13 +46,13 @@ export default {
         speed: 2000,
         direction: 'vertical',
         slidesPerView: 1,
-        effect: 'fade',
+        effect: 'flip',
         mousewheel: {
           invert: false
-        },
-        fadeEffect: {
-          crossFade: true
         }
+        // fadeEffect: {
+        //   crossFade: true
+        // }
       }
     }
   },
